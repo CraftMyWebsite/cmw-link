@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,30 +29,14 @@ public class Persist {
 		this.locks = new HashMap<String, Lock>();
 	}
 
-	public String getName(Class<?> clazz) {
-		return clazz.getSimpleName().toLowerCase();
-	}
-
 	public String getName(Object o) {
 		return getName(o.getClass());
-	}
-
-	public String getName(Type type) {
-		return getName(type.getClass());
 	}
 
 	private GsonBuilder buildGson() {
 		return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping()
 				.enableComplexMapKeySerialization()
 				.excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE);
-	}
-
-	public File getFile(String name) {
-		return new File(this.configFile.getFilePath() + File.separator +  name + ".json");
-	}
-
-	public File getFile(Class<?> clazz) {
-		return getFile(getName(clazz));
 	}
 
 	public File getFile(Object obj) {
@@ -69,6 +52,7 @@ public class Persist {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
+				configFile.getLog().severe("Failed to save file: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -107,6 +91,7 @@ public class Persist {
 			file.createNewFile();
 			Files.write(content.getBytes(), file);
 		} catch (IOException e) {
+			configFile.getLog().severe("Failed to write data to file: " + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			lock.unlock();
