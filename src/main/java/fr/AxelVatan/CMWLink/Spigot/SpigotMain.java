@@ -2,7 +2,7 @@ package fr.AxelVatan.CMWLink.Spigot;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.AxelVatan.CMWLink.Common.ConfigFile;
+import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
 import lombok.Getter;
 
 public class SpigotMain extends JavaPlugin{
@@ -18,7 +18,7 @@ public class SpigotMain extends JavaPlugin{
 
     @Override
     public void onDisable() {
-    	
+    	this.configFile.getPackages().disablePackages();
     }
 	
 }

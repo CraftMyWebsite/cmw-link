@@ -1,8 +1,9 @@
-package fr.AxelVatan.CMWLink.Common;
+package fr.AxelVatan.CMWLink.Common.Config;
 
 import java.io.File;
 import java.util.logging.Logger;
 
+import fr.AxelVatan.CMWLink.Common.Packages.Packages;
 import lombok.Getter;
 
 public class ConfigFile {
@@ -10,7 +11,8 @@ public class ConfigFile {
 	private @Getter File filePath;
 	private @Getter Logger log;
 	private @Getter Settings config;
-	
+	private @Getter Packages packages;
+
 	public ConfigFile(File filePath, Logger log){
 		this.filePath = filePath;
 		this.log = log;
@@ -20,9 +22,11 @@ public class ConfigFile {
 		if (config != null) persist.save(config);
 		log.info("Configuration loaded successfully !");
 		log.info("Port: " + config.getPort());
+		this.packages = new Packages(log, filePath);
 	}
 
 	private class Settings{
 		private @Getter int port = 24102;
+		private @Getter boolean proxy = false;
 	}
 }

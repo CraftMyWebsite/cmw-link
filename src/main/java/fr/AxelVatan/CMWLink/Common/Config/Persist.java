@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Common;
+package fr.AxelVatan.CMWLink.Common.Config;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +29,10 @@ public class Persist {
 		this.locks = new HashMap<String, Lock>();
 	}
 
+	public String getName(Class<?> clazz) {
+		return clazz.getSimpleName().toLowerCase();
+	}
+
 	public String getName(Object o) {
 		return getName(o.getClass());
 	}
@@ -37,6 +41,14 @@ public class Persist {
 		return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping()
 				.enableComplexMapKeySerialization()
 				.excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE);
+	}
+
+	public File getFile(String name) {
+		return new File(this.configFile.getFilePath() + File.separator +  name + ".json");
+	}
+
+	public File getFile(Class<?> clazz) {
+		return getFile(getName(clazz));
 	}
 
 	public File getFile(Object obj) {
@@ -52,11 +64,11 @@ public class Persist {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				configFile.getLog().severe("Failed to save file: " + e.getMessage());
+				this.configFile.getLog().severe("Failed to save file: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
-		writeCatch(file, gson.toJson(instance));
+		writeCatch(file, this.gson.toJson(instance));
 	}
 
 	public <T> T load(Class<T> clazz) {
@@ -69,9 +81,9 @@ public class Persist {
 			return null;
 		}
 		try {
-			return gson.fromJson(content, clazz);
+			return this.gson.fromJson(content, clazz);
 		} catch (Exception ex) {
-			configFile.getLog().severe("Failed to parse " + file.toString() + ": " + ex.getMessage());
+			this.configFile.getLog().severe("Failed to parse " + file.toString() + ": " + ex.getMessage());
 		}
 		return null;
 	}
@@ -79,19 +91,19 @@ public class Persist {
 	public void writeCatch(final File file, final String content) {
 		String name = file.getName();
 		final Lock lock;
-		if (locks.containsKey(name)) {
-			lock = locks.get(name);
+		if (this.locks.containsKey(name)) {
+			lock = this.locks.get(name);
 		} else {
 			ReadWriteLock rwl = new ReentrantReadWriteLock();
 			lock = rwl.writeLock();
-			locks.put(name, lock);
+			this.locks.put(name, lock);
 		}
 		lock.lock();
 		try {
 			file.createNewFile();
 			Files.write(content.getBytes(), file);
 		} catch (IOException e) {
-			configFile.getLog().severe("Failed to write data to file: " + e.getMessage());
+			this.configFile.getLog().severe("Failed to write data to file: " + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			lock.unlock();
