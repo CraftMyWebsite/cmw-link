@@ -25,8 +25,8 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>fr.AxelVatan.CraftMyWebsite</groupId>
-			<artifactId>CraftMyWebsite-Link</artifactId>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>Core</artifactId>
 			<version>1.0</version>
 			<scope>provided</scope>
 		</dependency>
