@@ -56,7 +56,7 @@
 	</repositories>
 
 	<build>
-		<finalName>CMWL_Core</finalName>
+		<finalName>CraftMyWebsite_Link</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<defaultGoal>clean install</defaultGoal>
 		<resources>
