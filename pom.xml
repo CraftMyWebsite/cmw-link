@@ -1,97 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>fr.AxelVatan.CraftMyWebsite</groupId>
-	<artifactId>CraftMyWebsite-Link</artifactId>
+	<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+	<artifactId>parent</artifactId>
 	<version>1.0</version>
-	<packaging>jar</packaging>
 
-	<name>CraftMyWebsite-Link</name>
-	<description>MC Plugin link for CraftMyWebsite</description>
+	<packaging>pom</packaging>
 
-	<developers>
-		<developer>
-			<name>Axel Vatan AKA Axeldu18</name>
-			<url>https://axelvatan.fr/</url>
-		</developer>
-	</developers>
+	<modules>
+		<module>core</module>
+		<module>votes</module>
+		<module>boutique</module>
+	</modules>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.24</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.19-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-        	<groupId>com.velocitypowered</groupId>
-        	<artifactId>velocity-api</artifactId>
-        	<version>3.0.1</version>
-        	<scope>provided</scope>
-    	</dependency>
-	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>maven-repo</id>
-			<url>https://repo1.maven.org/maven2/</url>
-		</repository>
-		<repository>
-			<id>papermc</id>
-			<url>https://papermc.io/repo/repository/maven-public/</url>
-		</repository>
-	</repositories>
-
-	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<defaultGoal>clean install</defaultGoal>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<configuration>
-					<release>11</release>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<finalName>${project.artifactId}</finalName>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<appendAssemblyId>false</appendAssemblyId>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- bind to the packaging phase -->
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 </project>

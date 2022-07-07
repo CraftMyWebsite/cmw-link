@@ -1,5 +1,5 @@
-name: CraftMyWebsite-Link
-main: fr.AxelVatan.CMWLink.BungeeCord.BungeeCordMain
+name: CraftMyWebsite_Link
+main: fr.AxelVatan.CMWLink.Spigot.SpigotMain
 version: 1.0
 author: AxelVatan
 description: CraftMyWebsite-Link a java plugin for MC servers

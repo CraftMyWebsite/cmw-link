@@ -27,6 +27,6 @@ public class ConfigFile {
 
 	private class Settings{
 		private @Getter int port = 24102;
-		private @Getter boolean proxy = false;
+		private @Getter boolean useProxy = false;
 	}
 }
