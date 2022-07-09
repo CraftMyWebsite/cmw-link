@@ -3,6 +3,7 @@ package fr.AxelVatan.CMWLink.Common.Config;
 import java.io.File;
 import java.util.logging.Logger;
 
+import fr.AxelVatan.CMWLink.Common.Config.WebServer.WebServer;
 import fr.AxelVatan.CMWLink.Common.Packages.Packages;
 import lombok.Getter;
 
@@ -12,6 +13,7 @@ public class ConfigFile {
 	private @Getter Logger log;
 	private @Getter Settings config;
 	private @Getter Packages packages;
+	private @Getter WebServer webServer;
 
 	public ConfigFile(File filePath, Logger log){
 		this.filePath = filePath;
@@ -23,9 +25,11 @@ public class ConfigFile {
 		log.info("Configuration loaded successfully !");
 		log.info("Port: " + config.getPort());
 		this.packages = new Packages(log, filePath);
+		this.webServer = new WebServer(this);
+		
 	}
 
-	private class Settings{
+	public class Settings{
 		private @Getter int port = 24102;
 		private @Getter boolean useProxy = false;
 	}

@@ -42,12 +42,21 @@
         	<version>3.0.1</version>
         	<scope>provided</scope>
     	</dependency>
+    	<dependency>
+			<groupId>io.vacco.java-express</groupId>
+			<artifactId>java-express</artifactId>
+			<version>0.2.1</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
 		<repository>
 			<id>maven-repo</id>
 			<url>https://repo1.maven.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>jcenter-repo</id>
+			<url>https://jcenter.bintray.com/</url>
 		</repository>
 		<repository>
 			<id>papermc</id>
