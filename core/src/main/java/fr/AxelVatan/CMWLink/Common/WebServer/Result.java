@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Common.Config.WebServer;
+package fr.AxelVatan.CMWLink.Common.WebServer;
 
 import express.utils.Status;
 import lombok.AllArgsConstructor;

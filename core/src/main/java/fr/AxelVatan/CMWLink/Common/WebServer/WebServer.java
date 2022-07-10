@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Common.Config.WebServer;
+package fr.AxelVatan.CMWLink.Common.WebServer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

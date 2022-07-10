@@ -3,8 +3,8 @@ package fr.AxelVatan.CMWLink.Common.Config;
 import java.io.File;
 import java.util.logging.Logger;
 
-import fr.AxelVatan.CMWLink.Common.Config.WebServer.WebServer;
 import fr.AxelVatan.CMWLink.Common.Packages.Packages;
+import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
 
 public class ConfigFile {
