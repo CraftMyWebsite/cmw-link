@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import fr.AxelVatan.CMWLink.Common.WebServer.IRoute;
-import fr.AxelVatan.CMWLink.Common.WebServer.VersionRoute;
 import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
 
@@ -28,7 +27,6 @@ public class CMWLPackage {
 		long epoch = System.currentTimeMillis();
 		log(Level.INFO, "Loading...");
 		enable();
-		this.addRoute(new VersionRoute(this));
 		registerRoutes();
 		log(Level.INFO, "Enabled in " + convertString(System.currentTimeMillis() - epoch, 1, TimeUnit.MILLISECONDS) + ".");
 	}

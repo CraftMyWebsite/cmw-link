@@ -5,9 +5,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
-import java.util.Map;
 
-import org.json.simple.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import express.Express;
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
@@ -24,13 +24,11 @@ public class WebServer {
 		this.app = new Express();
 		this.routes = new HashMap<String, IRoute>();
 		app.all("/", (req, res) -> {
-			//MAYBE CHANGE JSON LIB LATER...
-			Map<Object, Object> map = new HashMap<Object, Object>();
-			map.put("SUCCESS", 200);
-			map.put("NAME", "CraftMyWebSite_Link");
-			map.put("VERSION", 1.0);
-			JSONObject jo = new JSONObject(map);
-			res.send(jo.toString());
+			JsonObject jsObj = new JsonObject();
+			jsObj.addProperty("SUCCESS", 200);
+			jsObj.addProperty("NAME", "CraftMyWebSite_Link");
+			jsObj.addProperty("VERSION", 1.0);
+			res.send(jsObj.toString());
 		});
 	}
 
@@ -41,7 +39,8 @@ public class WebServer {
 			URLConnection uc = whatismyip.openConnection();
 			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: 1.0");
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
-			String ip = in.readLine();
+			JsonObject ipJson = new Gson().fromJson(in.readLine(), JsonObject.class);
+			String ip = ipJson.get("IP").getAsString();
 			this.config.getLog().info("External IP: " + ip);
 			URL checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/" + this.config.getConfig().getPort());
 			uc = checkURL.openConnection();
@@ -72,7 +71,7 @@ public class WebServer {
 		for(IRoute route : this.routes.values()) {
 			switch(route.getRouteType()) {
 			case GET:
-				//UGLY BUT IL BE MODIFIED LATER
+				//UGLY BUT IT WILL BE MODIFIED LATER
 				app.get("/" + route.getRouteName(), (req, res) -> {
 					route.execute(req, res);
 				});
