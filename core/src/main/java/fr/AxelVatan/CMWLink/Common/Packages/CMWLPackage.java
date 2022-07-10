@@ -8,7 +8,7 @@ import fr.AxelVatan.CMWLink.Common.WebServer.IRoute;
 import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
 
-public class CMWLPackage {
+public abstract class CMWLPackage {
 
 	private @Getter String pluginName = "Unknown";
 	private @Getter String version = "Unknown";
@@ -36,11 +36,11 @@ public class CMWLPackage {
 		log(Level.INFO, "Disabled.");
 	}
 	
-	public void enable() {}
+	public abstract void enable();
 
-	public void disable() {}
+	public abstract void disable();
 	
-	public void registerRoutes() {}
+	public abstract void registerRoutes();
 	
 	public final void addRoute(IRoute route) {
 		this.webServer.addRoute(route);

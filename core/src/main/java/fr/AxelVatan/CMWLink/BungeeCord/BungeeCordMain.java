@@ -17,6 +17,7 @@ public class BungeeCordMain extends Plugin {
 
     @Override
     public void onDisable() {
+    	this.configFile.getWebServer().disable();
     	this.configFile.getPackages().disablePackages();
     }
     
