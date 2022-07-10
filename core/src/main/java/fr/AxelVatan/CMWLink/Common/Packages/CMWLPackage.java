@@ -36,20 +36,38 @@ public abstract class CMWLPackage {
 		log(Level.INFO, "Disabled.");
 	}
 	
+	/**
+	 * Called when Package is enabling
+	 */
 	public abstract void enable();
 
+	/**
+	 * Called when Package is disabling
+	 */
 	public abstract void disable();
 	
+	/**
+	 * Called when Package is enabling
+	 */
 	public abstract void registerRoutes();
 	
+	/**
+	 * Add route to WebServer
+	 */
 	public final void addRoute(IRoute route) {
 		this.webServer.addRoute(route);
 	}
 	
+	/**
+	 * Remove route from WebServer
+	 */
 	public final void removeRoute(IRoute route) {
 		this.webServer.removeRoute(route);
 	}
 	
+	/**
+	 * Log everything you want with priority level (Display colors to console if is supported).
+	 */
 	public void log(Level level, String message){
 		this.log.log(level, "{" + this.pluginName + ", Version: " + this.version + "}==> " +message);
 	}

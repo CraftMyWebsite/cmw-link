@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fr.AxelVatan.CMWLink.BungeeCord"},{"l":"fr.AxelVatan.CMWLink.Common.Config"},{"l":"fr.AxelVatan.CMWLink.Common.Packages"},{"l":"fr.AxelVatan.CMWLink.Common.WebServer"},{"l":"fr.AxelVatan.CMWLink.Spigot"},{"l":"fr.AxelVatan.CMWLink.Velocity"}];updateSearchResults();

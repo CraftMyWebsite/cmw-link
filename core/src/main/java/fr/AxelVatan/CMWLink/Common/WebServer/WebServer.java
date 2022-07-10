@@ -40,7 +40,6 @@ public class WebServer {
 				jsObj.addProperty("CODE", 404);
 				jsObj.addProperty("ERROR", "Route " + req.getPath() + " does not exist.");
 				res.send(jsObj.toString());
-				//FUCK THIS FAVICON FLOOD WHEN REQUEST RECEIVED
 				if(config.getConfig().isLogRequests() && !req.getPath().contains("favicon.ico")) {
 					config.getLog().severe("Route " + req.getPath() + " requested by " + req.getIp() + " does not exist.");
 				}
