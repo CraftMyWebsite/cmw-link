@@ -21,11 +21,13 @@ import org.yaml.snakeyaml.introspector.PropertyUtils;
 
 import com.google.common.base.Preconditions;
 
+import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
 
 public class Packages {
 
 	private Logger log;
+	private WebServer webServer;
 	private Yaml yaml;
 	private File packagesPath;
 	private Map<String, CMWLPackageDescription> packagesToLoad;
@@ -33,8 +35,9 @@ public class Packages {
 	private Map<String, Class<?>> classes;
 	private @Getter List<CMWLPackage> packagesLoaded;
 	
-	public Packages(Logger log, File filePath) {
+	public Packages(Logger log, File filePath, WebServer webServer) {
 		this.log = log;
+		this.webServer = webServer;
 		log.info("Searching packages ...");
 		this.packagesPath = new File(filePath + File.separator + "Packages");
 		if(!this.packagesPath.exists()) {
@@ -59,7 +62,7 @@ public class Packages {
 		}
 	}
 	
-	public void detectPackages(){
+	private void detectPackages(){
 		for (File file : this.packagesPath.listFiles() ){
 			if (file.isFile() && file.getName().endsWith(".jar")){
 				try (JarFile jar = new JarFile(file)){
@@ -83,7 +86,7 @@ public class Packages {
 		this.log.info("Packages found: " + this.packagesToLoad.size());
 	}
 	
-	public void loadPackages(){
+	private void loadPackages(){
 		Map<CMWLPackageDescription, Boolean> pluginStatuses = new HashMap<CMWLPackageDescription, Boolean>();
 		for (Map.Entry<String, CMWLPackageDescription> entry : this.packagesToLoad.entrySet()){
 			CMWLPackageDescription plugin = entry.getValue();
@@ -132,7 +135,7 @@ public class Packages {
 				this.loaders.put(plugin.getName(), loader);
 				Class<?> main = loader.loadClass( plugin.getMain());
 				CMWLPackage clazz = (CMWLPackage) main.getDeclaredConstructor().newInstance();
-				clazz.init(plugin.getName(), plugin.getVersion(), this.log);
+				clazz.init(plugin.getName(), plugin.getVersion(), this.log, webServer);
 				this.log.info("Loaded plugin " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
 				this.packagesLoaded.add(clazz);
 			} catch (Throwable t){

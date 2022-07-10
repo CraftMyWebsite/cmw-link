@@ -24,9 +24,10 @@ public class ConfigFile {
 		if (config != null) persist.save(config);
 		log.info("Configuration loaded successfully !");
 		log.info("Port: " + config.getPort());
-		this.packages = new Packages(log, filePath);
 		this.webServer = new WebServer(this);
-		
+		this.packages = new Packages(log, filePath, webServer);
+		this.webServer.createRoutes();
+		this.webServer.startWebServer();
 	}
 
 	public class Settings{

@@ -4,6 +4,9 @@ import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import fr.AxelVatan.CMWLink.Common.WebServer.IRoute;
+import fr.AxelVatan.CMWLink.Common.WebServer.VersionRoute;
+import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
 
 public class CMWLPackage {
@@ -11,11 +14,13 @@ public class CMWLPackage {
 	private @Getter String pluginName = "Unknown";
 	private @Getter String version = "Unknown";
 	private Logger log;
+	private WebServer webServer;
 	
-	public void init(String pluginName, String version, Logger log) {
+	public void init(String pluginName, String version, Logger log, WebServer webServer) {
 		this.pluginName = pluginName;
 		this.version = version;
 		this.log = log;
+		this.webServer = webServer;
 		onEnable();
 	}
 	
@@ -23,6 +28,8 @@ public class CMWLPackage {
 		long epoch = System.currentTimeMillis();
 		log(Level.INFO, "Loading...");
 		enable();
+		this.addRoute(new VersionRoute(this));
+		registerRoutes();
 		log(Level.INFO, "Enabled in " + convertString(System.currentTimeMillis() - epoch, 1, TimeUnit.MILLISECONDS) + ".");
 	}
 	
@@ -34,6 +41,16 @@ public class CMWLPackage {
 	public void enable() {}
 
 	public void disable() {}
+	
+	public void registerRoutes() {}
+	
+	public final void addRoute(IRoute route) {
+		webServer.addRoute(route);
+	}
+	
+	public final void removeRoute(IRoute route) {
+		webServer.removeRoute(route);
+	}
 	
 	public void log(Level level, String message){
 		this.log.log(level, "{" + this.pluginName + ", Version: " + this.version + "}==> " +message);
