@@ -8,5 +8,6 @@ public class Main extends CMWLPackage{
 
 	public void enable() {
 		this.log(Level.INFO, "Boutique enabled.");
+		this.addRoute(new Version(this));
 	}
 }

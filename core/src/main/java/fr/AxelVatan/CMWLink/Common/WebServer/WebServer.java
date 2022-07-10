@@ -24,14 +24,12 @@ public class WebServer {
 		this.app = new Express();
 		this.routes = new HashMap<String, IRoute>();
 		app.all("/", (req, res) -> {
-			routes.put("/", null);
 			JsonObject jsObj = new JsonObject();
 			jsObj.addProperty("CODE", 200);
 			jsObj.addProperty("NAME", "CraftMyWebSite_Link");
 			jsObj.addProperty("VERSION", 1.0);
 			res.send(jsObj.toString());
 		});
-
 		app.use((req, res) ->{
 			if(routes.containsKey(req.getPath())) {
 				if(config.getConfig().isLogRequests()) {
@@ -42,7 +40,8 @@ public class WebServer {
 				jsObj.addProperty("CODE", 404);
 				jsObj.addProperty("ERROR", "Route " + req.getPath() + " does not exist.");
 				res.send(jsObj.toString());
-				if(config.getConfig().isLogRequests()) {
+				//FUCK THIS FAVICON FLOOD WHEN REQUEST RECEIVED
+				if(config.getConfig().isLogRequests() && !req.getPath().contains("favicon.ico")) {
 					config.getLog().severe("Route " + req.getPath() + " requested by " + req.getIp() + " does not exist.");
 				}
 			}
@@ -85,11 +84,13 @@ public class WebServer {
 	}
 
 	public void createRoutes() {
+		this.config.getLog().info("REGISTER ROUTES");
 		for(IRoute route : this.routes.values()) {
+			this.config.getLog().info("Register route: " + route.getPackagePrefix() + "/" + route.getRouteName());
 			switch(route.getRouteType()) {
 			case GET:
 				//UGLY BUT IT WILL BE MODIFIED LATER
-				app.get("/" + route.getRouteName(), (req, res) -> {
+				app.get("/" + route.getPackagePrefix() + "/" + route.getRouteName(), (req, res) -> {
 					route.execute(req, res);
 				});
 				break;
@@ -101,5 +102,6 @@ public class WebServer {
 				break;
 			}
 		}
+		routes.put("/", null);
 	}
 }

@@ -43,11 +43,11 @@ public class CMWLPackage {
 	public void registerRoutes() {}
 	
 	public final void addRoute(IRoute route) {
-		webServer.addRoute(route);
+		this.webServer.addRoute(route);
 	}
 	
 	public final void removeRoute(IRoute route) {
-		webServer.removeRoute(route);
+		this.webServer.removeRoute(route);
 	}
 	
 	public void log(Level level, String message){
