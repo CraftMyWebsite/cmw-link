@@ -76,11 +76,11 @@ public class WebServer {
 	}
 
 	public void addRoute(IRoute route){
-		this.routes.put(route.getPackagePrefix() + "/" + route.getRouteName(), route);
+		this.routes.put("/" + route.getPackagePrefix() + "/" + route.getRouteName(), route);
 	}
 
 	public void removeRoute(IRoute route){
-		this.routes.remove(route.getPackagePrefix() + "/" + route.getRouteName());
+		this.routes.remove("/" + route.getPackagePrefix() + "/" + route.getRouteName());
 	}
 
 	public void createRoutes() {

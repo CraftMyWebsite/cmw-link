@@ -18,6 +18,6 @@ public class Main extends CMWLPackage{
 
 	@Override
 	public void registerRoutes() {
-		
+		this.addRoute(new VersionRoute(this));
 	}
 }
