@@ -11,12 +11,14 @@ import lombok.Getter;
 public abstract class CMWLPackage {
 
 	private @Getter String pluginName = "Unknown";
+	private @Getter String routePrefix = "Unknown";
 	private @Getter String version = "Unknown";
 	private Logger log;
 	private WebServer webServer;
 	
-	public void init(String pluginName, String version, Logger log, WebServer webServer) {
+	public void init(String pluginName, String routePrefix, String version, Logger log, WebServer webServer) {
 		this.pluginName = pluginName;
+		this.routePrefix = routePrefix;
 		this.version = version;
 		this.log = log;
 		this.webServer = webServer;
@@ -55,14 +57,14 @@ public abstract class CMWLPackage {
 	 * Add route to WebServer
 	 */
 	public final void addRoute(IRoute route) {
-		this.webServer.addRoute(route);
+		this.webServer.addRoute(this, route);
 	}
 	
 	/**
 	 * Remove route from WebServer
 	 */
 	public final void removeRoute(IRoute route) {
-		this.webServer.removeRoute(route);
+		this.webServer.removeRoute(this, route);
 	}
 	
 	/**

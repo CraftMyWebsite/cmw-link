@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class CMWLPackageDescription{
 
     private String name;
+    private String route_prefix;
     private String main;
     private String version;
     private String author;

@@ -2,7 +2,7 @@
 CraftMyWebsite-Link a java plugin for MC servers
 
 
-### CompatibilitÃ©
+### Compatibilité
 ------------
 - **Spigot/Paper**
 - **BungeeCord/Waterfall**
@@ -81,7 +81,7 @@ import fr.AxelVatan.CMWLink.Common.WebServer.RouteType;
 public class TestRoute extends CMWLRoute<TestPackage>{
 
 	public TestRoute(TestPackage main) {
-		super(main, "test", "ping", RouteType.GET);
+		super(main, "ping", RouteType.GET);
 	}
 
 	@Override
@@ -97,7 +97,6 @@ public class TestRoute extends CMWLRoute<TestPackage>{
 
 Dans le constructeur vous devez obligatoirement déclaré les parametres suivant:
 - main : La class principale du package
-- "test" : Le prefix de la route
 - "ping" : Le nom de la route
 - RouteType: Le type de route (GET, POST)
 
@@ -109,7 +108,8 @@ La fonction "execute" est déclanchée quand la route définie est appelée.
 Pour que le package soit reconnue par le plugin vous devez avoir un package.yml dans le jar
 
 ```yaml
-name: CMWL_Votes
+name: CMWL_Test
+route_prefix: test
 main: fr.AxelVatan.CMWLink.TestPackages.TestPackage
 version: 1.0
 author: AxelVatan
@@ -117,11 +117,12 @@ author: AxelVatan
 ```
 
 - name: Le nom du package.
+- route_prefix: le prefix pour toutes les route du plugin.
 - main: Le chemin vers la class principale du package.
-- verison: La version du package.
+- version: La version du package.
 - author: L'auteur du package.
 
-### Support, infos et communautÃ©
+### Support, infos et communauté
 ------------
 
 ### Liens utiles :
@@ -131,4 +132,4 @@ author: AxelVatan
 - **Twitter**: https://twitter.com/CraftMyWebsite
 
 ------------
-Copyright Â© CraftMyWebsite 2014-2022 
+Copyright © CraftMyWebsite 2014-2022 

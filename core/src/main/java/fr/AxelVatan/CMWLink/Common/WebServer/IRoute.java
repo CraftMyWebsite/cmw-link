@@ -6,11 +6,6 @@ import express.http.response.Response;
 public interface IRoute {
 
 	/**
-	 * Get the prefix for package route (http:127.0.0.1/PACKAGE_PREFIX/ROUTE_NAME).
-	 */
-	public abstract String getPackagePrefix();
-	
-	/**
 	 * Get the route name of the package (http:127.0.0.1/PACKAGE_PREFIX/ROUTE_NAME).
 	 */
 	public abstract String getRouteName();

@@ -8,7 +8,7 @@ import fr.AxelVatan.CMWLink.Common.WebServer.RouteType;
 public class VersionRoute extends CMWLRoute<Main>{
 
 	public VersionRoute(Main main) {
-		super(main, "vote", "version", RouteType.GET);
+		super(main, "version", RouteType.GET);
 	}
 
 	@Override

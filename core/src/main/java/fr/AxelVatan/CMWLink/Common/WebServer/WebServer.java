@@ -5,12 +5,15 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.logging.Level;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import express.Express;
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
+import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import lombok.Getter;
 
 public class WebServer {
@@ -74,30 +77,34 @@ public class WebServer {
 		}
 	}
 
-	public void addRoute(IRoute route){
-		this.routes.put("/" + route.getPackagePrefix() + "/" + route.getRouteName(), route);
+	public void addRoute(CMWLPackage cmwlPackage, IRoute route){
+		cmwlPackage.log(Level.INFO, "Register route: " + cmwlPackage.getRoutePrefix() + "/" + route.getRouteName());
+		this.routes.put("/" + cmwlPackage.getRoutePrefix() + "/" + route.getRouteName(), route);
 	}
 
-	public void removeRoute(IRoute route){
-		this.routes.remove("/" + route.getPackagePrefix() + "/" + route.getRouteName());
+	public void removeRoute(CMWLPackage cmwlPackage, IRoute route){
+		this.routes.remove("/" + cmwlPackage.getRoutePrefix() + "/" + route.getRouteName());
 	}
 
 	public void createRoutes() {
-		this.config.getLog().info("REGISTER ROUTES");
-		for(IRoute route : this.routes.values()) {
-			this.config.getLog().info("Register route: " + route.getPackagePrefix() + "/" + route.getRouteName());
+		for(Entry<String, IRoute> entry : this.routes.entrySet()) {
+			String routeName = entry.getKey();
+			IRoute route = entry.getValue();
 			switch(route.getRouteType()) {
 			case GET:
-				//UGLY BUT IT WILL BE MODIFIED LATER
-				app.get("/" + route.getPackagePrefix() + "/" + route.getRouteName(), (req, res) -> {
+				app.get(routeName, (req, res) -> {
 					route.execute(req, res);
 				});
 				break;
 			case POST:
-
+				app.post(routeName, (req, res) -> {
+					route.execute(req, res);
+				});
 				break;
 			case PUT:
-
+				app.put(routeName, (req, res) -> {
+					route.execute(req, res);
+				});
 				break;
 			}
 		}

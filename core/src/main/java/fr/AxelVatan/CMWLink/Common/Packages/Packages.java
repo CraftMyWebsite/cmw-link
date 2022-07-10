@@ -71,6 +71,7 @@ public class Packages {
 					try (InputStream in = jar.getInputStream(pdf)){
 						CMWLPackageDescription desc = this.yaml.loadAs(in, CMWLPackageDescription.class);
 						Preconditions.checkNotNull(desc.getName(), "Plugin from %s has no name", file);
+						Preconditions.checkNotNull(desc.getRoute_prefix(), "Plugin from %s has no route prefix", file);
 						Preconditions.checkNotNull(desc.getMain(), "Plugin from %s has no main", file);
 						Preconditions.checkNotNull(desc.getVersion(), "Plugin from %s has no version", file);
 						Preconditions.checkNotNull(desc.getAuthor(), "Plugin from %s has no author", file);
@@ -135,7 +136,7 @@ public class Packages {
 				this.loaders.put(plugin.getName(), loader);
 				Class<?> main = loader.loadClass( plugin.getMain());
 				CMWLPackage clazz = (CMWLPackage) main.getDeclaredConstructor().newInstance();
-				clazz.init(plugin.getName(), plugin.getVersion(), this.log, webServer);
+				clazz.init(plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), this.log, webServer);
 				this.log.info("Loaded plugin " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
 				this.packagesLoaded.add(clazz);
 			} catch (Throwable t){

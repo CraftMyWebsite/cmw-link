@@ -1,4 +1,5 @@
 name: CMWL_Votes
+route_prefix: votes
 main: fr.AxelVatan.CMWLink.Votes.Main
 version: 1.0
 author: AxelVatan
