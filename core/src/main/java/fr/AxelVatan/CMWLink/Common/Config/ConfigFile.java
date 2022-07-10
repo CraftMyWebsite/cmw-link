@@ -24,6 +24,8 @@ public class ConfigFile {
 		if (config != null) persist.save(config);
 		log.info("Configuration loaded successfully !");
 		log.info("Port: " + config.getPort());
+		log.info("Log Requests: " + config.isLogRequests());
+		log.info("Using proxy: " + config.isUseProxy());
 		this.webServer = new WebServer(this);
 		this.packages = new Packages(log, filePath, webServer);
 		this.webServer.createRoutes();
@@ -32,6 +34,7 @@ public class ConfigFile {
 
 	public class Settings{
 		private @Getter int port = 24102;
+		private @Getter boolean logRequests = true;
 		private @Getter boolean useProxy = false;
 	}
 }

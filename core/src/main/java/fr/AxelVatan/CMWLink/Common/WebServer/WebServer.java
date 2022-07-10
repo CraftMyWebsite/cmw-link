@@ -24,11 +24,28 @@ public class WebServer {
 		this.app = new Express();
 		this.routes = new HashMap<String, IRoute>();
 		app.all("/", (req, res) -> {
+			routes.put("/", null);
 			JsonObject jsObj = new JsonObject();
-			jsObj.addProperty("SUCCESS", 200);
+			jsObj.addProperty("CODE", 200);
 			jsObj.addProperty("NAME", "CraftMyWebSite_Link");
 			jsObj.addProperty("VERSION", 1.0);
 			res.send(jsObj.toString());
+		});
+
+		app.use((req, res) ->{
+			if(routes.containsKey(req.getPath())) {
+				if(config.getConfig().isLogRequests()) {
+					config.getLog().info("Host " + req.getIp() + " requested route " + req.getPath());
+				}
+			}else {
+				JsonObject jsObj = new JsonObject();
+				jsObj.addProperty("CODE", 404);
+				jsObj.addProperty("ERROR", "Route " + req.getPath() + " does not exist.");
+				res.send(jsObj.toString());
+				if(config.getConfig().isLogRequests()) {
+					config.getLog().severe("Route " + req.getPath() + " requested by " + req.getIp() + " does not exist.");
+				}
+			}
 		});
 	}
 
@@ -58,7 +75,7 @@ public class WebServer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void addRoute(IRoute route){
 		this.routes.put(route.getRouteName(), route);
 	}
@@ -66,7 +83,7 @@ public class WebServer {
 	public void removeRoute(IRoute route){
 		this.routes.remove(route.getRouteName());
 	}
-	
+
 	public void createRoutes() {
 		for(IRoute route : this.routes.values()) {
 			switch(route.getRouteType()) {
@@ -77,10 +94,10 @@ public class WebServer {
 				});
 				break;
 			case POST:
-				
+
 				break;
 			case PUT:
-				
+
 				break;
 			}
 		}
