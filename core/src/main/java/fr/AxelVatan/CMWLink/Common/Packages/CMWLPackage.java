@@ -74,6 +74,9 @@ public abstract class CMWLPackage {
 		this.log.log(level, "{" + this.pluginName + ", Version: " + this.version + "}==> " +message);
 	}
 	
+	/**
+	 * Convert time in milliseconds to any type you want with decimal
+	 */
 	public String convertString(long time, int trim, TimeUnit type){
 		if (time == -1L) {
 			return "Permanent";
