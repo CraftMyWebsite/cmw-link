@@ -12,7 +12,7 @@ public class SpigotMain extends JavaPlugin{
     @Override
     public void onEnable() {
     	this.getLogger().info("==========================================");
-    	this.configFile = new ConfigFile(this.getDataFolder(), this.getLogger());
+    	this.configFile = new ConfigFile(this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
     	this.getLogger().info("==========================================");
     }
 

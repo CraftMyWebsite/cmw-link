@@ -21,7 +21,7 @@ public class VelocityMain {
 	@Inject
 	public VelocityMain(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
 		logger.info("==========================================");
-		this.configFile = new ConfigFile(dataDirectory.toFile(), logger);
+		this.configFile = new ConfigFile(dataDirectory.toFile(), logger, "1.0");
 		logger.info("==========================================");
 	}
 

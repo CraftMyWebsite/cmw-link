@@ -11,13 +11,15 @@ public class ConfigFile {
 
 	private @Getter File filePath;
 	private @Getter Logger log;
+	private @Getter String version;
 	private @Getter Settings config;
 	private @Getter Packages packages;
 	private @Getter WebServer webServer;
 
-	public ConfigFile(File filePath, Logger log){
+	public ConfigFile(File filePath, Logger log, String version){
 		this.filePath = filePath;
 		this.log = log;
+		this.version = version;
 		log.info("Loading configuration...");
 		Persist persist = new Persist(this);
 		config = persist.getFile(Settings.class).exists() ? persist.load(Settings.class) : new Settings();

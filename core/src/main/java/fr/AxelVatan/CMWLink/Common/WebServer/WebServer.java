@@ -72,7 +72,7 @@ public class WebServer {
 			JsonObject jsObj = new JsonObject();
 			jsObj.addProperty("CODE", 200);
 			jsObj.addProperty("NAME", "CraftMyWebSite_Link");
-			jsObj.addProperty("VERSION", 1.0);
+			jsObj.addProperty("VERSION", config.getVersion());
 			res.send(jsObj.toString());
 		});
 		authHost();
@@ -110,14 +110,14 @@ public class WebServer {
 		try {
 			URL whatismyip = new URL("https://ip.conceptngo.fr/myIP");
 			URLConnection uc = whatismyip.openConnection();
-			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: 1.0");
+			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
 			JsonObject ipJson = new Gson().fromJson(in.readLine(), JsonObject.class);
 			String ip = ipJson.get("IP").getAsString();
 			this.config.getLog().info("External IP: " + ip);
 			URL checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/" + this.config.getConfig().getPort());
 			uc = checkURL.openConnection();
-			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: 1.0");
+			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
 			in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
 			String code = in.readLine();
 			if(code.equalsIgnoreCase("200")) {
