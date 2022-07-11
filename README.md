@@ -117,7 +117,7 @@ author: AxelVatan
 ```
 
 - name: Le nom du package.
-- route_prefix: le prefix pour toutes les route du plugin.
+- route_prefix: le prefix pour toutes les route du package.
 - main: Le chemin vers la class principale du package.
 - version: La version du package.
 - author: L'auteur du package.

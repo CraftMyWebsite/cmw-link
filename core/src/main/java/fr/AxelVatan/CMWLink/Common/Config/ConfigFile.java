@@ -37,6 +37,8 @@ public class ConfigFile {
 		private @Getter int port = 24102;
 		private @Getter boolean logRequests = true;
 		private @Getter boolean useProxy = false;
+		private @Getter String username = "admin";
+		private @Getter String password = "changeme";
 		
 	}
 }
