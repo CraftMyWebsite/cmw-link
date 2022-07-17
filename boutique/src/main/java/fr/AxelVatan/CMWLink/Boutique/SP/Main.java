@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
 import fr.AxelVatan.CMWLink.Boutique.SP.Routes.TestGive;
@@ -53,6 +54,10 @@ public class Main extends CMWLPackage implements PluginMessageListener{
 			String username = in.readUTF();
 			String item = in.readUTF();
 			int qty = in.readInt();
+			ByteArrayDataOutput out = ByteStreams.newDataOutput();
+			out.writeUTF(subchannel);
+			out.writeUTF("Received give order: " + username + ", " + item + ", " + qty + " OK");
+			Bukkit.getPlayer(username).sendPluginMessage(mcServer.getPluginManager().getPlugin("CraftMyWebsite_Link"), "cmw:boutique", out.toByteArray());
 			this.log(Level.INFO, "Received give order: " + username + ", " + item + ", " + qty);
 		}
 	}
