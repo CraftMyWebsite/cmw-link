@@ -32,10 +32,36 @@ public class ConfigFile {
 		log.info("- Using proxy: " + config.isUseProxy());
 		this.webServer = new WebServer(this);
 		this.packages = new Packages(log, filePath, webServer);
-		if(!this.config.useProxy && this.startingFrom != StartingFrom.SPIGOT) {
-			this.webServer.createRoutes();
-			this.webServer.startWebServer();
+		switch(this.startingFrom) {
+		case BUNGEECORD:
+			if(this.config.useProxy) {
+				this.startWebServer();
+			}else {
+				log.severe("UseProxy on this BungeeCord Proxy is not set to true !");
+				log.severe("CMW-Link will be useless");
+			}
+			break;
+		case SPIGOT:
+			if(this.config.isUseProxy()) {
+				log.info("Waiting requests from the proxy");
+			}else {
+				this.startWebServer();
+			}
+			break;
+		case VELOCITY:
+			if(this.config.useProxy) {
+				this.startWebServer();
+			}else {
+				log.severe("UseProxy on this Velocity Proxy is not set to true !");
+				log.severe("CMW-Link will be useless");
+			}
+			break;
 		}
+	}
+
+	private void startWebServer() {
+		this.webServer.createRoutes();
+		this.webServer.startWebServer();
 	}
 
 	public class Settings{

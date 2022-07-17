@@ -1,17 +1,10 @@
 package fr.AxelVatan.CMWLink.Common.WebServer;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.Base64;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
@@ -19,7 +12,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import express.Express;
-import express.http.request.Authorization;
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import lombok.Getter;
@@ -45,12 +37,12 @@ public class WebServer {
 		handleNonExistingRoutes();
 	}
 
-	private void authHost() {
+	/*private void authHost() {
 		app.use((req, res) ->{
 			List<Authorization> test = req.getAuthorization();
 			System.out.println("HEADERS: " + test.get(0).getDataBase64Decoded());
 		});
-	}
+	}*/
 	
 	private void handleNonExistingRoutes() {
 		app.use((req, res) ->{

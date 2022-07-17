@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Boutique.Methods;
+package fr.AxelVatan.CMWLink.Boutique;
 
 public enum Result {
 
