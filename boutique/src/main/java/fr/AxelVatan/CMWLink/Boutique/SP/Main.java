@@ -34,8 +34,6 @@ public class Main extends CMWLPackage implements PluginMessageListener{
 
 	@Override
 	public void disable() {
-		mcServer.getMessenger().unregisterOutgoingPluginChannel(mcServer.getPluginManager().getPlugin("CraftMyWebsite_Link"));
-		mcServer.getMessenger().unregisterIncomingPluginChannel(mcServer.getPluginManager().getPlugin("CraftMyWebsite_Link"));
 	}
 
 	@Override
