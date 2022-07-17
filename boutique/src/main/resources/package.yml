@@ -1,5 +1,6 @@
 name: CMWL_Boutique
 route_prefix: boutique
-main: fr.AxelVatan.CMWLink.Boutique.Main
+sp_main: fr.AxelVatan.CMWLink.Boutique.SP.Main
+bg_main: fr.AxelVatan.CMWLink.Boutique.BG.Main
 version: 1.0
 author: AxelVatan

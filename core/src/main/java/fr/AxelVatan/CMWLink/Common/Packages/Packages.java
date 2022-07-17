@@ -72,7 +72,7 @@ public class Packages {
 						CMWLPackageDescription desc = this.yaml.loadAs(in, CMWLPackageDescription.class);
 						Preconditions.checkNotNull(desc.getName(), "Plugin from %s has no name", file);
 						Preconditions.checkNotNull(desc.getRoute_prefix(), "Plugin from %s has no route prefix", file);
-						Preconditions.checkNotNull(desc.getMain(), "Plugin from %s has no main", file);
+						Preconditions.checkNotNull(desc.getSp_main(), "Plugin from %s has no sp_main", file);
 						Preconditions.checkNotNull(desc.getVersion(), "Plugin from %s has no version", file);
 						Preconditions.checkNotNull(desc.getAuthor(), "Plugin from %s has no author", file);
 						desc.setFile(file);
@@ -132,9 +132,23 @@ public class Packages {
 		}
 		if(status){
 			try{
-				PackageClassLoader loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getMain(), plugin.getFile().toURI().toURL(), this);
+				PackageClassLoader loader = null;
+				Class<?> main = null;
+				switch(webServer.getConfig().getStartingFrom()) {
+				case BUNGEECORD:
+					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getBg_main(), plugin.getFile().toURI().toURL(), this);
+					main = loader.loadClass( plugin.getBg_main());
+					break;
+				case SPIGOT:
+					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getSp_main(), plugin.getFile().toURI().toURL(), this);
+					main = loader.loadClass( plugin.getSp_main());
+					break;
+				case VELOCITY:
+					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getBg_main(), plugin.getFile().toURI().toURL(), this);
+					main = loader.loadClass( plugin.getBg_main());
+					break;
+				}
 				this.loaders.put(plugin.getName(), loader);
-				Class<?> main = loader.loadClass( plugin.getMain());
 				CMWLPackage clazz = (CMWLPackage) main.getDeclaredConstructor().newInstance();
 				clazz.init(plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), this.log, webServer);
 				this.log.info("Loaded plugin " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
