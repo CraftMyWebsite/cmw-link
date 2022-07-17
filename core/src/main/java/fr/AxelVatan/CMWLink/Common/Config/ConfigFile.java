@@ -9,6 +9,7 @@ import lombok.Getter;
 
 public class ConfigFile {
 
+	private @Getter StartingFrom startingFrom;
 	private @Getter File filePath;
 	private @Getter Logger log;
 	private @Getter String version;
@@ -16,7 +17,8 @@ public class ConfigFile {
 	private @Getter Packages packages;
 	private @Getter WebServer webServer;
 
-	public ConfigFile(File filePath, Logger log, String version){
+	public ConfigFile(StartingFrom startingFrom,File filePath, Logger log, String version){
+		this.startingFrom = startingFrom;
 		this.filePath = filePath;
 		this.log = log;
 		this.version = version;
@@ -30,17 +32,19 @@ public class ConfigFile {
 		log.info("- Using proxy: " + config.isUseProxy());
 		this.webServer = new WebServer(this);
 		this.packages = new Packages(log, filePath, webServer);
-		this.webServer.createRoutes();
-		this.webServer.startWebServer();
+		if(!this.config.useProxy && this.startingFrom != StartingFrom.SPIGOT) {
+			this.webServer.createRoutes();
+			this.webServer.startWebServer();
+		}
 	}
 
 	public class Settings{
-		
+
 		private @Getter int port = 24102;
 		private @Getter boolean logRequests = true;
 		private @Getter boolean useProxy = false;
 		private @Getter String username = "admin";
 		private @Getter String password = "changeme";
-		
+
 	}
 }

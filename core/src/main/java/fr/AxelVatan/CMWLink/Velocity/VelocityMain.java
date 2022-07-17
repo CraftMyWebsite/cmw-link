@@ -11,6 +11,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
+import fr.AxelVatan.CMWLink.Common.Config.StartingFrom;
 import lombok.Getter;
 
 @Plugin(id = "craftmywebsite-link", name = "CraftMyWebsite-Link", version = "1.0", url = "https://craftmywebsite.fr/", description = "CraftMyWebsite-Link a java plugin for MC servers", authors = {"AxelVatan"})
@@ -21,7 +22,7 @@ public class VelocityMain {
 	@Inject
 	public VelocityMain(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
 		logger.info("==========================================");
-		this.configFile = new ConfigFile(dataDirectory.toFile(), logger, "1.0");
+		this.configFile = new ConfigFile(StartingFrom.VELOCITY,dataDirectory.toFile(), logger, "1.0");
 		logger.info("==========================================");
 	}
 

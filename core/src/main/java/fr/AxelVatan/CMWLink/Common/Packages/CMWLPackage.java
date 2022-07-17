@@ -15,6 +15,8 @@ public abstract class CMWLPackage {
 	private @Getter String version = "Unknown";
 	private Logger log;
 	private WebServer webServer;
+	private @Getter boolean isUseProxyConfig;
+	private @Getter boolean isInBungee;
 	
 	public void init(String pluginName, String routePrefix, String version, Logger log, WebServer webServer) {
 		this.pluginName = pluginName;
@@ -22,6 +24,13 @@ public abstract class CMWLPackage {
 		this.version = version;
 		this.log = log;
 		this.webServer = webServer;
+		this.isUseProxyConfig = webServer.getConfig().getConfig().isUseProxy();
+		try {
+			Class.forName("net.md_5.bungee.api.ProxyServer");
+			this.isInBungee = true;
+		} catch (ClassNotFoundException e) {
+			this.isInBungee = false;
+		}
 		onEnable();
 	}
 	
