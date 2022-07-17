@@ -30,6 +30,40 @@ public class WebServer {
 	private Express app;
 	private @Getter HashMap<String, IRoute> routes;
 
+	public static void main(String a[]){
+        
+		final String customerKey = "Your customer ID";
+        // Customer secret
+        final String customerSecret = "Your customer secret";
+
+        // Concatenate customer key and customer secret and use base64 to encode the concatenated string
+        String plainCredentials = customerKey + ":" + customerSecret;
+        String base64Credentials = new String(Base64.getEncoder().encode(plainCredentials.getBytes()));
+        // Create authorization header
+        String authorizationHeader = "Basic " + base64Credentials;
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        // Create HTTP request object
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://127.0.0.1:24102/boutique/give/Axeldu18/stone/1"))
+                .GET()
+                .header("Authorization", authorizationHeader)
+                .header("Content-Type", "application/json")
+                .build();
+        // Send HTTP request
+        HttpResponse<String> response = null;
+		try {
+			response = client.send(request,
+			        HttpResponse.BodyHandlers.ofString());
+		} catch (IOException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        System.out.println(response.body());
+    }
+	
 	public WebServer(ConfigFile config) {
 		this.config = config;
 		this.app = new Express();
@@ -41,7 +75,7 @@ public class WebServer {
 			jsObj.addProperty("VERSION", config.getVersion());
 			res.send(jsObj.toString());
 		});
-		authHost();
+		//authHost();
 		handleNonExistingRoutes();
 	}
 
@@ -54,10 +88,10 @@ public class WebServer {
 	
 	private void handleNonExistingRoutes() {
 		app.use((req, res) ->{
-			if(routes.containsKey(req.getPath())) {
-				if(config.getConfig().isLogRequests()) {
+			/*if(routes.containsKey(req.getPath())) {
+				if(config.getConfig().isLogRequests()) {*/
 					config.getLog().info("Host " + req.getIp() + " requested route " + req.getPath());
-				}
+				/*}
 			}else {
 				JsonObject jsObj = new JsonObject();
 				jsObj.addProperty("CODE", 404);
@@ -66,7 +100,7 @@ public class WebServer {
 				if(config.getConfig().isLogRequests() && !req.getPath().contains("favicon.ico")) {
 					config.getLog().severe("Route " + req.getPath() + " requested by " + req.getIp() + " does not exist.");
 				}
-			}
+			}*/
 		});
 	}
 	
