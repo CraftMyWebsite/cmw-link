@@ -3,14 +3,17 @@ package fr.AxelVatan.CMWLink.Boutique.SP;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
+import fr.AxelVatan.CMWLink.Boutique.Result;
 import fr.AxelVatan.CMWLink.Boutique.SP.Routes.TestGive;
 import fr.AxelVatan.CMWLink.Boutique.SP.Routes.VersionRoute;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
@@ -56,9 +59,26 @@ public class Main extends CMWLPackage implements PluginMessageListener{
 			int qty = in.readInt();
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();
 			out.writeUTF(subchannel);
-			out.writeUTF("Received give order: " + username + ", " + item + ", " + qty + " OK");
+			try {
+				Material mat = Material.getMaterial(item);
+				if(mat == null) {
+					out.writeUTF(Result.ITEM_NOT_FOUND.name());
+				}else {
+					Player playerReq = Bukkit.getServer().getPlayer(username);
+					if(playerReq == null) {
+						out.writeUTF(Result.PLAYER_NOT_FOUND.name());
+					}else {
+						ItemStack itemStack = new ItemStack(Material.getMaterial(item), qty);
+						Bukkit.getServer().getPlayer(username).getInventory().addItem(itemStack);
+						this.log(Level.INFO, "Received give order: " + username + ", " + item + ", " + qty);
+						out.writeUTF(Result.SUCCESS.name());
+					}
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+				out.writeUTF(Result.ITEM_NOT_FOUND.name());
+			}
 			Bukkit.getPlayer(username).sendPluginMessage(mcServer.getPluginManager().getPlugin("CraftMyWebsite_Link"), "cmw:boutique", out.toByteArray());
-			this.log(Level.INFO, "Received give order: " + username + ", " + item + ", " + qty);
 		}
 	}
 }
