@@ -37,7 +37,6 @@ public class WebServer {
 	}
 
 	private void authRequest() {
-		
 	}
 	
 	public void startWebServer() {

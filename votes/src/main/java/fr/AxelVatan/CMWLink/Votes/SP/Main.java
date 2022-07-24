@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Votes;
+package fr.AxelVatan.CMWLink.Votes.SP;
 
 import java.util.logging.Level;
 
@@ -8,7 +8,7 @@ public class Main extends CMWLPackage{
 
 	@Override
 	public void enable() {
-		this.log(Level.INFO, "Votes enabled.");
+		this.log(Level.INFO, "Votes for Spigot enabled.");
 	}
 
 	@Override
@@ -18,6 +18,6 @@ public class Main extends CMWLPackage{
 
 	@Override
 	public void registerRoutes() {
-		this.addRoute(new VersionRoute(this));
+		
 	}
 }
