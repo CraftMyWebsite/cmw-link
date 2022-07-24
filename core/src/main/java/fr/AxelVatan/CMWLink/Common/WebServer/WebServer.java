@@ -33,11 +33,11 @@ public class WebServer {
 			jsObj.addProperty("VERSION", config.getVersion());
 			res.send(jsObj.toString());
 		});
-		//authHost();
-		handleErrors();
+		authRequest();
 	}
 
-	private void handleErrors() {
+	private void authRequest() {
+		
 	}
 	
 	public void startWebServer() {
@@ -99,6 +99,12 @@ public class WebServer {
 			}
 		}
 		routes.put("/", null);
+		app.all((req, res) -> {
+			JsonObject jsObj = new JsonObject();
+			jsObj.addProperty("CODE", 404);
+			jsObj.addProperty("MESSAGE", "Route " + req.getPath() + " not found !");
+			res.send(jsObj.toString());
+		});
 	}
 
 	public void disable() {

@@ -4,8 +4,6 @@ import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-
 import fr.AxelVatan.CMWLink.Common.WebServer.IRoute;
 import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
