@@ -1,5 +1,5 @@
-name: CMWL_Votes
-route_prefix: votes
+name: CMWL_Monitoring
+route_prefix: monitoring
 sp_main: fr.AxelVatan.CMWLink.Votes.SP.Main
 bg_main: fr.AxelVatan.CMWLink.Votes.BG.Main
 version: 1.0

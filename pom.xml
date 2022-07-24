@@ -13,6 +13,7 @@
 		<module>core</module>
 		<module>votes</module>
 		<module>boutique</module>
+		<module>monitoring</module>
 	</modules>
 
 </project>

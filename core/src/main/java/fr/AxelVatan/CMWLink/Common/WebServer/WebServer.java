@@ -34,32 +34,10 @@ public class WebServer {
 			res.send(jsObj.toString());
 		});
 		//authHost();
-		handleNonExistingRoutes();
+		handleErrors();
 	}
 
-	/*private void authHost() {
-		app.use((req, res) ->{
-			List<Authorization> test = req.getAuthorization();
-			System.out.println("HEADERS: " + test.get(0).getDataBase64Decoded());
-		});
-	}*/
-	
-	private void handleNonExistingRoutes() {
-		app.use((req, res) ->{
-			/*if(routes.containsKey(req.getPath())) {
-				if(config.getConfig().isLogRequests()) {*/
-					config.getLog().info("Host " + req.getIp() + " requested route " + req.getPath());
-				/*}
-			}else {
-				JsonObject jsObj = new JsonObject();
-				jsObj.addProperty("CODE", 404);
-				jsObj.addProperty("ERROR", "Route " + req.getPath() + " does not exist.");
-				res.send(jsObj.toString());
-				if(config.getConfig().isLogRequests() && !req.getPath().contains("favicon.ico")) {
-					config.getLog().severe("Route " + req.getPath() + " requested by " + req.getIp() + " does not exist.");
-				}
-			}*/
-		});
+	private void handleErrors() {
 	}
 	
 	public void startWebServer() {
@@ -69,15 +47,16 @@ public class WebServer {
 			URLConnection uc = whatismyip.openConnection();
 			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
-			JsonObject ipJson = new Gson().fromJson(in.readLine(), JsonObject.class);
-			String ip = ipJson.get("IP").getAsString();
+			JsonObject json = new Gson().fromJson(in.readLine(), JsonObject.class);
+			String ip = json.get("IP").getAsString();
 			this.config.getLog().info("External IP: " + ip);
 			URL checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/" + this.config.getConfig().getPort());
 			uc = checkURL.openConnection();
 			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
 			in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
-			String code = in.readLine();
-			if(code.equalsIgnoreCase("200")) {
+			json = new Gson().fromJson(in.readLine(), JsonObject.class);
+			boolean reachable = json.get("REACHABLE").getAsBoolean();
+			if(reachable) {
 				this.config.getLog().info("Port " + this.config.getConfig().getPort() + " is properly forwarded and is externally accessible.");
 			}
 			else {

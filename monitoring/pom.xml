@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
-	<artifactId>Core</artifactId>
+	<artifactId>Monitoring</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>CMWL_Core</name>
+	<name>CMWL_Monitoring</name>
 
 	<developers>
 		<developer>
@@ -25,28 +25,17 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>Core</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>1.19-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-        	<groupId>com.velocitypowered</groupId>
-        	<artifactId>velocity-api</artifactId>
-        	<version>3.0.1</version>
-        	<scope>provided</scope>
-    	</dependency>
-    	<dependency>
-    		<groupId>io.vacco.java-express</groupId>
-			<artifactId>java-express</artifactId>
-			<version>0.2.1</version>
-    	</dependency>
 	</dependencies>
 
 	<repositories>
@@ -55,17 +44,13 @@
 			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
 		<repository>
-			<id>jcenter-repo</id>
-			<url>https://jcenter.bintray.com/</url>
-		</repository>
-		<repository>
 			<id>papermc</id>
 			<url>https://papermc.io/repo/repository/maven-public/</url>
 		</repository>
 	</repositories>
 
 	<build>
-		<finalName>CraftMyWebsite_Link</finalName>
+		<finalName>CMWL_Monitoring</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<defaultGoal>clean install</defaultGoal>
 		<resources>
