@@ -1,9 +1,12 @@
 package fr.AxelVatan.CMWLink.Monitoring.SP;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.BanEntry;
+import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
@@ -54,6 +57,14 @@ public class ServerInfos {
 		return playersList;
 	}
 	
+	public List<BanInfo> getBanList(Type banType) {
+		List<BanInfo> banList = new ArrayList<BanInfo>();
+		for(BanEntry entry : this.server.getBanList(banType).getBanEntries()) {
+			banList.add(new BanInfo(entry.getReason(), entry.getSource(), entry.getTarget(), entry.getCreated(), entry.getExpiration()));
+		}
+		return banList;
+	}
+	
 	public HashMap<Object, Object> getAllSettings(){
 		HashMap<Object, Object> settings = new HashMap<Object, Object>();
 		settings.put("ALLOW_NETHER", this.server.getAllowNether());
@@ -70,9 +81,17 @@ public class ServerInfos {
 	
 	@AllArgsConstructor
 	public class PlayerInfo {
-		
 		private @Getter String username;
 		private @Getter String uuid;
 		private @Getter String ip;
+	}
+	
+	@AllArgsConstructor
+	public class BanInfo {
+		private @Getter String reason;
+		private @Getter String source;
+		private @Getter String target;
+		private @Getter Date created;
+		private @Getter Date expiration;
 	}
 }

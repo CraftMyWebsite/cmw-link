@@ -3,6 +3,7 @@ package fr.AxelVatan.CMWLink.Monitoring.SP;
 import java.util.logging.Level;
 
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
+import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetBanListRoute;
 import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetCurrentPlayersRoute;
 import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetMaxPlayersRoute;
 import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetMotdRoute;
@@ -33,6 +34,7 @@ public class Main extends CMWLPackage{
 		//SERVER
 		this.addRoute(new GetMotdRoute(this));
 		this.addRoute(new GetOpListRoute(this));
+		this.addRoute(new GetBanListRoute(this));
 		//POST
 	}
 
