@@ -52,7 +52,7 @@ public class WebServer {
 					.append("VERSION", config.getVersion());
 			res.send(json.build());
 		});
-		authRequest();
+		//authRequest();
 	}
 	
 	private void authRequest() {

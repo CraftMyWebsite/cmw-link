@@ -28,7 +28,7 @@ public class GetBanListRoute extends CMWLRoute<Main>{
 
 	private JsonArray createJsonArray(Type banType) {
 		JsonArray banList = new JsonArray();
-		for(BanInfo banInfo : this.getPlugin().getServerInfos().getBanList(Type.NAME)) {
+		for(BanInfo banInfo : this.getPlugin().getServerInfos().getBanList(banType)) {
 			JsonObject banInfoJs = new JsonObject();
 			banInfoJs.addProperty("REASON", banInfo.getReason());
 			banInfoJs.addProperty("SOURCE", banInfo.getSource());
