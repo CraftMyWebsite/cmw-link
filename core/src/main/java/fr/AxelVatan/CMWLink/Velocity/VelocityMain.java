@@ -27,7 +27,7 @@ public class VelocityMain {
 	}
 
 	@Subscribe
-	public void onPlayerChat(ProxyShutdownEvent event) {
+	public void onProxyShutdown(ProxyShutdownEvent event) {
 		this.configFile.getWebServer().disable();
 		this.configFile.getPackages().disablePackages();
 	}
