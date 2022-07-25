@@ -72,7 +72,6 @@ public class Packages {
 						CMWLPackageDescription desc = this.yaml.loadAs(in, CMWLPackageDescription.class);
 						Preconditions.checkNotNull(desc.getName(), "Plugin from %s has no name", file);
 						Preconditions.checkNotNull(desc.getRoute_prefix(), "Plugin from %s has no route prefix", file);
-						Preconditions.checkNotNull(desc.getSp_main(), "Plugin from %s has no sp_main", file);
 						Preconditions.checkNotNull(desc.getVersion(), "Plugin from %s has no version", file);
 						Preconditions.checkNotNull(desc.getAuthor(), "Plugin from %s has no author", file);
 						desc.setFile(file);
@@ -136,15 +135,18 @@ public class Packages {
 				Class<?> main = null;
 				switch(webServer.getConfig().getStartingFrom()) {
 				case BUNGEECORD:
+					Preconditions.checkNotNull(plugin.getBg_main(), "Plugin from %s has no sp_main main class, maybe not compatible with BungeeCord ?", plugin.getFile());
 					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getBg_main(), plugin.getFile().toURI().toURL(), this);
 					main = loader.loadClass( plugin.getBg_main());
 					break;
 				case SPIGOT:
+					Preconditions.checkNotNull(plugin.getSp_main(), "Plugin from %s has no bg_main main class, maybe not compatible with Spigot/Paper ?", plugin.getFile());
 					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getSp_main(), plugin.getFile().toURI().toURL(), this);
 					main = loader.loadClass( plugin.getSp_main());
 					break;
 				case VELOCITY:
-					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getBg_main(), plugin.getFile().toURI().toURL(), this);
+					Preconditions.checkNotNull(plugin.getVl_main(), "Plugin from %s has no vl_main main class, maybe not compatible with Velocity ?", plugin.getFile());
+					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getVl_main(), plugin.getFile().toURI().toURL(), this);
 					main = loader.loadClass( plugin.getBg_main());
 					break;
 				}

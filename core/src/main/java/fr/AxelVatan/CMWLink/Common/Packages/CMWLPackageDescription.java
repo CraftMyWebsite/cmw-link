@@ -16,6 +16,7 @@ public class CMWLPackageDescription{
     private String route_prefix;
     private String sp_main;
     private String bg_main;
+    private String vl_main;
     private String version;
     private String author;
     private Set<String> depends = new HashSet<>();
