@@ -1,5 +1,7 @@
 package fr.AxelVatan.CMWLink.Boutique.BG.Routes;
 
+import java.util.HashMap;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
@@ -28,4 +30,11 @@ public class TestGive extends CMWLRoute<Main>{
 			res.send("Success " + in.readUTF() + " response: " + in.readUTF());
 		}, username, item, qty);
 	}
+
+	@Override
+	public String executeRoute(HashMap<String, String> params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

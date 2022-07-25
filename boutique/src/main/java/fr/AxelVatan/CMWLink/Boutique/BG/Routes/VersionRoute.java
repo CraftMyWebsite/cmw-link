@@ -1,7 +1,7 @@
 package fr.AxelVatan.CMWLink.Boutique.BG.Routes;
 
-import express.http.request.Request;
-import express.http.response.Response;
+import java.util.HashMap;
+
 import fr.AxelVatan.CMWLink.Boutique.BG.Main;
 import fr.AxelVatan.CMWLink.Common.Config.JsonBuilder;
 import fr.AxelVatan.CMWLink.Common.WebServer.CMWLRoute;
@@ -14,11 +14,9 @@ public class VersionRoute extends CMWLRoute<Main>{
 	}
 
 	@Override
-	public void execute(Request req, Response res) {
-		JsonBuilder json = new JsonBuilder()
-				.append("PACKAGE_NAME", this.getPlugin().getPluginName() + " for BungeeCord")
-				.append("VERSION", this.getPlugin().getVersion());
-		res.send(json.build());
+	public String executeRoute(HashMap<String, String> params) {
+		return new JsonBuilder("PACKAGE_NAME", this.getPlugin().getPluginName() + " for BungeeCord")
+				.append("VERSION", this.getPlugin().getVersion()).build();
 	}
 
 }

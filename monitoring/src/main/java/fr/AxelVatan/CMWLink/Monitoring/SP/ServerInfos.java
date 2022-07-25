@@ -19,7 +19,7 @@ public class ServerInfos {
 	
 	public ServerInfos(Main main) {
 		this.main = main;
-		this.server = Bukkit.getServer();
+		//this.server = Bukkit.getServer();
 	}
 	
 	public int getCurrentPlayers() {
