@@ -1,0 +1,33 @@
+package fr.AxelVatan.CMWLink.Common.Config;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+public class JsonBuilder {
+
+	private JsonObject jsObj = new JsonObject();
+	
+	public JsonBuilder append(String key, String value) {
+		jsObj.addProperty(key, value);
+		return this;
+	}
+	
+	public JsonBuilder append(String key, int value) {
+		jsObj.addProperty(key, value);
+		return this;
+	}
+	
+	public JsonBuilder append(String key, boolean value) {
+		jsObj.addProperty(key, value);
+		return this;
+	}
+	
+	public JsonBuilder append(String key, JsonElement value) {
+		jsObj.add(key, value);
+		return this;
+	}
+	
+	public String build(){
+		return jsObj.toString();
+	}
+}

@@ -20,6 +20,7 @@ import com.google.gson.JsonObject;
 
 import express.Express;
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
+import fr.AxelVatan.CMWLink.Common.Config.JsonBuilder;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import lombok.Getter;
 
@@ -55,11 +56,11 @@ public class WebServer {
 		this.app = new Express();
 		this.routes = new HashMap<String, IRoute>();
 		app.all("/", (req, res) -> {
-			JsonObject jsObj = new JsonObject();
-			jsObj.addProperty("CODE", 200);
-			jsObj.addProperty("NAME", "CraftMyWebSite_Link");
-			jsObj.addProperty("VERSION", config.getVersion());
-			res.send(jsObj.toString());
+			JsonBuilder json = new JsonBuilder()
+					.append("CODE", 200)
+					.append("NAME", "CraftMyWebSite_Link")
+					.append("VERSION", config.getVersion());
+			res.send(json.build());
 		});
 		authRequest();
 	}
@@ -71,11 +72,12 @@ public class WebServer {
 			String userAndPwdFromHost = BCrypt.hashpw(user + ":" + pwd, BCrypt.gensalt(10));
 			Boolean match = BCrypt.checkpw(config.getConfig().getUsername() + ":" + config.getConfig().getPassword(), userAndPwdFromHost);
 			if(!match) {
-				JsonObject jsObj = new JsonObject();
-				jsObj.addProperty("CODE", 401);
-				jsObj.addProperty("MESSAGE", "User not authorized to execute this request.");
+				JsonBuilder json = new JsonBuilder()
+						.append("CODE", 401)
+						.append("MESSAGE", "User not authorized to execute this request.");
+				res.send(json.build());
 				config.getLog().severe("User: " + user + " from host: " + req.getIp() + " is not authorized to execute the route: " + req.getPath());
-				res.send(jsObj.toString());
+				res.send(json.build());
 			}
 		});
 	}
@@ -144,10 +146,10 @@ public class WebServer {
 
 	private void handleNonExistingRoutes() {
 		app.all((req, res) -> {
-			JsonObject jsObj = new JsonObject();
-			jsObj.addProperty("CODE", 404);
-			jsObj.addProperty("MESSAGE", "Route " + req.getPath() + " not found !");
-			res.send(jsObj.toString());
+			JsonBuilder json = new JsonBuilder()
+					.append("CODE", 404)
+					.append("MESSAGE", "Route " + req.getPath() + " not found !");
+			res.send(json.build());
 		});
 	}
 	
