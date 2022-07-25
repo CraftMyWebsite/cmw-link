@@ -1,9 +1,15 @@
 package fr.AxelVatan.CMWLink.Monitoring.SP;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 public class ServerInfos {
 
@@ -16,11 +22,19 @@ public class ServerInfos {
 	}
 	
 	public int getCurrentPlayers() {
-		return this.server.getOfflinePlayers().length;
+		return this.server.getOnlinePlayers().size();
 	}
 	
 	public int getMaxPlayers() {
 		return this.server.getMaxPlayers();
+	}
+	
+	public List<PlayerInfo> getPlayersLit(){
+		List<PlayerInfo> playersList = new ArrayList<PlayerInfo>();
+		for(Player player :  this.server.getOnlinePlayers()) {
+			playersList.add(new PlayerInfo(player.getName(), player.getUniqueId().toString().replace("-", ""), player.getAddress().getHostString()));
+		}
+		return playersList;
 	}
 	
 	public String getMotd() {
@@ -43,5 +57,13 @@ public class ServerInfos {
 		settings.put("LEVEL_SEED", this.server.getWorlds().get(0).getSeed());
 		settings.put("MAX_BUILD_HEIGHT", this.server.getWorlds().get(0).getMaxHeight());
 		return settings;
+	}
+	
+	@AllArgsConstructor
+	public class PlayerInfo {
+		
+		private @Getter String username;
+		private @Getter String uuid;
+		private @Getter String ip;
 	}
 }

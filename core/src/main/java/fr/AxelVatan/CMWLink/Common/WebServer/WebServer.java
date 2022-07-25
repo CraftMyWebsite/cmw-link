@@ -1,16 +1,13 @@
 package fr.AxelVatan.CMWLink.Common.WebServer;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -32,22 +29,15 @@ public class WebServer {
 	
 	//TEST CODE
 	public static void main(String a[]){
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://127.0.0.1:24102/boutique/version"))
-                .GET()
-                .header("User", "admin")
-                .header("Pwd", "changme")
-                .header("Content-Type", "application/json")
-                .build();
-        HttpResponse<String> response = null;
-		try {
-			response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
+		ExecutorService executor = Executors.newFixedThreadPool(50);
+		for (int i = 0; i < 1; i++) {
+			Runnable worker = new MyRunnable(i);
+			try {
+				executor.execute(worker);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-
-        System.out.println(response.body());
     }
 	//
 	

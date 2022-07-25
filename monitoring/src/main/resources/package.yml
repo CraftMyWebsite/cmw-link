@@ -1,6 +1,6 @@
 name: CMWL_Monitoring
 route_prefix: monitoring
-sp_main: fr.AxelVatan.CMWLink.Votes.SP.Main
-bg_main: fr.AxelVatan.CMWLink.Votes.BG.Main
+sp_main: fr.AxelVatan.CMWLink.Monitoring.SP.Main
+bg_main: fr.AxelVatan.CMWLink.Monitoring.BG.Main
 version: 1.0
 author: AxelVatan

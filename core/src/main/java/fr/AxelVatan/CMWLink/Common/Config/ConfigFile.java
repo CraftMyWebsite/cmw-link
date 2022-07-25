@@ -71,6 +71,7 @@ public class ConfigFile {
 		private @Getter boolean useProxy = false;
 		private @Getter String username = "admin";
 		private @Getter String password = "changeme";
+		private @Getter String salt = "AN AWESOME SALT FOR HASH";
 
 	}
 }
