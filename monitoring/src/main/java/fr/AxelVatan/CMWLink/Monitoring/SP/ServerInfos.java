@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.v1_19_R1.util.CraftIconCache;
 import org.bukkit.entity.Player;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class ServerInfos {
 	
 	public ServerInfos(Main main) {
 		this.main = main;
-		//this.server = Bukkit.getServer();
+		this.server = Bukkit.getServer();
 	}
 	
 	public int getCurrentPlayers() {
@@ -44,6 +44,14 @@ public class ServerInfos {
 	
 	public String getVersion() {
 		return this.server.getBukkitVersion();
+	}
+	
+	public List<PlayerInfo> getOpList() {
+		List<PlayerInfo> playersList = new ArrayList<PlayerInfo>();
+		for(OfflinePlayer player : this.server.getOperators()) {
+			playersList.add(new PlayerInfo(player.getName(), player.getUniqueId().toString().replace("-", ""), null));
+		}
+		return playersList;
 	}
 	
 	public HashMap<Object, Object> getAllSettings(){

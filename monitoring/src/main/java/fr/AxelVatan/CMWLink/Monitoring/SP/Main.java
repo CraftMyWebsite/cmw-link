@@ -6,6 +6,7 @@ import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetCurrentPlayersRoute;
 import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetMaxPlayersRoute;
 import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetMotdRoute;
+import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetOpListRoute;
 import lombok.Getter;
 
 public class Main extends CMWLPackage{
@@ -31,6 +32,7 @@ public class Main extends CMWLPackage{
 		this.addRoute(new GetMaxPlayersRoute(this));
 		//SERVER
 		this.addRoute(new GetMotdRoute(this));
+		this.addRoute(new GetOpListRoute(this));
 		//POST
 	}
 

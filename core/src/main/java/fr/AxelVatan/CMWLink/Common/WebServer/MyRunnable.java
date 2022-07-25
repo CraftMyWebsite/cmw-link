@@ -18,7 +18,7 @@ public class MyRunnable implements Runnable {
 	public void run() {
 		HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://127.0.0.1:24102/monitoring/motd"))
+                .uri(URI.create("http://127.0.0.1:24102/monitoring/opList"))
                 .GET()
                 .header("User", "admin")
                 .header("Pwd", "changeme")
