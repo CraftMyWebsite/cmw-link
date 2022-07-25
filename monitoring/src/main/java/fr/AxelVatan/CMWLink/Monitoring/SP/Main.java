@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetCurrentPlayersRoute;
 import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetMaxPlayersRoute;
+import fr.AxelVatan.CMWLink.Monitoring.SP.Routes.Get.GetMotdRoute;
 import lombok.Getter;
 
 public class Main extends CMWLPackage{
@@ -28,6 +29,8 @@ public class Main extends CMWLPackage{
 		//PLAYERS
 		this.addRoute(new GetCurrentPlayersRoute(this));
 		this.addRoute(new GetMaxPlayersRoute(this));
+		//SERVER
+		this.addRoute(new GetMotdRoute(this));
 		//POST
 	}
 

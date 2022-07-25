@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.craftbukkit.v1_19_R1.util.CraftIconCache;
 import org.bukkit.entity.Player;
 
 import lombok.AllArgsConstructor;
