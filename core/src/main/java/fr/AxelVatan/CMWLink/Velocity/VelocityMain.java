@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import com.google.inject.Inject;
+import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
@@ -24,6 +25,8 @@ public class VelocityMain {
 		logger.info("==========================================");
 		this.configFile = new ConfigFile(StartingFrom.VELOCITY,dataDirectory.toFile(), logger, "1.0");
 		logger.info("==========================================");
+		CommandMeta meta = server.getCommandManager().metaBuilder("vcmwl").build();
+		server.getCommandManager().register(meta, new VL_Commands(this));
 	}
 
 	@Subscribe

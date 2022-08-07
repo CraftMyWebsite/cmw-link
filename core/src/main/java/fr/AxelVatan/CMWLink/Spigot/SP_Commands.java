@@ -36,9 +36,9 @@ public class SP_Commands implements CommandExecutor, TabCompleter {
 	}
 
 	private void help(CommandSender sender) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6CMW-Link: &7List des commandes"));
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7- cmwl &apackages | &7Affiche les packages actifs"));
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7- cmwl &apackages | &7Recharge le plugin"));
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6CMW-Link: &7Liste des commandes"));
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7- cmwl &apackages &8| &7Affiche les packages actifs"));
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7- cmwl &areload &8| &7Recharge le plugin"));
 	}
 
 	@Override
