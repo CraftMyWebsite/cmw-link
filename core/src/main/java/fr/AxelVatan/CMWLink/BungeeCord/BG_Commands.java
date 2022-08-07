@@ -15,7 +15,7 @@ import net.md_5.bungee.api.plugin.TabExecutor;
 public class BG_Commands extends Command implements TabExecutor{
 
 	private BungeeCordMain main;
-	
+
 	public BG_Commands(BungeeCordMain main) {
 		super("bcmwl");
 		this.main = main;
@@ -26,16 +26,22 @@ public class BG_Commands extends Command implements TabExecutor{
 		if(args.length == 0) {
 			help(sender);
 		}else if(args[0].equalsIgnoreCase("packages")) {
-			sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&6CMW-Link: &7Packages installés")));
-			for(CMWLPackage packageClass : this.main.getConfigFile().getPackages().getPackagesLoaded()) {
-				sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7- &a" + packageClass.getPluginName() + "&7, Version: &a" + packageClass.getVersion())));
+			if(sender.hasPermission("cmwl.packages")) {
+				sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&6CMW-Link: &7Packages installés")));
+				for(CMWLPackage packageClass : this.main.getConfigFile().getPackages().getPackagesLoaded()) {
+					sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7- &a" + packageClass.getPluginName() + "&7, Version: &a" + packageClass.getVersion())));
+				}
+			}else {
+				errorPerm(sender);
 			}
 		}else if(args[0].equalsIgnoreCase("reload")) {
-			//DISABLE
-			this.main.getConfigFile().getWebServer().disable();
-			this.main.getConfigFile().getPackages().disablePackages();
-			//RE-ENABLE
-			this.main.resetConfig();
+			if(sender.hasPermission("cmwl.reload")) {
+				this.main.getConfigFile().getWebServer().disable();
+				this.main.getConfigFile().getPackages().disablePackages();
+				this.main.resetConfig();
+			}else {
+				errorPerm(sender);
+			}
 		}else {
 			help(sender);
 		}
@@ -47,15 +53,23 @@ public class BG_Commands extends Command implements TabExecutor{
 		sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7- bcmwl &areload &8| &7Recharge le plugin")));
 	}
 
+	private void errorPerm(CommandSender sender) {
+		sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&4Vous n'avez pas la permission de faire cette commande !")));
+	}
+	
 	@Override
 	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
 		if (args.length > 2 || args.length == 0){
-            return ImmutableSet.of();
-        }
+			return ImmutableSet.of();
+		}
 		Set<String> matches = new HashSet<String>();
 		if(args.length == 1) {
-			matches.add("packages");
-			matches.add("reload");
+			if(sender.hasPermission("cmwl.packages")) {
+				matches.add("packages");
+			}
+			if(sender.hasPermission("cmwl.reload")) {
+				matches.add("reload");
+			}
 		}
 		return matches;
 	}

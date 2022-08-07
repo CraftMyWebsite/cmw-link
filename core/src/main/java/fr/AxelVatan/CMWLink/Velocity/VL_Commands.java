@@ -10,7 +10,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public class VL_Commands implements SimpleCommand {
 
 	private VelocityMain main;
-	
+
 	public VL_Commands(VelocityMain main) {
 		this.main = main;
 	}
@@ -20,16 +20,22 @@ public class VL_Commands implements SimpleCommand {
 		if(invocation.arguments().length == 0) {
 			help(invocation.source());
 		}else if(invocation.arguments()[0].equalsIgnoreCase("packages")) {
-			invocation.source().sendMessage(Component.text("CMW-Link: ", NamedTextColor.GOLD).append(Component.text("Packages installés", NamedTextColor.GRAY)));
-			for(CMWLPackage packageClass : this.main.getConfigFile().getPackages().getPackagesLoaded()) {
-				invocation.source().sendMessage(Component.text("- ", NamedTextColor.GRAY).append(Component.text(packageClass.getPluginName(), NamedTextColor.GREEN).append(Component.text(", Version: ", NamedTextColor.GRAY).append(Component.text(packageClass.getVersion(), NamedTextColor.GREEN)))));
+			if(invocation.source().hasPermission("cmwl.packages")) {
+				invocation.source().sendMessage(Component.text("CMW-Link: ", NamedTextColor.GOLD).append(Component.text("Packages installés", NamedTextColor.GRAY)));
+				for(CMWLPackage packageClass : this.main.getConfigFile().getPackages().getPackagesLoaded()) {
+					invocation.source().sendMessage(Component.text("- ", NamedTextColor.GRAY).append(Component.text(packageClass.getPluginName(), NamedTextColor.GREEN).append(Component.text(", Version: ", NamedTextColor.GRAY).append(Component.text(packageClass.getVersion(), NamedTextColor.GREEN)))));
+				}
+			}else {
+				errorPerm(invocation.source());
 			}
 		}else if(invocation.arguments()[0].equalsIgnoreCase("reload")) {
-			//DISABLE
-			this.main.getConfigFile().getWebServer().disable();
-			this.main.getConfigFile().getPackages().disablePackages();
-			//RE-ENABLE
-			this.main.resetConfig();
+			if(invocation.source().hasPermission("cmwl.reload")) {
+				this.main.getConfigFile().getWebServer().disable();
+				this.main.getConfigFile().getPackages().disablePackages();
+				this.main.resetConfig();
+			}else {
+				errorPerm(invocation.source());
+			}
 		}else {
 			help(invocation.source());
 		}
@@ -39,5 +45,9 @@ public class VL_Commands implements SimpleCommand {
 		sender.sendMessage(Component.text("CMW-Link: ", NamedTextColor.GOLD).append(Component.text("Liste des commandes", NamedTextColor.GRAY)));
 		sender.sendMessage(Component.text("- vcmwl ", NamedTextColor.GRAY).append(Component.text("packages", NamedTextColor.GREEN).append(Component.text(" | ", NamedTextColor.DARK_GRAY).append(Component.text("Affiche les packages actifs", NamedTextColor.GRAY)))));
 		sender.sendMessage(Component.text("- vcmwl ", NamedTextColor.GRAY).append(Component.text("reload", NamedTextColor.GREEN).append(Component.text(" | ", NamedTextColor.DARK_GRAY).append(Component.text("Recharge le plugin", NamedTextColor.GRAY)))));
+	}
+	
+	private void errorPerm(CommandSource sender) {
+		sender.sendMessage(Component.text("Vous n'avez pas la permission de faire cette commande !", NamedTextColor.DARK_RED));
 	}
 }

@@ -29,11 +29,13 @@ public class SP_Commands implements CommandExecutor, TabCompleter {
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7- &a" + packageClass.getPluginName() + "&7, Version: &a" + packageClass.getVersion()));
 			}
 		}else if(args[0].equalsIgnoreCase("reload")) {
-			//DISABLE
-			this.main.getConfigFile().getWebServer().disable();
-			this.main.getConfigFile().getPackages().disablePackages();
-			//RE-ENABLE
-			this.main.resetConfig();
+			if(sender.hasPermission("cmwl.reload")) {
+				this.main.getConfigFile().getWebServer().disable();
+				this.main.getConfigFile().getPackages().disablePackages();
+				this.main.resetConfig();
+			}else {
+				errorPerm(sender);
+			}
 		}else {
 			help(sender);
 		}
@@ -46,6 +48,10 @@ public class SP_Commands implements CommandExecutor, TabCompleter {
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7- cmwl &areload &8| &7Recharge le plugin"));
 	}
 
+	private void errorPerm(CommandSender sender) {
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Vous n'avez pas la permission de faire cette commande !"));
+	}
+	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length > 2 || args.length == 0){
@@ -53,8 +59,12 @@ public class SP_Commands implements CommandExecutor, TabCompleter {
         }
 		List<String> matches = new ArrayList<String>();
 		if(args.length == 1) {
-			matches.add("packages");
-			matches.add("reload");
+			if(sender.hasPermission("cmwl.packages")) {
+				matches.add("packages");
+			}
+			if(sender.hasPermission("cmwl.reload")) {
+				matches.add("reload");
+			}
 		}
 		return matches;
 	}
