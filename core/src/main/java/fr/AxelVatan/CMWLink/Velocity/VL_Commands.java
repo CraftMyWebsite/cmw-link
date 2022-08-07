@@ -24,7 +24,12 @@ public class VL_Commands implements SimpleCommand {
 			for(CMWLPackage packageClass : this.main.getConfigFile().getPackages().getPackagesLoaded()) {
 				invocation.source().sendMessage(Component.text("- ", NamedTextColor.GRAY).append(Component.text(packageClass.getPluginName(), NamedTextColor.GREEN).append(Component.text(", Version: ", NamedTextColor.GRAY).append(Component.text(packageClass.getVersion(), NamedTextColor.GREEN)))));
 			}
-			
+		}else if(invocation.arguments()[0].equalsIgnoreCase("reload")) {
+			//DISABLE
+			this.main.getConfigFile().getWebServer().disable();
+			this.main.getConfigFile().getPackages().disablePackages();
+			//RE-ENABLE
+			this.main.resetConfig();
 		}else {
 			help(invocation.source());
 		}

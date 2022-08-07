@@ -19,6 +19,10 @@ public class SpigotMain extends JavaPlugin{
     	this.getCommand("cmwl").setTabCompleter(new SP_Commands(this));
     }
 
+    public void resetConfig() {
+    	this.configFile = new ConfigFile(StartingFrom.SPIGOT, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
+    }
+    
     @Override
     public void onDisable() {
     	this.configFile.getWebServer().disable();

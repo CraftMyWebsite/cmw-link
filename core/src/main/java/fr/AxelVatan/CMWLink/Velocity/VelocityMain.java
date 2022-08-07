@@ -18,17 +18,25 @@ import lombok.Getter;
 @Plugin(id = "craftmywebsite-link", name = "CraftMyWebsite-Link", version = "1.0", url = "https://craftmywebsite.fr/", description = "CraftMyWebsite-Link a java plugin for MC servers", authors = {"AxelVatan"})
 public class VelocityMain {
 
+	private Path dataDirectory;
+	private Logger logger;
 	private @Getter ConfigFile configFile;
 
 	@Inject
 	public VelocityMain(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
+		this.logger = logger;
+		this.dataDirectory = dataDirectory;
 		logger.info("==========================================");
-		this.configFile = new ConfigFile(StartingFrom.VELOCITY,dataDirectory.toFile(), logger, "1.0");
+		this.configFile = new ConfigFile(StartingFrom.VELOCITY, dataDirectory.toFile(), logger, "1.0");
 		logger.info("==========================================");
 		CommandMeta meta = server.getCommandManager().metaBuilder("vcmwl").build();
 		server.getCommandManager().register(meta, new VL_Commands(this));
 	}
 
+	public void resetConfig() {
+		this.configFile = new ConfigFile(StartingFrom.VELOCITY, dataDirectory.toFile(), logger, "1.0");
+    }
+	
 	@Subscribe
 	public void onProxyShutdown(ProxyShutdownEvent event) {
 		this.configFile.getWebServer().disable();

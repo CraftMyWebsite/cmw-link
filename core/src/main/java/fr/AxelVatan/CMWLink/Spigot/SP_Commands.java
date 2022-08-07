@@ -28,7 +28,12 @@ public class SP_Commands implements CommandExecutor, TabCompleter {
 			for(CMWLPackage packageClass : this.main.getConfigFile().getPackages().getPackagesLoaded()) {
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7- &a" + packageClass.getPluginName() + "&7, Version: &a" + packageClass.getVersion()));
 			}
-			
+		}else if(args[0].equalsIgnoreCase("reload")) {
+			//DISABLE
+			this.main.getConfigFile().getWebServer().disable();
+			this.main.getConfigFile().getPackages().disablePackages();
+			//RE-ENABLE
+			this.main.resetConfig();
 		}else {
 			help(sender);
 		}

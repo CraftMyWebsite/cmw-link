@@ -17,6 +17,10 @@ public class BungeeCordMain extends Plugin {
     	this.getProxy().getPluginManager().registerCommand(this, new BG_Commands(this));
     }
 
+    public void resetConfig() {
+    	this.configFile = new ConfigFile(StartingFrom.BUNGEECORD, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
+    }
+    
     @Override
     public void onDisable() {
     	this.configFile.getWebServer().disable();
