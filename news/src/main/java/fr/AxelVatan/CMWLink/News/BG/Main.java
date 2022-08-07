@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Votes.BG;
+package fr.AxelVatan.CMWLink.News.BG;
 
 import java.util.logging.Level;
 

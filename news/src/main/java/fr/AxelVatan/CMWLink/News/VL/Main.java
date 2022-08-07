@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Votes.SP;
+package fr.AxelVatan.CMWLink.News.VL;
 
 import java.util.logging.Level;
 
@@ -8,7 +8,7 @@ public class Main extends CMWLPackage{
 
 	@Override
 	public void enable() {
-		this.log(Level.INFO, "News for Spigot enabled.");
+		this.log(Level.INFO, "News for Velocity enabled.");
 	}
 
 	@Override
