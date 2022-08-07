@@ -38,8 +38,8 @@ public class BG_Commands extends Command implements TabExecutor{
 
 	private void help(CommandSender sender) {
 		sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&6CMW-Link: &7List des commandes")));
-		sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7- bcmwl &apackages |&7Affiche les packages actifs")));
-		sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7- bcmwl &apackages |&7Recharge le plugin")));
+		sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7- bcmwl &apackages | &7Affiche les packages actifs")));
+		sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7- bcmwl &apackages | &7Recharge le plugin")));
 	}
 
 	@Override
