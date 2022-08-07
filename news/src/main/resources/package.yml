@@ -1,0 +1,7 @@
+name: CMWL_News
+route_prefix: news
+sp_main: fr.AxelVatan.CMWLink.News.SP.Main
+bg_main: fr.AxelVatan.CMWLink.News.BG.Main
+vl_main: fr.AxelVatan.CMWLink.News.VL.Main
+version: 1.0
+author: AxelVatan&Teyir
