@@ -17,6 +17,12 @@ public class ConfigFile {
 	private @Getter Packages packages;
 	private @Getter WebServer webServer;
 
+	//			.~~~~.
+	//			i====i_
+	//			|cccc|_)
+	//			|cccc|   GIVE ME A BEER ! <3
+	//			`-==-'
+	
 	public ConfigFile(StartingFrom startingFrom,File filePath, Logger log, String version){
 		this.startingFrom = startingFrom;
 		this.filePath = filePath;
