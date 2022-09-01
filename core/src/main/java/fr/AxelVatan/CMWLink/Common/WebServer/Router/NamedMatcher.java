@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class NamedMatcher implements NamedMatchResult {
 
@@ -26,57 +25,8 @@ public class NamedMatcher implements NamedMatchResult {
 		this.matcher = parentPattern.pattern().matcher(input);
 	}
 
-	public Pattern standardPattern() {
-		return matcher.pattern();
-	}
-
-	public NamedPattern namedPattern() {
-		return parentPattern;
-	}
-
-	public NamedMatcher usePattern(NamedPattern newPattern) {
-		this.parentPattern = newPattern;
-		matcher.usePattern(newPattern.pattern());
-		return this;
-	}
-
-	public NamedMatcher reset() {
-		matcher.reset();
-		return this;
-	}
-
-	public NamedMatcher reset(CharSequence input) {
-		matcher.reset(input);
-		return this;
-	}
-
 	public boolean matches() {
 		return matcher.matches();
-	}
-
-	public NamedMatchResult toMatchResult() {
-		return new NamedMatcher(this.parentPattern, matcher.toMatchResult());
-	}
-
-	public boolean find() {
-		return matcher.find();
-	}
-
-	public boolean find(int start) {
-		return matcher.find(start);
-	}
-
-	public boolean lookingAt() {
-		return matcher.lookingAt();
-	}
-
-	public NamedMatcher appendReplacement(StringBuffer sb, String replacement) {
-		matcher.appendReplacement(sb, replacement);
-		return this;
-	}
-
-	public StringBuffer appendTail(StringBuffer sb) {
-		return matcher.appendTail(sb);
 	}
 
 	public String group() {
@@ -107,7 +57,7 @@ public class NamedMatcher implements NamedMatchResult {
 		Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (int i = 1; i <= groupCount(); i++) {
-			String groupName = parentPattern.groupNames().get(i-1);
+			String groupName = parentPattern.getGroupNames().get(i-1);
 			String groupValue = matcher.group(i);
 			result.put(groupName, groupValue);
 		}
@@ -116,7 +66,7 @@ public class NamedMatcher implements NamedMatchResult {
 	}
 
 	private int groupIndex(String groupName) {
-		return parentPattern.groupNames().indexOf(groupName) + 1;
+		return parentPattern.getGroupNames().indexOf(groupName) + 1;
 	}
 
 	public int start() {

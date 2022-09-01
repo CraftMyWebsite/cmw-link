@@ -2,8 +2,6 @@ package fr.AxelVatan.CMWLink.Common.WebServer.Matcher;
 
 import java.util.Set;
 
-import com.google.common.base.Objects;
-
 import fr.AxelVatan.CMWLink.Common.WebServer.Injector.Fuzzy.AbstractFuzzyMatcher;
 
 public class ClassSetMatcher extends AbstractFuzzyMatcher<Class<?>> {
@@ -30,23 +28,4 @@ public class ClassSetMatcher extends AbstractFuzzyMatcher<Class<?>> {
 		return roundNumber;
 	}
 	
-	@Override
-	public String toString() {
-		return "match any: " + classes;
-	}
-	
-	@Override
-	public int hashCode() {
-		return classes.hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		} else if (obj instanceof ClassSetMatcher) {
-			return Objects.equal(classes, ((ClassSetMatcher) obj).classes);
-		}
-		return true;
-	}
 }

@@ -5,13 +5,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lombok.Getter;
+
 public class NamedPattern {
 
 	private static final Pattern NAMED_GROUP_PATTERN = Pattern.compile("\\(\\?<(\\w+)>");
 
 	private Pattern pattern;
 	private String namedPattern;
-	private List<String> groupNames;
+	private @Getter List<String> groupNames;
 
 	public static NamedPattern compile(String regex) {
 		return new NamedPattern(regex, 0);
@@ -27,10 +29,6 @@ public class NamedPattern {
 		groupNames = extractGroupNames(regex);
 	}
 
-	public int flags() {
-		return pattern.flags();
-	}
-
 	public NamedMatcher matcher(CharSequence input) {
 		return new NamedMatcher(this, input);
 	}
@@ -39,16 +37,8 @@ public class NamedPattern {
 		return pattern;
 	}
 
-	public String standardPattern() {
-		return pattern.pattern();
-	}
-
 	public String namedPattern() {
 		return namedPattern;
-	}
-
-	public List<String> groupNames() {
-		return groupNames;
 	}
 
 	public String[] split(CharSequence input, int limit) {
