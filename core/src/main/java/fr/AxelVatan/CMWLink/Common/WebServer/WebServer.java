@@ -6,8 +6,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -19,6 +17,8 @@ import express.Express;
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
 import fr.AxelVatan.CMWLink.Common.Config.JsonBuilder;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
+import fr.AxelVatan.CMWLink.Common.WebServer.Injector.Injector;
+import fr.AxelVatan.CMWLink.Common.WebServer.Router.RouteMatcher;
 import lombok.Getter;
 
 public class WebServer {
@@ -26,10 +26,12 @@ public class WebServer {
 	private @Getter ConfigFile config;
 	private Express app;
 	private @Getter HashMap<String, IRoute> routes;
+	private @Getter RouteMatcher router;
+	private Injector injector;
 	
 	//TEST CODE
 	public static void main(String a[]){
-		ExecutorService executor = Executors.newFixedThreadPool(50);
+		/*ExecutorService executor = Executors.newFixedThreadPool(50);
 		for (int i = 0; i < 1; i++) {
 			Runnable worker = new MyRunnable(i);
 			try {
@@ -37,7 +39,9 @@ public class WebServer {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
+		System.out.println("RESULT: " + BCrypt.hashpw("test", BCrypt.gensalt()));
+		System.out.println("RESULT: " + BCrypt.checkpw("test", "$2a$10$eBfu1aIV0jH45fIoPpg2pOibq/MtB9X50bt/XV5GsLTLtWE/YSb0u"));
     }
 	//
 	
@@ -45,6 +49,8 @@ public class WebServer {
 		this.config = config;
 		this.app = new Express();
 		this.routes = new HashMap<String, IRoute>();
+		this.router = new RouteMatcher();
+		this.injector = new Injector(this);
 		app.all("/", (req, res) -> {
 			JsonBuilder json = new JsonBuilder()
 					.append("CODE", 200)
@@ -145,5 +151,6 @@ public class WebServer {
 	
 	public void disable() {
 		this.app.stop();
+		this.injector.close();
 	}
 }
