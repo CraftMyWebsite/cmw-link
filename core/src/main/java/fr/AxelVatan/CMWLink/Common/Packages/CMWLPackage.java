@@ -29,6 +29,7 @@ public abstract class CMWLPackage {
 	
 	public final void onEnable(){
 		long epoch = System.currentTimeMillis();
+		log(Level.INFO, "Loading...");
 		enable();
 		registerRoutes();
 		log(Level.INFO, "Enabled in " + convertString(System.currentTimeMillis() - epoch, 1, TimeUnit.MILLISECONDS) + ".");

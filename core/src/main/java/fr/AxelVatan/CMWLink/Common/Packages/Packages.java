@@ -1,7 +1,14 @@
 package fr.AxelVatan.CMWLink.Common.Packages;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,7 +44,7 @@ public class Packages {
 	private Map<String, Class<?>> classes;
 	private @Getter Set<CMWLPackageDescription> packagesCertified;
 	private @Getter List<CMWLPackage> packagesLoaded;
-	
+
 	public Packages(Logger log, File filePath, WebServer webServer) {
 		this.log = log;
 		this.webServer = webServer;
@@ -57,16 +64,20 @@ public class Packages {
 		this.packagesLoaded = new ArrayList<CMWLPackage>();
 		this.packagesCertified = new HashSet<CMWLPackageDescription>();
 		detectPackages();
-		certificatePackages();
+		if(!webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
+			certificatePackages();
+		}else {
+			webServer.getConfig().getLog().warning("Skipped checking certificate due to loadUncertifiedPackages enabled in settings.json !");
+		}
 		loadPackages();
 	}
-	
+
 	public void disablePackages() {
 		for(CMWLPackage miniPlugin : packagesLoaded) {
 			miniPlugin.onDisable();
 		}
 	}
-	
+
 	private void detectPackages(){
 		for (File file : this.packagesPath.listFiles() ){
 			if (file.isFile() && file.getName().endsWith(".jar")){
@@ -90,14 +101,16 @@ public class Packages {
 		}
 		this.log.info("Packages found: " + this.packagesToLoad.size());
 	}
-	
+
 	private void certificatePackages() {
+		this.log.info("Waiting for packages certification...");
 		ExecutorService executor = Executors.newFixedThreadPool(5);
 		for (CMWLPackageDescription packageDesc : this.packagesToLoad.values()) {
 			Runnable worker = new Runnable() {
 				@Override
 				public void run() {
-					webServer.getConfig().getLog().warning("CHECKING CERTIFICATE FOR: " + packageDesc.getName());
+					String md5 = getMd5(packageDesc.getFile().getAbsoluteFile());
+					webServer.getConfig().getLog().warning("CHECKING CERTIFICATE FOR: " + packageDesc.getName() + " MD5 IS: " + md5);
 				}
 			};
 			try {
@@ -107,18 +120,41 @@ public class Packages {
 			}
 		}
 	}
-	
+
+	private String getMd5(File file) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("MD5");
+			FileInputStream fis = new FileInputStream(file);
+			byte[] byteArray = new byte[1024];
+			int bytesCount = 0; 
+			while ((bytesCount = fis.read(byteArray)) != -1) {
+				digest.update(byteArray, 0, bytesCount);
+			};
+			fis.close();
+			byte[] bytes = digest.digest();
+			StringBuilder sb = new StringBuilder();
+			for(int i=0; i< bytes.length ;i++){
+				sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+			}
+			return sb.toString().toUpperCase();
+		} catch (NoSuchAlgorithmException | IOException e) {
+			this.log.severe("Cannot read MD5 of file " + file.getAbsolutePath() + ", error: " + e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	private void loadPackages(){
 		Map<CMWLPackageDescription, Boolean> pluginStatuses = new HashMap<CMWLPackageDescription, Boolean>();
 		for (Map.Entry<String, CMWLPackageDescription> entry : this.packagesToLoad.entrySet()){
-			
+
 			CMWLPackageDescription plugin = entry.getValue();
 			if (!enablePackage(pluginStatuses, new Stack<CMWLPackageDescription>(), plugin)){
 				this.log.warning("Failed to enable " + entry.getKey());
 			}
 		}
 	}
-	
+
 	private boolean enablePackage(Map<CMWLPackageDescription, Boolean> pluginStatuses, Stack<CMWLPackageDescription> dependStack, CMWLPackageDescription plugin){
 		if(pluginStatuses.containsKey(plugin)){
 			return pluginStatuses.get(plugin);
@@ -165,7 +201,7 @@ public class Packages {
 		pluginStatuses.put(plugin, status);
 		return status;
 	}
-	
+
 	private void loadPlugin(boolean status, CMWLPackageDescription plugin){
 		if(status){
 			try{
@@ -191,7 +227,7 @@ public class Packages {
 				this.loaders.put(plugin.getName(), loader);
 				CMWLPackage clazz = (CMWLPackage) main.getDeclaredConstructor().newInstance();
 				clazz.init(plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), this.log, webServer);
-				this.log.info("Loading " + (this.packagesCertified.contains(plugin) ? "CERTIFIED" : "UNCERTIFIED") + " package " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
+				this.log.info("Loaded " + (this.packagesCertified.contains(plugin) ? "CERTIFIED" : "UNCERTIFIED") + " package " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
 				this.packagesLoaded.add(clazz);
 			} catch (Throwable t){
 				this.log.severe("Error enabling package " + plugin.getName() + ":" + t.getMessage());
@@ -199,7 +235,7 @@ public class Packages {
 			}
 		}
 	}
-	
+
 	public Class<?> getClassByName(final String name) {
 		Class<?> cachedClass = this.classes.get(name);
 		if (cachedClass != null) {
