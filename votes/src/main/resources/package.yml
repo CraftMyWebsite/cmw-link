@@ -2,5 +2,6 @@ name: CMWL_Votes
 route_prefix: votes
 sp_main: fr.AxelVatan.CMWLink.Votes.SP.Main
 bg_main: fr.AxelVatan.CMWLink.Votes.BG.Main
+vl_main: fr.AxelVatan.CMWLink.Votes.VL.Main
 version: 1.0
 author: AxelVatan

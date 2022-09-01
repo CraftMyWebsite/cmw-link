@@ -33,7 +33,11 @@ public class ConfigFile {
 		config = persist.getFile(Settings.class).exists() ? persist.load(Settings.class) : new Settings();
 		if (config != null) persist.save(config);
 		log.info("Configuration loaded successfully !");
-		log.info("- Port: " + config.getPort());
+		if(config.isBindToDefaultPort()) {
+			log.info("- WebServer binded to default server port");
+		}else {
+			log.info("- Port: " + config.getPort());
+		}
 		log.info("- Log Requests: " + config.isLogRequests());
 		log.info("- Using proxy: " + config.isUseProxy());
 		this.webServer = new WebServer(this);
@@ -73,6 +77,7 @@ public class ConfigFile {
 	public class Settings{
 
 		private @Getter int port = 24102;
+		private @Getter boolean bindToDefaultPort = false;
 		private @Getter boolean logRequests = true;
 		private @Getter boolean useProxy = false;
 		private @Getter String username = "admin";
