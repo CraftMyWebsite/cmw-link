@@ -46,7 +46,7 @@ public class Packages {
 	private Map<String, CMWLPackageDescription> packagesToLoad;
 	private Map<String, PackageClassLoader> loaders;
 	private Map<String, Class<?>> classes;
-	private @Getter Set<CMWLPackageDescription> packagesCertified;
+	private @Getter HashMap<String, CMWLPackageDescription> packagesCertified;
 	private @Getter List<CMWLPackage> packagesLoaded;
 	private int checked;
 
@@ -82,13 +82,13 @@ public class Packages {
 		this.loaders = new LinkedHashMap<String, PackageClassLoader>();
 		this.classes = new HashMap<String, Class<?>>();
 		this.packagesLoaded = new ArrayList<CMWLPackage>();
-		this.packagesCertified = new HashSet<CMWLPackageDescription>();
+		this.packagesCertified = new HashMap<String, CMWLPackageDescription>();
 		detectPackages();
-		if(!webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
-			certificatePackages();
-		}else {
+
+		certificatePackages();
+		/*}else {
 			webServer.getConfig().getLog().warning("Skipped checking certificate due to loadUncertifiedPackages enabled in settings.json !");
-		}
+		}*/
 		loadPackages();
 	}
 
@@ -132,10 +132,14 @@ public class Packages {
 					String localMd5 = getMd5(packageDesc.getFile().getAbsoluteFile());
 					checked++;
 					if(checkMd5CMW(localMd5)) {
-						log.info("Checked " + packageDesc.getName() + " is CERTIFIED by CMW. " + checked + "/" + packagesToLoad.size());
-						packagesCertified.add(packageDesc);
+						log.info("Checked " + packageDesc.getName() + " is CERTIFIED by CMW.");
+						packagesCertified.put(packageDesc.getName(), packageDesc);
 					}else {
-						log.severe(packageDesc.getName() + " is not certificate by CMW, it will not be loaded.");
+						if(!webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
+							log.severe(packageDesc.getName() + " is not certificate by CMW, it will not be loaded.");
+						}else {
+							log.warning(packageDesc.getName() + " is not certificate by CMW, it will loaded because loadUncertifiedPackages is enabled in settings.json.");
+						}
 					}
 				}
 			};
@@ -153,19 +157,19 @@ public class Packages {
 
 	private boolean checkMd5CMW(String md5) {
 		try {
-			URL checkCertificate = new URL("https://api.craftmywebsite.fr/certificatePackage/" + md5);
+			URL checkCertificate = new URL("https://ip.conceptngo.fr/certificatePackage/" + md5);
 			URLConnection hc = checkCertificate.openConnection();
-	        hc.setRequestProperty("User-Agent", "CMWL-Link, version: " + this.webServer.getConfig().getVersion());
-	        BufferedReader in = new BufferedReader(new InputStreamReader(hc.getInputStream()));
-	        JSONParser parser = new JSONParser();
-	        JSONObject json = (JSONObject) parser.parse(in.readLine());
-	        return (boolean) json.get("SUCCESS");
+			hc.setRequestProperty("User-Agent", "CMWL-Link, version: " + this.webServer.getConfig().getVersion());
+			BufferedReader in = new BufferedReader(new InputStreamReader(hc.getInputStream()));
+			JSONParser parser = new JSONParser();
+			JSONObject json = (JSONObject) parser.parse(in.readLine());
+			return (boolean) json.get("SUCCESS");
 		} catch (IOException | ParseException e) {
 			this.log.severe("Unable to certificate package, maybe API errors or check your internet connection.");
 			return false;
 		}
 	}
-	
+
 	private String getMd5(File file) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("MD5");
@@ -234,7 +238,7 @@ public class Packages {
 			}
 		}
 		if(!this.webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
-			if(this.packagesCertified.contains(plugin)) {
+			if(this.packagesCertified.containsValue(plugin)) {
 				loadPlugin(status, plugin);
 			}
 		}else {
@@ -269,7 +273,7 @@ public class Packages {
 				this.loaders.put(plugin.getName(), loader);
 				CMWLPackage clazz = (CMWLPackage) main.getDeclaredConstructor().newInstance();
 				clazz.init(plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), this.log, webServer);
-				this.log.info("Loaded " + (this.packagesCertified.contains(plugin) ? "CERTIFIED" : "UNCERTIFIED") + " package " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
+				this.log.info("Loaded " + (this.packagesCertified.containsValue(plugin) ? "CERTIFIED" : "UNCERTIFIED") + " package " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
 				this.packagesLoaded.add(clazz);
 			} catch (Throwable t){
 				this.log.severe("Error enabling package " + plugin.getName() + ":" + t.getMessage());
