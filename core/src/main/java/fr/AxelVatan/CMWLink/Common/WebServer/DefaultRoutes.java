@@ -39,20 +39,7 @@ public class DefaultRoutes {
 			}
 		});
 
-        Handler<FullHttpResponse, RoutedHttpRequest> apiHandler = new Handler<FullHttpResponse, RoutedHttpRequest>() {
-            @Override
-            public FullHttpResponse handle(RoutedHttpRequest event) {
-                APIv2Handler h = new APIv2Handler(event.getRequest(), ws);
-                ws.getConfig().getLog().info("Request was matched");
-                return h.serve();
-            }
-        };
-
-        r.get("/api/2/call", apiHandler);
-        r.post("/api/2/call", apiHandler);
-
-        r.get("/api/2/version", apiHandler);
-        r.post("/api/2/version", apiHandler);
+        r.get("/api/2/call", null);
 
         r.get("/", new Handler<FullHttpResponse, RoutedHttpRequest>() {
             @Override

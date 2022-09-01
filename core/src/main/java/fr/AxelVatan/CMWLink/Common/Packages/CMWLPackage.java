@@ -10,9 +10,9 @@ import lombok.Getter;
 
 public abstract class CMWLPackage {
 
-	private @Getter String pluginName = "Unknown";
-	private @Getter String routePrefix = "Unknown";
-	private @Getter String version = "Unknown";
+	private @Getter String pluginName;
+	private @Getter String routePrefix;
+	private @Getter String version;
 	private Logger log;
 	private WebServer webServer;
 	private @Getter boolean isUseProxy;
@@ -29,7 +29,6 @@ public abstract class CMWLPackage {
 	
 	public final void onEnable(){
 		long epoch = System.currentTimeMillis();
-		log(Level.INFO, "Loading...");
 		enable();
 		registerRoutes();
 		log(Level.INFO, "Enabled in " + convertString(System.currentTimeMillis() - epoch, 1, TimeUnit.MILLISECONDS) + ".");

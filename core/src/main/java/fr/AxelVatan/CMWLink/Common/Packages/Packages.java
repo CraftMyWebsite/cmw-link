@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
@@ -33,6 +35,7 @@ public class Packages {
 	private Map<String, CMWLPackageDescription> packagesToLoad;
 	private Map<String, PackageClassLoader> loaders;
 	private Map<String, Class<?>> classes;
+	private @Getter Set<CMWLPackageDescription> packagesCertified;
 	private @Getter List<CMWLPackage> packagesLoaded;
 	
 	public Packages(Logger log, File filePath, WebServer webServer) {
@@ -52,7 +55,9 @@ public class Packages {
 		this.loaders = new LinkedHashMap<String, PackageClassLoader>();
 		this.classes = new HashMap<String, Class<?>>();
 		this.packagesLoaded = new ArrayList<CMWLPackage>();
+		this.packagesCertified = new HashSet<CMWLPackageDescription>();
 		detectPackages();
+		certificatePackages();
 		loadPackages();
 	}
 	
@@ -70,10 +75,10 @@ public class Packages {
 					Preconditions.checkNotNull(pdf, "Package must have a Package.yml");
 					try (InputStream in = jar.getInputStream(pdf)){
 						CMWLPackageDescription desc = this.yaml.loadAs(in, CMWLPackageDescription.class);
-						Preconditions.checkNotNull(desc.getName(), "Plugin from %s has no name", file);
-						Preconditions.checkNotNull(desc.getRoute_prefix(), "Plugin from %s has no route prefix", file);
-						Preconditions.checkNotNull(desc.getVersion(), "Plugin from %s has no version", file);
-						Preconditions.checkNotNull(desc.getAuthor(), "Plugin from %s has no author", file);
+						Preconditions.checkNotNull(desc.getName(), "Package from %s has no name", file);
+						Preconditions.checkNotNull(desc.getRoute_prefix(), "Package from %s has no route prefix", file);
+						Preconditions.checkNotNull(desc.getVersion(), "Package from %s has no version", file);
+						Preconditions.checkNotNull(desc.getAuthor(), "Package from %s has no author", file);
 						desc.setFile(file);
 						this.packagesToLoad.put(desc.getName(), desc);
 					}
@@ -86,11 +91,29 @@ public class Packages {
 		this.log.info("Packages found: " + this.packagesToLoad.size());
 	}
 	
+	private void certificatePackages() {
+		ExecutorService executor = Executors.newFixedThreadPool(5);
+		for (CMWLPackageDescription packageDesc : this.packagesToLoad.values()) {
+			Runnable worker = new Runnable() {
+				@Override
+				public void run() {
+					webServer.getConfig().getLog().warning("CHECKING CERTIFICATE FOR: " + packageDesc.getName());
+				}
+			};
+			try {
+				executor.execute(worker);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	private void loadPackages(){
 		Map<CMWLPackageDescription, Boolean> pluginStatuses = new HashMap<CMWLPackageDescription, Boolean>();
 		for (Map.Entry<String, CMWLPackageDescription> entry : this.packagesToLoad.entrySet()){
+			
 			CMWLPackageDescription plugin = entry.getValue();
-			if (!enablePackage( pluginStatuses, new Stack<CMWLPackageDescription>(), plugin)){
+			if (!enablePackage(pluginStatuses, new Stack<CMWLPackageDescription>(), plugin)){
 				this.log.warning("Failed to enable " + entry.getKey());
 			}
 		}
@@ -129,23 +152,38 @@ public class Packages {
 				break;
 			}
 		}
+		if(!this.webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
+			if(this.packagesCertified.contains(plugin)) {
+				loadPlugin(status, plugin);
+			}else {
+				this.log.severe("Loading of " + plugin.getName() + ", version: " + plugin.getVersion() + ", by: " + plugin.getAuthor() + " cancelled, this package in not CERTIFIED !");
+				this.log.info("If you want to load UNCERTIFIED packages, enable loadUncertifiedPackages in settings.json");
+			}
+		}else {
+			loadPlugin(status, plugin);
+		}
+		pluginStatuses.put(plugin, status);
+		return status;
+	}
+	
+	private void loadPlugin(boolean status, CMWLPackageDescription plugin){
 		if(status){
 			try{
 				PackageClassLoader loader = null;
 				Class<?> main = null;
 				switch(webServer.getConfig().getStartingFrom()) {
 				case BUNGEECORD:
-					Preconditions.checkNotNull(plugin.getBg_main(), "Plugin from %s has no sp_main main class, maybe not compatible with BungeeCord ?", plugin.getFile());
+					Preconditions.checkNotNull(plugin.getBg_main(), "Package from %s has no sp_main main class, maybe not compatible with BungeeCord ?", plugin.getFile());
 					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getBg_main(), plugin.getFile().toURI().toURL(), this);
 					main = loader.loadClass( plugin.getBg_main());
 					break;
 				case SPIGOT:
-					Preconditions.checkNotNull(plugin.getSp_main(), "Plugin from %s has no bg_main main class, maybe not compatible with Spigot/Paper ?", plugin.getFile());
+					Preconditions.checkNotNull(plugin.getSp_main(), "Package from %s has no bg_main main class, maybe not compatible with Spigot/Paper ?", plugin.getFile());
 					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getSp_main(), plugin.getFile().toURI().toURL(), this);
 					main = loader.loadClass( plugin.getSp_main());
 					break;
 				case VELOCITY:
-					Preconditions.checkNotNull(plugin.getVl_main(), "Plugin from %s has no vl_main main class, maybe not compatible with Velocity ?", plugin.getFile());
+					Preconditions.checkNotNull(plugin.getVl_main(), "Package from %s has no vl_main main class, maybe not compatible with Velocity ?", plugin.getFile());
 					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getVl_main(), plugin.getFile().toURI().toURL(), this);
 					main = loader.loadClass( plugin.getBg_main());
 					break;
@@ -153,15 +191,13 @@ public class Packages {
 				this.loaders.put(plugin.getName(), loader);
 				CMWLPackage clazz = (CMWLPackage) main.getDeclaredConstructor().newInstance();
 				clazz.init(plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), this.log, webServer);
-				this.log.info("Loaded plugin " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
+				this.log.info("Loading " + (this.packagesCertified.contains(plugin) ? "CERTIFIED" : "UNCERTIFIED") + " package " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
 				this.packagesLoaded.add(clazz);
 			} catch (Throwable t){
-				this.log.severe("Error enabling plugin " + plugin.getName() + ":" + t.getMessage());
+				this.log.severe("Error enabling package " + plugin.getName() + ":" + t.getMessage());
 				t.printStackTrace();
 			}
 		}
-		pluginStatuses.put( plugin, status );
-		return status;
 	}
 	
 	public Class<?> getClassByName(final String name) {

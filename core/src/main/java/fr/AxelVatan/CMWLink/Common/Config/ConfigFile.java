@@ -40,6 +40,7 @@ public class ConfigFile {
 		}
 		log.info("- Log Requests: " + config.isLogRequests());
 		log.info("- Using proxy: " + config.isUseProxy());
+		log.info("- Load Uncertified packages: " + config.isLoadUncertifiedPackages());
 		this.webServer = new WebServer(this);
 		this.packages = new Packages(log, filePath, webServer);
 		switch(this.startingFrom) {
@@ -78,6 +79,7 @@ public class ConfigFile {
 
 		private @Getter int port = 24102;
 		private @Getter boolean bindToDefaultPort = false;
+		private @Getter boolean loadUncertifiedPackages = false;
 		private @Getter boolean logRequests = true;
 		private @Getter boolean useProxy = false;
 		private @Getter String username = "admin";
