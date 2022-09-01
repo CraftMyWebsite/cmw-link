@@ -1,9 +1,13 @@
 package fr.AxelVatan.CMWLink.Common.Packages;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -20,6 +24,9 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
@@ -43,7 +50,7 @@ public class Packages {
 	private @Getter List<CMWLPackage> packagesLoaded;
 	private int checked;
 
-	
+
 	//	⠀⠀⠀⠀⠀⠀⠀⢰⠒⠒⠒⠒⠒⠒⢲⡖⣶⣶⡆⠀⠀⠀⠀⠀⠀⠀
 	//	⠀⠀⢀⡀⣯⠉⠉⠉⣖⣲⣶⡆⠀⠀⠈⠉⠉⠉⠉⠉⠉⢱⠀⠀⠀⠀
 	//	⢀⣀⣸⠀⠀⠀⠀⠀⠈⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣇⣀⡀
@@ -55,9 +62,9 @@ public class Packages {
 	//	⠈⠉⢹⣿⣿⣀⣀⣠⠀⠀⠀⠀⠀⠀⠸⣿⡇⠀⣀⣀⣀⣿⣿⡏⠉⠁
 	//	⠀⠀⠀⠀⢿⠿⠿⢿⣀⣀⣀⣀⣠⣤⣤⣤⣤⣤⣿⠿⠿⡿⠀⠀⠀⠀
 	//	⠀⠀⠀⠀⠀⠀⠀⠸⠿⠿⠿⠿⠿⣿⣿⣿⣿⠿⠇⠀⠀⠀⠀⠀⠀⠀
-	
-	
-	
+
+
+
 	public Packages(Logger log, File filePath, WebServer webServer) {
 		this.log = log;
 		this.webServer = webServer;
@@ -122,9 +129,14 @@ public class Packages {
 			Runnable worker = new Runnable() {
 				@Override
 				public void run() {
-					String md5 = getMd5(packageDesc.getFile().getAbsoluteFile());
+					String localMd5 = getMd5(packageDesc.getFile().getAbsoluteFile());
 					checked++;
-					log.info("Checked " + packageDesc.getName() + " is CERTIFIED by CMW. " + checked + "/" + packagesToLoad.size());
+					if(checkMd5CMW(localMd5)) {
+						log.info("Checked " + packageDesc.getName() + " is CERTIFIED by CMW. " + checked + "/" + packagesToLoad.size());
+						packagesCertified.add(packageDesc);
+					}else {
+						log.severe(packageDesc.getName() + " is not certificate by CMW, it will not be loaded.");
+					}
 				}
 			};
 			try {
@@ -136,8 +148,24 @@ public class Packages {
 		executor.shutdown();
 		while(!executor.isTerminated()) {
 		}
+		this.log.info("If you want to load UNCERTIFIED packages, enable loadUncertifiedPackages in settings.json");
 	}
 
+	private boolean checkMd5CMW(String md5) {
+		try {
+			URL checkCertificate = new URL("https://api.craftmywebsite.fr/certificatePackage/" + md5);
+			URLConnection hc = checkCertificate.openConnection();
+	        hc.setRequestProperty("User-Agent", "CMWL-Link, version: " + this.webServer.getConfig().getVersion());
+	        BufferedReader in = new BufferedReader(new InputStreamReader(hc.getInputStream()));
+	        JSONParser parser = new JSONParser();
+	        JSONObject json = (JSONObject) parser.parse(in.readLine());
+	        return (boolean) json.get("SUCCESS");
+		} catch (IOException | ParseException e) {
+			this.log.severe("Unable to certificate package, maybe API errors or check you internet connection.");
+			return false;
+		}
+	}
+	
 	private String getMd5(File file) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("MD5");
@@ -208,9 +236,6 @@ public class Packages {
 		if(!this.webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
 			if(this.packagesCertified.contains(plugin)) {
 				loadPlugin(status, plugin);
-			}else {
-				this.log.severe("Loading of " + plugin.getName() + ", version: " + plugin.getVersion() + ", by: " + plugin.getAuthor() + " cancelled, this package in not CERTIFIED !");
-				this.log.info("If you want to load UNCERTIFIED packages, enable loadUncertifiedPackages in settings.json");
 			}
 		}else {
 			loadPlugin(status, plugin);
