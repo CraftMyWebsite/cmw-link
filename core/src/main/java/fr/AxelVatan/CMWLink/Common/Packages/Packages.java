@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -44,6 +41,7 @@ public class Packages {
 	private Map<String, Class<?>> classes;
 	private @Getter Set<CMWLPackageDescription> packagesCertified;
 	private @Getter List<CMWLPackage> packagesLoaded;
+	private int checked;
 
 	public Packages(Logger log, File filePath, WebServer webServer) {
 		this.log = log;
@@ -110,7 +108,8 @@ public class Packages {
 				@Override
 				public void run() {
 					String md5 = getMd5(packageDesc.getFile().getAbsoluteFile());
-					webServer.getConfig().getLog().warning("CHECKING CERTIFICATE FOR: " + packageDesc.getName() + " MD5 IS: " + md5);
+					checked++;
+					log.info("Checked " + packageDesc.getName() + " is CERTIFIED by CMW. " + checked + "/" + packagesToLoad.size());
 				}
 			};
 			try {
@@ -118,6 +117,9 @@ public class Packages {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		executor.shutdown();
+		while(!executor.isTerminated()) {
 		}
 	}
 
