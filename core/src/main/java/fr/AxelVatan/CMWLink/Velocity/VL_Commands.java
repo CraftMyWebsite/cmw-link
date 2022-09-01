@@ -23,7 +23,10 @@ public class VL_Commands implements SimpleCommand {
 			if(invocation.source().hasPermission("cmwl.packages")) {
 				invocation.source().sendMessage(Component.text("CMW-Link: ", NamedTextColor.GOLD).append(Component.text("Packages installés", NamedTextColor.GRAY)));
 				for(CMWLPackage packageClass : this.main.getConfigFile().getPackages().getPackagesLoaded()) {
-					invocation.source().sendMessage(Component.text("- ", NamedTextColor.GRAY).append(Component.text(packageClass.getPluginName(), NamedTextColor.GREEN).append(Component.text(", Version: ", NamedTextColor.GRAY).append(Component.text(packageClass.getVersion(), NamedTextColor.GREEN)))));
+					boolean certified = main.getConfigFile().getPackages().getPackagesCertified().containsKey(packageClass.getPluginName());
+					Component certifiedText = Component.text("Certifié [CMW]", NamedTextColor.AQUA);
+					Component unCertifiedText = Component.text("Non certifié [CMW]", NamedTextColor.DARK_RED);
+					invocation.source().sendMessage(Component.text("- ", NamedTextColor.GRAY).append(Component.text(packageClass.getPluginName(), NamedTextColor.GREEN).append(Component.text(", Version: ", NamedTextColor.GRAY).append(Component.text(packageClass.getVersion(), NamedTextColor.GREEN).append(Component.text(" | ", NamedTextColor.DARK_GRAY).append((certified ? certifiedText : unCertifiedText)))))));
 				}
 			}else {
 				errorPerm(invocation.source());
