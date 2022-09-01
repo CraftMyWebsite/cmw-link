@@ -161,7 +161,7 @@ public class Packages {
 	        JSONObject json = (JSONObject) parser.parse(in.readLine());
 	        return (boolean) json.get("SUCCESS");
 		} catch (IOException | ParseException e) {
-			this.log.severe("Unable to certificate package, maybe API errors or check you internet connection.");
+			this.log.severe("Unable to certificate package, maybe API errors or check your internet connection.");
 			return false;
 		}
 	}
