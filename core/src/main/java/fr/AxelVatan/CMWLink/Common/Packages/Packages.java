@@ -48,7 +48,6 @@ public class Packages {
 	private Map<String, Class<?>> classes;
 	private @Getter HashMap<String, CMWLPackageDescription> packagesCertified;
 	private @Getter List<CMWLPackage> packagesLoaded;
-	private int checked;
 
 
 	//	⠀⠀⠀⠀⠀⠀⠀⢰⠒⠒⠒⠒⠒⠒⢲⡖⣶⣶⡆⠀⠀⠀⠀⠀⠀⠀
@@ -84,11 +83,7 @@ public class Packages {
 		this.packagesLoaded = new ArrayList<CMWLPackage>();
 		this.packagesCertified = new HashMap<String, CMWLPackageDescription>();
 		detectPackages();
-
 		certificatePackages();
-		/*}else {
-			webServer.getConfig().getLog().warning("Skipped checking certificate due to loadUncertifiedPackages enabled in settings.json !");
-		}*/
 		loadPackages();
 	}
 
@@ -130,15 +125,14 @@ public class Packages {
 				@Override
 				public void run() {
 					String localMd5 = getMd5(packageDesc.getFile().getAbsoluteFile());
-					checked++;
 					if(checkMd5CMW(localMd5)) {
 						log.info("Checked " + packageDesc.getName() + " is CERTIFIED by CMW.");
 						packagesCertified.put(packageDesc.getName(), packageDesc);
 					}else {
 						if(!webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
-							log.severe(packageDesc.getName() + " is not certificate by CMW, it will not be loaded.");
+							log.severe(packageDesc.getName() + " is not certified by CMW, it will not be loaded.");
 						}else {
-							log.warning(packageDesc.getName() + " is not certificate by CMW, it will loaded because loadUncertifiedPackages is enabled in settings.json.");
+							log.warning(packageDesc.getName() + " is not certified by CMW, it will loaded because loadUncertifiedPackages is enabled in settings.json.");
 						}
 					}
 				}
@@ -152,7 +146,9 @@ public class Packages {
 		executor.shutdown();
 		while(!executor.isTerminated()) {
 		}
-		this.log.info("If you want to load UNCERTIFIED packages, enable loadUncertifiedPackages in settings.json");
+		if(!webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
+			this.log.info("If you want to load UNCERTIFIED packages, enable loadUncertifiedPackages in settings.json");
+		}
 	}
 
 	private boolean checkMd5CMW(String md5) {

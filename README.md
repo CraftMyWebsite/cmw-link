@@ -14,15 +14,23 @@ CraftMyWebsite-Link a java plugin for MC servers
 ```json
 {
  	"port": 24102,
+  	"bindToDefaultPort": true,
+  	"loadUncertifiedPackages": true,
   	"logRequests": true,
- 	"useProxy": false
+  	"useProxy": false,
+  	"username": "admin",
+  	"password": "changeme"
 }
 
 ```
 
-- Port: Port sur lequel l'api du plugin est accessible.
+- port: Port sur lequel l'api du plugin est accessible.
+- bindToDefaultPort: Permet d'utiliser le port par défaut de minecraft pour les communications (Paper/Spigot seulement pour le moment)
+- loadUncertifiedPackage: Permet de chargé les packages non certifié par l'équipe de CMW
 - logRequests: Affiche-les demande de requêtes dans la console du serveur.
 - useProxy: Permet d'utilise les Proxy tel que BungeeCord, Waterfall, Velocity.
+- username: Le nom de l'utilisateur pour les requettes
+- password: Le mot de passe de l'utilisateur pour les requettes
 
 Pour vérifié le bon fonctionnement du plugin il suffit de taper l'IP du serveur avec le port dans un navigateur, le plugin envoie la réponse suivante:
 
@@ -85,9 +93,12 @@ public class TestRoute extends CMWLRoute<TestPackage>{
 	}
 
 	@Override
-	public void execute(Request req, Response res) {
+	public String executeRoute(HashMap<String, String> params) {
 		System.out.print("Pong !");
-		res.send("Pong !");
+		JsonBuilder json = new JsonBuilder();
+		json.append("CODE", 200);
+		json.append("MESSAGE", "Pong !");
+		return json.build();
 	}
 
 }
@@ -102,7 +113,7 @@ Dans le constructeur vous devez obligatoirement déclaré les parametres suivant:
 
 La fonction "execute" est déclanchée quand la route définie est appelée.
 
-- http://127.0.0.1/test/ping -> Réponse: Pong !
+- http://127.0.0.1:24102/test/ping -> Réponse: {"CODE":200,"MESSAGE":"Pong !"}
 
 <br>
 Pour que le package soit reconnue par le plugin vous devez avoir un package.yml dans le jar
@@ -110,7 +121,7 @@ Pour que le package soit reconnue par le plugin vous devez avoir un package.yml 
 ```yaml
 name: CMWL_Test
 route_prefix: test
-main: fr.AxelVatan.CMWLink.TestPackages.TestPackage
+sp_main: fr.AxelVatan.CMWLink.TestPackages.TestPackage
 version: 1.0
 author: AxelVatan
 
@@ -118,7 +129,9 @@ author: AxelVatan
 
 - name: Le nom du package.
 - route_prefix: le prefix pour toutes les route du package.
-- main: Le chemin vers la class principale du package.
+- sp_main: Le chemin vers la class principale du package pour l'utilisation sur Paper/Spigot.
+- bg_main: Le chemin vers la class principale du package pour l'utilisation sur BungeeCord/Waterfall.
+- vl_main: Le chemin vers la class principale du package pour l'utilisation sur Velocity.
 - version: La version du package.
 - author: L'auteur du package.
 
