@@ -129,7 +129,7 @@ public class Packages {
 						log.info("Checked " + packageDesc.getName() + " is CERTIFIED by CMW.");
 						packagesCertified.put(packageDesc.getName(), packageDesc);
 					}else {
-						if(!webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
+						if(!webServer.getConfig().getSettings().isLoadUncertifiedPackages()) {
 							log.severe(packageDesc.getName() + " is not certified by CMW, it will not be loaded.");
 						}else {
 							log.warning(packageDesc.getName() + " is not certified by CMW, it will loaded because loadUncertifiedPackages is enabled in settings.json.");
@@ -146,7 +146,7 @@ public class Packages {
 		executor.shutdown();
 		while(!executor.isTerminated()) {
 		}
-		if(!webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
+		if(!webServer.getConfig().getSettings().isLoadUncertifiedPackages()) {
 			this.log.info("If you want to load UNCERTIFIED packages, enable loadUncertifiedPackages in settings.json");
 		}
 	}
@@ -233,7 +233,7 @@ public class Packages {
 				break;
 			}
 		}
-		if(!this.webServer.getConfig().getConfig().isLoadUncertifiedPackages()) {
+		if(!this.webServer.getConfig().getSettings().isLoadUncertifiedPackages()) {
 			if(this.packagesCertified.containsValue(plugin)) {
 				loadPlugin(status, plugin);
 			}

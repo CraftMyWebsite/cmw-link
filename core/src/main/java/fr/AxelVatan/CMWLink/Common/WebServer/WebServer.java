@@ -80,7 +80,7 @@ public class WebServer {
 	}
 	
 	public void startWebServer() {
-		this.app.listen(this.config.getConfig().getPort());
+		this.app.listen(this.config.getSettings().getPort());
 		try {
 			URL whatismyip = new URL("https://ip.conceptngo.fr/myIP");
 			URLConnection uc = whatismyip.openConnection();
@@ -89,22 +89,17 @@ public class WebServer {
 			JsonObject json = new Gson().fromJson(in.readLine(), JsonObject.class);
 			String ip = json.get("IP").getAsString();
 			this.config.getLog().info("External IP: " + ip);
-			URL checkURL;
-			if(this.getConfig().getConfig().isBindToDefaultPort()) {
-				checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/25565");
-			}else {
-				checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/" + this.config.getConfig().getPort());
-			}
+			URL checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/" + (this.getConfig().getSettings().isBindToDefaultPort() ? "25565" : this.config.getSettings().getPort()));
 			uc = checkURL.openConnection();
 			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
 			in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
 			json = new Gson().fromJson(in.readLine(), JsonObject.class);
 			boolean reachable = json.get("REACHABLE").getAsBoolean();
 			if(reachable) {
-				this.config.getLog().info("Port " + (this.getConfig().getConfig().isBindToDefaultPort() ? "25565" : this.config.getConfig().getPort()) + " is properly forwarded and is externally accessible.");
+				this.config.getLog().info("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? "25565" : this.config.getSettings().getPort()) + " is properly forwarded and is externally accessible.");
 			}
 			else {
-				this.config.getLog().severe("Port " + (this.getConfig().getConfig().isBindToDefaultPort() ? "25565" : this.config.getConfig().getPort()) + " is not properly forwarded.");
+				this.config.getLog().severe("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? "25565" : this.config.getSettings().getPort()) + " is not properly forwarded.");
 			}
 		} catch (Exception e) {
 			this.config.getLog().severe("Cannot joint API to get IP and PORT verification, maybe API is down ");
@@ -112,7 +107,7 @@ public class WebServer {
 	}
 
 	public void addRoute(CMWLPackage cmwlPackage, IRoute route){
-		cmwlPackage.log(Level.INFO, "Register route: /" + cmwlPackage.getRoutePrefix() + "/" + route.getRouteName());
+		cmwlPackage.log(Level.INFO, "Register type " + route.getRouteType() + " route: /" + cmwlPackage.getRoutePrefix() + "/" + route.getRouteName());
 		this.routes.put("/" + cmwlPackage.getRoutePrefix() + "/" + route.getRouteName(), route);
 	}
 

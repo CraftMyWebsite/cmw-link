@@ -23,7 +23,7 @@ public abstract class CMWLPackage {
 		this.version = version;
 		this.log = log;
 		this.webServer = webServer;
-		this.isUseProxy = webServer.getConfig().getConfig().isUseProxy();
+		this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
 		onEnable();
 	}
 	

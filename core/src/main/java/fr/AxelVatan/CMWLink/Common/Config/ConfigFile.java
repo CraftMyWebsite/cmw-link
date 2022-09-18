@@ -13,7 +13,7 @@ public class ConfigFile {
 	private @Getter File filePath;
 	private @Getter Logger log;
 	private @Getter String version;
-	private @Getter Settings config;
+	private @Getter Settings settings;
 	private @Getter Packages packages;
 	private @Getter WebServer webServer;
 
@@ -30,22 +30,22 @@ public class ConfigFile {
 		this.version = version;
 		log.info("Loading configuration...");
 		Persist persist = new Persist(this);
-		config = persist.getFile(Settings.class).exists() ? persist.load(Settings.class) : new Settings();
-		if (config != null) persist.save(config);
+		settings = persist.getFile(Settings.class).exists() ? persist.load(Settings.class) : new Settings();
+		if (settings != null) persist.save(settings);
 		log.info("Configuration loaded successfully !");
-		if(config.isBindToDefaultPort()) {
+		if(settings.isBindToDefaultPort()) {
 			log.info("- WebServer binded to default server port");
 		}else {
-			log.info("- Port: " + config.getPort());
+			log.info("- Port: " + settings.getPort());
 		}
-		log.info("- Log Requests: " + config.isLogRequests());
-		log.info("- Using proxy: " + config.isUseProxy());
-		log.info("- Load Uncertified packages: " + config.isLoadUncertifiedPackages());
+		log.info("- Log Requests: " + settings.isLogRequests());
+		log.info("- Using proxy: " + settings.isUseProxy());
+		log.info("- Load Uncertified packages: " + settings.isLoadUncertifiedPackages());
 		this.webServer = new WebServer(this);
 		this.packages = new Packages(log, filePath, webServer);
 		switch(this.startingFrom) {
 		case BUNGEECORD:
-			if(this.config.useProxy) {
+			if(this.settings.useProxy) {
 				this.startWebServer();
 			}else {
 				log.severe("UseProxy on this BungeeCord Proxy is not set to true !");
@@ -53,14 +53,14 @@ public class ConfigFile {
 			}
 			break;
 		case SPIGOT:
-			if(this.config.isUseProxy()) {
+			if(this.settings.isUseProxy()) {
 				log.info("Waiting requests from the proxy");
 			}else {
 				this.startWebServer();
 			}
 			break;
 		case VELOCITY:
-			if(this.config.useProxy) {
+			if(this.settings.useProxy) {
 				this.startWebServer();
 			}else {
 				log.severe("UseProxy on this Velocity Proxy is not set to true !");
