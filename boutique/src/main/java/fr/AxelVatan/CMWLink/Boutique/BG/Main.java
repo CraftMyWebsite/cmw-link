@@ -12,7 +12,6 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
 import fr.AxelVatan.CMWLink.Boutique.BG.Routes.TestGive;
-import fr.AxelVatan.CMWLink.Boutique.BG.Routes.VersionRoute;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -39,7 +38,6 @@ public class Main extends CMWLPackage implements Listener{
 
 	@Override
 	public void registerRoutes() {
-		this.addRoute(new VersionRoute(this));
 		this.addRoute(new TestGive(this));
 	}
 

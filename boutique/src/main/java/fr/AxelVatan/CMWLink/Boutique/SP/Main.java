@@ -15,7 +15,6 @@ import com.google.common.io.ByteStreams;
 
 import fr.AxelVatan.CMWLink.Boutique.Result;
 import fr.AxelVatan.CMWLink.Boutique.SP.Routes.TestGive;
-import fr.AxelVatan.CMWLink.Boutique.SP.Routes.VersionRoute;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 
 public class Main extends CMWLPackage implements PluginMessageListener{
@@ -39,7 +38,6 @@ public class Main extends CMWLPackage implements PluginMessageListener{
 	@Override
 	public void registerRoutes() {
 		if(!this.isUseProxy()) {
-			this.addRoute(new VersionRoute(this));
 			this.addRoute(new TestGive(this));
 		}
 	}
