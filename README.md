@@ -113,7 +113,9 @@ Dans le constructeur vous devez obligatoirement déclaré les parametres suivant:
 
 La fonction "execute" est déclanchée quand la route définie est appelée.
 
-- http://127.0.0.1:24102/test/ping -> Réponse: {"CODE":200,"MESSAGE":"Pong !"}
+```
+http://127.0.0.1:24102/test/ping -> Réponse: {"CODE":200,"MESSAGE":"Pong !"}
+```
 
 <br>
 Pour que le package soit reconnue par le plugin vous devez avoir un package.yml dans le jar

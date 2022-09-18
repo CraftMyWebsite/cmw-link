@@ -58,12 +58,13 @@ public class WebServer {
 					.append("VERSION", config.getVersion());
 			res.send(json.build());
 		});
-		//authRequest();
+		authRequest();
 	}
 	
 	private void authRequest() {
 		app.use((req, res) -> {
-			String user = req.getHeader("User").get(0);
+			System.out.println("HEADERS: " + req.getHeaders().entrySet());
+			/*String user = req.getHeader("User").get(0);
 			String pwd = req.getHeader("Pwd").get(0);
 			String userAndPwdFromHost = BCrypt.hashpw(user + ":" + pwd, BCrypt.gensalt(10));
 			Boolean match = BCrypt.checkpw(config.getConfig().getUsername() + ":" + config.getConfig().getPassword(), userAndPwdFromHost);
@@ -74,7 +75,7 @@ public class WebServer {
 				res.send(json.build());
 				config.getLog().severe("User: " + user + " from host: " + req.getIp() + " is not authorized to execute the route: " + req.getPath());
 				res.send(json.build());
-			}
+			}*/
 		});
 	}
 	
@@ -88,17 +89,22 @@ public class WebServer {
 			JsonObject json = new Gson().fromJson(in.readLine(), JsonObject.class);
 			String ip = json.get("IP").getAsString();
 			this.config.getLog().info("External IP: " + ip);
-			URL checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/" + this.config.getConfig().getPort());
+			URL checkURL;
+			if(this.getConfig().getConfig().isBindToDefaultPort()) {
+				checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/25565");
+			}else {
+				checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/" + this.config.getConfig().getPort());
+			}
 			uc = checkURL.openConnection();
 			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
 			in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
 			json = new Gson().fromJson(in.readLine(), JsonObject.class);
 			boolean reachable = json.get("REACHABLE").getAsBoolean();
 			if(reachable) {
-				this.config.getLog().info("Port " + this.config.getConfig().getPort() + " is properly forwarded and is externally accessible.");
+				this.config.getLog().info("Port " + (this.getConfig().getConfig().isBindToDefaultPort() ? "25565" : this.config.getConfig().getPort()) + " is properly forwarded and is externally accessible.");
 			}
 			else {
-				this.config.getLog().severe("Port " + this.config.getConfig().getPort() + " is not properly forwarded.");
+				this.config.getLog().severe("Port " + (this.getConfig().getConfig().isBindToDefaultPort() ? "25565" : this.config.getConfig().getPort()) + " is not properly forwarded.");
 			}
 		} catch (Exception e) {
 			this.config.getLog().severe("Cannot joint API to get IP and PORT verification, maybe API is down ");
