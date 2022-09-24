@@ -63,6 +63,16 @@ public class WebServer {
 	
 	private void authRequest() {
 		app.use((req, res) -> {
+			String ip = req.getIp();
+			if(!this.config.getSettings().getWhitelistedIps().contains(ip)) {
+				this.config.getLog().severe("IP " + ip + " try to execute request, this IP is not in whitelist IPs !");
+				JsonBuilder json = new JsonBuilder()
+						.append("CODE", 403)
+						.append("MESSAGE", "This IP " + ip + " is not allowed to execute requests !");
+				res.send(json.build());
+				return;
+			}
+			System.out.println("REQUESTER IP: " + ip);
 			System.out.println("HEADERS: " + req.getHeaders().entrySet());
 			/*String user = req.getHeader("User").get(0);
 			String pwd = req.getHeader("Pwd").get(0);

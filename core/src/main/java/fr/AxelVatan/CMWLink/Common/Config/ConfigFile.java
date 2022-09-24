@@ -1,6 +1,8 @@
 package fr.AxelVatan.CMWLink.Common.Config;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 import fr.AxelVatan.CMWLink.Common.Packages.Packages;
@@ -22,7 +24,7 @@ public class ConfigFile {
 	//			|cccc|_)
 	//			|cccc|   GIVE ME A BEER ! <3
 	//			`-==-'
-	
+
 	public ConfigFile(StartingFrom startingFrom,File filePath, Logger log, String version){
 		this.startingFrom = startingFrom;
 		this.filePath = filePath;
@@ -41,6 +43,9 @@ public class ConfigFile {
 		log.info("- Log Requests: " + settings.isLogRequests());
 		log.info("- Using proxy: " + settings.isUseProxy());
 		log.info("- Load Uncertified packages: " + settings.isLoadUncertifiedPackages());
+		if(settings.isEnableWhitelistedIps()) {
+			log.info("- Whitelisted IP: " + settings.getWhitelistedIps());
+		}
 		this.webServer = new WebServer(this);
 		this.packages = new Packages(log, filePath, webServer);
 		switch(this.startingFrom) {
@@ -82,9 +87,9 @@ public class ConfigFile {
 		private @Getter boolean loadUncertifiedPackages = false;
 		private @Getter boolean logRequests = true;
 		private @Getter boolean useProxy = false;
-		private @Getter String username = "admin";
-		private @Getter String password = "changeme";
-		private @Getter String salt = "AN AWESOME SALT FOR HASH";
+		private @Getter boolean enableWhitelistedIps = false;
+		private @Getter List<String> whitelistedIps = Arrays.asList("127.0.0.1");
+		private @Getter String token = "TOKEN FROM THE CMS";
 
 	}
 }
