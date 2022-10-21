@@ -29,8 +29,8 @@ public class BG_Commands extends Command implements TabExecutor{
 			if(sender.hasPermission("cmwl.packages")) {
 				sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&6CMW-Link: &7Packages installés")));
 				for(CMWLPackage packageClass : this.main.getConfigFile().getPackages().getPackagesLoaded()) {
-					boolean certified = main.getConfigFile().getPackages().getPackagesCertified().containsKey(packageClass.getPluginName());
-					sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7- &a" + packageClass.getPluginName() + "&7, Version: &a" + packageClass.getVersion() + " &8| " + (certified ? "&bCertifié [CMW]" : "&4Non certifié [CMW]"))));
+					boolean certified = main.getConfigFile().getPackages().getPackagesCertified().containsKey(packageClass.getPackageName());
+					sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7- &a" + packageClass.getPackageName() + "&7, Version: &a" + packageClass.getVersion() + " &8| " + (certified ? "&bCertifié [CMW]" : "&4Non certifié [CMW]"))));
 				}
 			}else {
 				errorPerm(sender);

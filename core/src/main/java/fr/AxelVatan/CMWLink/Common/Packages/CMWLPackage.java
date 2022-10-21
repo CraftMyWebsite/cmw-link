@@ -1,5 +1,6 @@
 package fr.AxelVatan.CMWLink.Common.Packages;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,17 +11,20 @@ import lombok.Getter;
 
 public abstract class CMWLPackage {
 
-	private @Getter String pluginName;
+	private @Getter String packageName;
 	private @Getter String routePrefix;
 	private @Getter String version;
+	private @Getter File mainFolder;
 	private Logger log;
 	private WebServer webServer;
 	private @Getter boolean isUseProxy;
+	private @Getter PackageConfig packageConfig;
 	
-	public void init(String pluginName, String routePrefix, String version, Logger log, WebServer webServer) {
-		this.pluginName = pluginName;
+	public void init(String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer) {
+		this.packageName = packageName;
 		this.routePrefix = routePrefix;
 		this.version = version;
+		this.mainFolder = mainFolder;
 		this.log = log;
 		this.webServer = webServer;
 		this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
@@ -33,6 +37,12 @@ public abstract class CMWLPackage {
 		enable();
 		registerRoutes();
 		log(Level.INFO, "Enabled in " + convertString(System.currentTimeMillis() - epoch, 1, TimeUnit.MILLISECONDS) + ".");
+	}
+	
+	public void setPackageConfig(PackageConfig pConfig) {
+		PackagePersist persist = new PackagePersist(this, mainFolder);
+		packageConfig = persist.getFile(PackageConfig.class).exists() ? persist.load(PackageConfig.class) : pConfig;
+		if (packageConfig != null) persist.save(packageConfig);
 	}
 	
 	public final void onDisable(){
@@ -73,7 +83,7 @@ public abstract class CMWLPackage {
 	 * Log everything you want with priority level (Display colors to console if is supported).
 	 */
 	public void log(Level level, String message){
-		this.log.log(level, "{" + this.pluginName + ", Version: " + this.version + "}==> " +message);
+		this.log.log(level, "{" + this.packageName + ", Version: " + this.version + "}==> " +message);
 	}
 	
 	/**

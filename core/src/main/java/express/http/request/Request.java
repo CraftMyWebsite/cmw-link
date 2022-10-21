@@ -37,7 +37,7 @@ public class Request {
     private final String protocol;                      // Request protocol
     private final URI uri;                              // Request uri
     private final InputStream body;                     // Request body
-    private final @Getter Headers headers;                      // Request Headers
+    private final @Getter Headers headers;              // Request Headers
     private final boolean secure;
     private final String contentType;                   // Request content-type
     private final long contentLength;                   // Request content-length

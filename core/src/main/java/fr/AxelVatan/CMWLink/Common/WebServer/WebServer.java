@@ -23,6 +23,19 @@ import lombok.Getter;
 
 public class WebServer {
 
+/*                 ___  ___
+         \  \  /`\ \  \ \  \ \  \
+          \__\ \__\ \__' \__' \__\
+           \  \ \  \ \    \     \
+            \  \ \  \ \    \     \
+                    ___         ___  ___
+\  \  /`\ \    \    \  \ \    \ \    \    \.  \
+ \__\ \__\ \    \    \  \ \  . \ \__  \__  \`\ \
+  \  \ \  \ \    \    \  \ \ |`\\ \    \    \ `\\
+   \  \ \  \ \___ \___ \__\ \|  `\ \___ \___ \  `\
+
+  */
+	
 	private @Getter ConfigFile config;
 	private Express app;
 	private @Getter HashMap<String, IRoute> routes;
@@ -63,6 +76,7 @@ public class WebServer {
 	
 	private void authRequest() {
 		app.use((req, res) -> {
+			//IP WHITELIST CHECK
 			String ip = req.getIp();
 			if(!this.config.getSettings().getWhitelistedIps().contains(ip)) {
 				this.config.getLog().severe("IP " + ip + " try to execute request, this IP is not in whitelist IPs !");
@@ -72,20 +86,11 @@ public class WebServer {
 				res.send(json.build());
 				return;
 			}
-			System.out.println("REQUESTER IP: " + ip);
+			//HEADER CHECK
+			
+			//AUTH CHECK
+			
 			System.out.println("HEADERS: " + req.getHeaders().entrySet());
-			/*String user = req.getHeader("User").get(0);
-			String pwd = req.getHeader("Pwd").get(0);
-			String userAndPwdFromHost = BCrypt.hashpw(user + ":" + pwd, BCrypt.gensalt(10));
-			Boolean match = BCrypt.checkpw(config.getConfig().getUsername() + ":" + config.getConfig().getPassword(), userAndPwdFromHost);
-			if(!match) {
-				JsonBuilder json = new JsonBuilder()
-						.append("CODE", 401)
-						.append("MESSAGE", "User not authorized to execute this request.");
-				res.send(json.build());
-				config.getLog().severe("User: " + user + " from host: " + req.getIp() + " is not authorized to execute the route: " + req.getPath());
-				res.send(json.build());
-			}*/
 		});
 	}
 	

@@ -25,7 +25,7 @@ public class ConfigFile {
 	//			|cccc|   GIVE ME A BEER ! <3
 	//			`-==-'
 
-	public ConfigFile(StartingFrom startingFrom,File filePath, Logger log, String version){
+	public ConfigFile(StartingFrom startingFrom, File filePath, Logger log, String version){
 		this.startingFrom = startingFrom;
 		this.filePath = filePath;
 		this.log = log;

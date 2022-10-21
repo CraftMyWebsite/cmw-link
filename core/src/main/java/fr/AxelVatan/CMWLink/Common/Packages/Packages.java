@@ -42,6 +42,7 @@ public class Packages {
 	private Logger log;
 	private WebServer webServer;
 	private Yaml yaml;
+	private File defaultPath;
 	private File packagesPath;
 	private Map<String, CMWLPackageDescription> packagesToLoad;
 	private Map<String, PackageClassLoader> loaders;
@@ -64,13 +65,18 @@ public class Packages {
 
 
 
-	public Packages(Logger log, File filePath, WebServer webServer) {
+	public Packages(Logger log, File defaultPath, WebServer webServer) {
 		this.log = log;
 		this.webServer = webServer;
+		this.defaultPath = defaultPath;
 		log.info("Searching packages ...");
-		this.packagesPath = new File(filePath + File.separator + "Packages");
+		this.packagesPath = new File(defaultPath + File.separator + "Packages");
 		if(!this.packagesPath.exists()) {
 			this.packagesPath.mkdirs();
+		}
+		File packagesConfigPath = new File(defaultPath + File.separator + "PackagesConfig");
+		if(!packagesConfigPath.exists()) {
+			packagesConfigPath.mkdirs();
 		}
 		Constructor yamlConstructor = new CustomClassLoaderConstructor(Packages.class.getClassLoader());
 		PropertyUtils propertyUtils = yamlConstructor.getPropertyUtils();
@@ -268,7 +274,7 @@ public class Packages {
 				}
 				this.loaders.put(plugin.getName(), loader);
 				CMWLPackage clazz = (CMWLPackage) main.getDeclaredConstructor().newInstance();
-				clazz.init(plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), this.log, webServer);
+				clazz.init(plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), defaultPath, this.log, webServer);
 				this.log.info("Loaded " + (this.packagesCertified.containsValue(plugin) ? "CERTIFIED" : "UNCERTIFIED") + " package " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
 				this.packagesLoaded.add(clazz);
 			} catch (Throwable t){
