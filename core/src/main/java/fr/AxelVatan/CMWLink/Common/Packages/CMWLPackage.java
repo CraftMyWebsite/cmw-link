@@ -41,7 +41,8 @@ public abstract class CMWLPackage {
 	
 	public void setPackageConfig(PackageConfig pConfig) {
 		PackagePersist persist = new PackagePersist(this, mainFolder);
-		packageConfig = persist.getFile(PackageConfig.class).exists() ? persist.load(PackageConfig.class) : pConfig;
+		//TODO FIX LOAD 
+		packageConfig = persist.getFile().exists() ? persist.load(PackageConfig.class) : pConfig;
 		if (packageConfig != null) persist.save(packageConfig);
 	}
 	

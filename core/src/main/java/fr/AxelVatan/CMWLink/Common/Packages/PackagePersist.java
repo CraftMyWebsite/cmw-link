@@ -31,34 +31,18 @@ public class PackagePersist {
 		this.locks = new HashMap<String, Lock>();
 	}
 
-	public String getName(Class<?> clazz) {
-		return clazz.getSimpleName().toLowerCase();
-	}
-
-	public String getName(Object o) {
-		return getName(o.getClass());
-	}
-
 	private GsonBuilder buildGson() {
 		return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping()
 				.enableComplexMapKeySerialization()
 				.excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE);
 	}
 
-	public File getFile(String name) {
+	public File getFile() {
 		return new File(packageFolder + File.separator + "PackagesConfig" + File.separator + packageClass.getPackageName() + ".json");
 	}
 
-	public File getFile(Class<?> clazz) {
-		return getFile(getName(clazz));
-	}
-
-	public File getFile(Object obj) {
-		return getFile(getName(obj));
-	}
-
 	public void save(Object instance) {
-		save(instance, getFile(instance));
+		save(instance, getFile());
 	}
 
 	public void save(Object instance, File file) {
@@ -74,7 +58,7 @@ public class PackagePersist {
 	}
 
 	public <T> T load(Class<T> clazz) {
-		return load(clazz, getFile(clazz));
+		return load(clazz, getFile());
 	}
 
 	public <T> T load(Class<T> clazz, File file) {

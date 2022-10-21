@@ -13,6 +13,8 @@ import net.md_5.bungee.api.ChatColor;
 
 public class VoteReceived extends CMWLRoute<Main>{
 	
+	//TODO CLEAN CODE
+	
 	public VoteReceived(Main main) {
 		super(main, "send/:username/:site_name/:reward_name", RouteType.GET);
 	}
