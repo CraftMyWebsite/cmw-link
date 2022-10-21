@@ -21,6 +21,7 @@ public class RewardCmd extends CMWLRoute<Main>{
 	public String executeRoute(HashMap<String, String> params) {
 		String username = params.get("username");
 		String cmd = params.get("cmd");
+		//TODO CLEAN AND SECURE
 		OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(username);
 		if(offPlayer != null) {
 			QueuedReward qReward = new QueuedReward(offPlayer.getUniqueId().toString().replaceAll("-", ""), cmd);

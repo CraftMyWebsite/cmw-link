@@ -87,10 +87,10 @@ public class WebServer {
 				return;
 			}
 			//HEADER CHECK
+			System.out.println("HEADERS: " + req.getHeader("X-CMW-ACCESS").toString());
 			
 			//AUTH CHECK
 			
-			//System.out.println("HEADERS: " + req.getHeaders().entrySet());
 		});
 	}
 	
