@@ -14,9 +14,8 @@ import net.md_5.bungee.api.ChatColor;
 public class VoteReceived extends CMWLRoute<Main>{
 	
 	//TODO CLEAN CODE
-	
 	public VoteReceived(Main main) {
-		super(main, "send/:username/:site_name/:reward_name", RouteType.GET);
+		super(main, "send/validate/:username/:site_name/:reward_name", RouteType.GET);
 	}
 
 	@Override
@@ -31,5 +30,4 @@ public class VoteReceived extends CMWLRoute<Main>{
 				));
 		return new JsonBuilder().append("CODE", 200).build();
 	}
-
 }

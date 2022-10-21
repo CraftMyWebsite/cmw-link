@@ -24,7 +24,7 @@ public abstract class CMWLPackage {
 		this.packageName = packageName;
 		this.routePrefix = routePrefix;
 		this.version = version;
-		this.mainFolder = mainFolder;
+		this.mainFolder = new File(mainFolder + File.separator + "PackagesConfig" + File.separator + packageName);
 		this.log = log;
 		this.webServer = webServer;
 		this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
@@ -40,6 +40,9 @@ public abstract class CMWLPackage {
 	}
 	
 	public void setPackageConfig(PackageConfig pConfig) {
+		if(!this.mainFolder.exists()) {
+			this.mainFolder.mkdirs();
+		}
 		PackagePersist persist = new PackagePersist(this, mainFolder);
 		//TODO FIX LOAD 
 		packageConfig = persist.getFile().exists() ? persist.load(PackageConfig.class) : pConfig;

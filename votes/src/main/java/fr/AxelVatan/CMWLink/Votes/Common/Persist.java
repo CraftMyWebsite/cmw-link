@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Common.Packages;
+package fr.AxelVatan.CMWLink.Votes.Common;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,18 +17,24 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class PackagePersist {
+public class Persist {
 
-	private CMWLPackage packageClass;
-	private File packageFolder;
+	private RewardQueue queue;
 	private Gson gson;
 	private Map<String, Lock> locks;
 
-	public PackagePersist(CMWLPackage packageClass, File packageFolder) {
-		this.packageClass = packageClass;
-		this.packageFolder = packageFolder;
+	public Persist(RewardQueue queue) {
+		this.queue = queue;
 		this.gson = buildGson().create();
 		this.locks = new HashMap<String, Lock>();
+	}
+
+	public String getName(Class<?> clazz) {
+		return clazz.getSimpleName().toLowerCase();
+	}
+
+	public String getName(Object o) {
+		return getName(o.getClass());
 	}
 
 	private GsonBuilder buildGson() {
@@ -37,12 +43,20 @@ public class PackagePersist {
 				.excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE);
 	}
 
-	public File getFile() {
-		return new File(packageFolder + File.separator + "settings.json");
+	public File getFile(String name) {
+		return new File(this.queue.getMain().getMainFolder() + File.separator +  name + ".json");
+	}
+
+	public File getFile(Class<?> clazz) {
+		return getFile(getName(clazz));
+	}
+
+	public File getFile(Object obj) {
+		return getFile(getName(obj));
 	}
 
 	public void save(Object instance) {
-		save(instance, getFile());
+		save(instance, getFile(instance));
 	}
 
 	public void save(Object instance, File file) {
@@ -50,7 +64,7 @@ public class PackagePersist {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				this.packageClass.log(Level.SEVERE, "Failed to save file: " + e.getMessage());
+				this.queue.getMain().log(Level.SEVERE, "Failed to save file: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -58,7 +72,7 @@ public class PackagePersist {
 	}
 
 	public <T> T load(Class<T> clazz) {
-		return load(clazz, getFile());
+		return load(clazz, getFile(clazz));
 	}
 
 	public <T> T load(Class<T> clazz, File file) {
@@ -69,7 +83,7 @@ public class PackagePersist {
 		try {
 			return this.gson.fromJson(content, clazz);
 		} catch (Exception ex) {
-			this.packageClass.log(Level.SEVERE, "Failed to parse " + file.toString() + ": " + ex.getMessage());
+			this.queue.getMain().log(Level.SEVERE, "Failed to parse " + file.toString() + ": " + ex.getMessage());
 		}
 		return null;
 	}
@@ -89,7 +103,7 @@ public class PackagePersist {
 			file.createNewFile();
 			Files.write(content.getBytes(), file);
 		} catch (IOException e) {
-			this.packageClass.log(Level.SEVERE, "Failed to write data to file: " + e.getMessage());
+			this.queue.getMain().log(Level.SEVERE, "Failed to write data to file: " + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			lock.unlock();
