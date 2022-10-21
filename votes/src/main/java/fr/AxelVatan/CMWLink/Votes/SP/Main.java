@@ -5,13 +5,17 @@ import java.util.logging.Level;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import fr.AxelVatan.CMWLink.Votes.Common.Config;
 import fr.AxelVatan.CMWLink.Votes.SP.Routes.VoteReceived;
+import lombok.Getter;
 
 public class Main extends CMWLPackage{
 
+	private @Getter Config config;
+	
 	@Override
 	public void enable() {
 		this.log(Level.INFO, "Votes for Spigot enabled.");
-		this.setPackageConfig(new Config());
+		this.config = new Config();
+		this.setPackageConfig(config);
 	}
 
 	@Override

@@ -46,7 +46,6 @@ public class PackagePersist {
 	}
 
 	public File getFile(String name) {
-		System.out.println(packageFolder + File.separator + "PackagesConfig" + File.separator + packageClass.getPackageName() + ".json");
 		return new File(packageFolder + File.separator + "PackagesConfig" + File.separator + packageClass.getPackageName() + ".json");
 	}
 

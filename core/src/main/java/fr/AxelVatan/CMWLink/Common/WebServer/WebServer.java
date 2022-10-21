@@ -90,7 +90,7 @@ public class WebServer {
 			
 			//AUTH CHECK
 			
-			System.out.println("HEADERS: " + req.getHeaders().entrySet());
+			//System.out.println("HEADERS: " + req.getHeaders().entrySet());
 		});
 	}
 	
