@@ -25,20 +25,20 @@ public class RewardQueue {
 	}
 	
 	public void addToQueue(QueuedReward qReward) {
-		if(this.queue.containsKey(qReward.getUsername())) {
+		if(this.queue.containsKey(qReward.getUuid())) {
 			List<QueuedReward> qRewards = new ArrayList<QueuedReward>();
-			qRewards.addAll(this.queue.get(qReward.getUsername()));
+			qRewards.addAll(this.queue.get(qReward.getUuid()));
 			qRewards.add(qReward);
-			this.queue.put(qReward.getUsername(), qRewards);
+			this.queue.put(qReward.getUuid(), qRewards);
 		}else {
-			this.queue.put(qReward.getUsername(), Arrays.asList(qReward));
+			this.queue.put(qReward.getUuid(), Arrays.asList(qReward));
 		}
 		File qFile = new File(main.getMainFolder() + File.separator + "Queue");
 		if(!qFile.exists()) {
 			qFile.mkdirs();
 		}
-		qFile = new File(main.getMainFolder() + File.separator + "Queue" + File.separator + qReward.getUsername() + ".json");
-		persist.save(this.queue.get(qReward.getUsername()), qFile);
+		qFile = new File(main.getMainFolder() + File.separator + "Queue" + File.separator + qReward.getUuid() + ".json");
+		persist.save(this.queue.get(qReward.getUuid()), qFile);
 	}
 
 	private void loadQueuedRewards() {

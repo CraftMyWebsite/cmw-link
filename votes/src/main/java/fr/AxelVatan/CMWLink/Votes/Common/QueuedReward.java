@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class QueuedReward {
 
-	private @Getter String username;
+	private @Getter String uuid;
 	private @Getter String cmd;
 }
