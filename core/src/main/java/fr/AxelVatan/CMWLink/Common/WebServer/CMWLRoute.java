@@ -9,6 +9,7 @@ import com.google.gson.JsonParser;
 
 import express.http.request.Request;
 import express.http.response.Response;
+import express.utils.Status;
 import fr.AxelVatan.CMWLink.Common.Config.JsonBuilder;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import lombok.Getter;
@@ -30,10 +31,13 @@ public abstract class CMWLRoute<PluginType extends CMWLPackage> implements IRout
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try {
 			JsonElement je = JsonParser.parseString(executeRoute(req.getParams()));
+			//TODO TO FIX
+			res.setStatus(Status._200);
 			res.send(gson.toJson(je));
 		}catch(Exception e) {
 			e.printStackTrace();
 			JsonElement je = JsonParser.parseString(new JsonBuilder("CODE", 500).append("MESSAGE", e.getMessage() + ", see console for more informations !").build());
+			res.setStatus(Status._500);
 			res.send(gson.toJson(je));
 		}
 		

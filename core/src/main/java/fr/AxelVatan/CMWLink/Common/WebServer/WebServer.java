@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import express.Express;
+import express.utils.Status;
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
 import fr.AxelVatan.CMWLink.Common.Config.JsonBuilder;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
@@ -69,6 +70,7 @@ public class WebServer {
 					.append("CODE", 200)
 					.append("NAME", "CraftMyWebSite_Link")
 					.append("VERSION", config.getVersion());
+			res.setStatus(Status._200);
 			res.send(json.build());
 		});
 		authRequest();
@@ -83,6 +85,7 @@ public class WebServer {
 				JsonBuilder json = new JsonBuilder()
 						.append("CODE", 403)
 						.append("MESSAGE", "This IP " + ip + " is not allowed to execute requests !");
+				res.setStatus(Status._403);
 				res.send(json.build());
 				return;
 			}
@@ -161,6 +164,7 @@ public class WebServer {
 			JsonBuilder json = new JsonBuilder()
 					.append("CODE", 404)
 					.append("MESSAGE", "Route " + req.getPath() + " not found !");
+			res.setStatus(Status._404);
 			res.send(json.build());
 		});
 	}
