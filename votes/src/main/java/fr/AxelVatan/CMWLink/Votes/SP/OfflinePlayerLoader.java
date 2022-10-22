@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Votes.Common;
+package fr.AxelVatan.CMWLink.Votes.SP;
 
 import java.util.UUID;
 

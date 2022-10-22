@@ -4,7 +4,6 @@ import java.util.logging.Level;
 
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import fr.AxelVatan.CMWLink.Votes.Common.Config;
-import fr.AxelVatan.CMWLink.Votes.Common.OfflinePlayerLoader;
 import fr.AxelVatan.CMWLink.Votes.Common.RewardQueue;
 import fr.AxelVatan.CMWLink.Votes.SP.Routes.RewardCmd;
 import fr.AxelVatan.CMWLink.Votes.SP.Routes.VoteReceived;
@@ -22,6 +21,7 @@ public class Main extends CMWLPackage{
 		this.config = new Config();
 		this.queue = new RewardQueue(this, config);
 		this.setPackageConfig(config);
+		this.loadPackageConfig(config);
 		this.offLoader = new OfflinePlayerLoader();
 	}
 

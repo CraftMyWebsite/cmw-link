@@ -22,6 +22,7 @@ public abstract class CMWLPackage {
 	private WebServer webServer;
 	private @Getter boolean isUseProxy;
 	private @Getter PackageConfig packageConfig;
+	private PackagePersist persist;
 	
 	public void init(StartingFrom startingFrom, String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer) {
 		if(this.alreadyInit == false) {
@@ -33,6 +34,7 @@ public abstract class CMWLPackage {
 			this.log = log;
 			this.webServer = webServer;
 			this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
+			this.persist = new PackagePersist(this, mainFolder);
 			onEnable();
 			this.alreadyInit = true;
 		}else {
@@ -52,10 +54,13 @@ public abstract class CMWLPackage {
 		if(!this.mainFolder.exists()) {
 			this.mainFolder.mkdirs();
 		}
-		PackagePersist persist = new PackagePersist(this, mainFolder);
-		//TODO FIX LOAD 
-		packageConfig = persist.getFile().exists() ? persist.load(PackageConfig.class) : pConfig;
-		if (packageConfig != null) persist.save(packageConfig);
+		if(!persist.getFile().exists()) {
+			persist.save(pConfig);
+		}
+	}
+	
+	public void loadPackageConfig(PackageConfig pConfig) {
+		packageConfig = persist.load(pConfig.getClass());
 	}
 	
 	public final void onDisable(){
