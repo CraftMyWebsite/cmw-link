@@ -5,6 +5,7 @@ CraftMyWebsite-Link a java plugin for MC servers
 ### Compatibilité
 ------------
 - **Spigot/Paper**
+- **Mohist/Magma**
 - **BungeeCord/Waterfall**
 - **Velocity**
 
@@ -13,24 +14,27 @@ CraftMyWebsite-Link a java plugin for MC servers
 
 ```json
 {
- 	"port": 24102,
-  	"bindToDefaultPort": true,
-  	"loadUncertifiedPackages": true,
-  	"logRequests": true,
-  	"useProxy": false,
-  	"username": "admin",
-  	"password": "changeme"
+	"port": 24102,
+	"bindToDefaultPort": false,
+    "loadUncertifiedPackages": true,
+    "logRequests": true,
+    "useProxy": false,
+    "enableWhitelistedIps": true,
+    "whitelistedIps": [
+      "127.0.0.1"
+    ],
+    "token": "TOKEN FROM THE CMS"
 }
 
 ```
 
 - port: Port sur lequel l'api du plugin est accessible.
-- bindToDefaultPort: Permet d'utiliser le port par défaut de minecraft pour les communications (Paper/Spigot seulement pour le moment)
+- bindToDefaultPort: Permet d'utiliser le port par défaut de minecraft pour les communications (Paper/Spigot/Mohist/Magma seulement pour le moment)
 - loadUncertifiedPackage: Permet de chargé les packages non certifié par l'équipe de CMW
 - logRequests: Affiche-les demande de requêtes dans la console du serveur.
 - useProxy: Permet d'utilise les Proxy tel que BungeeCord, Waterfall, Velocity.
-- username: Le nom de l'utilisateur pour les requettes
-- password: Le mot de passe de l'utilisateur pour les requettes
+- enableWhitelistedIps: Active la whitelist d'ips
+- whitelistedIps: Liste des ips de la whitelist
 
 Pour vérifié le bon fonctionnement du plugin il suffit de taper l'IP du serveur avec le port dans un navigateur, le plugin envoie la réponse suivante:
 
