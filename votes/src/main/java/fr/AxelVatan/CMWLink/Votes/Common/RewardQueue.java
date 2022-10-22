@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import lombok.Getter;
+import net.md_5.bungee.api.ChatColor;
 
 public class RewardQueue {
 
@@ -65,27 +66,29 @@ public class RewardQueue {
 	private void proccessQueue() {
 		for(Player player : Bukkit.getOnlinePlayers()) {
 			String uuid = player.getUniqueId().toString().replace("-", "");
-			QueuedReward rewards = this.queue.get(uuid);
-			ExecutorService executor = Executors.newFixedThreadPool(5);
-			for(String cmd : rewards.getCmds()) {
-				Runnable worker = new Runnable() {
-					@Override
-					public void run() {
-						Bukkit.getScheduler().runTask(plugin, new Runnable() {
-							@Override
-							public void run() {
-								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
-								player.sendMessage("Command: " + cmd + ", executed !");
-							}
-						});
-					}
-				};
-				executor.execute(worker);
+			if(this.queue.containsKey(uuid)) {
+				QueuedReward rewards = this.queue.get(uuid);
+				ExecutorService executor = Executors.newFixedThreadPool(5);
+				for(String cmd : rewards.getCmds()) {
+					Runnable worker = new Runnable() {
+						@Override
+						public void run() {
+							Bukkit.getScheduler().runTask(plugin, new Runnable() {
+								@Override
+								public void run() {
+									Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+								}
+							});
+						}
+					};
+					executor.execute(worker);
+				}
+				executor.shutdown();
+				while (!executor.isTerminated()) {}
+				player.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getPrefix() + " " + config.getRewardQueueText()));
+				this.queue.remove(uuid);
+				new File(main.getMainFolder() + File.separator + "Queue" + File.separator + uuid + ".json").delete();
 			}
-			executor.shutdown();
-			while (!executor.isTerminated()) {}
-			this.queue.remove(uuid);
-			new File(main.getMainFolder() + File.separator + "Queue" + File.separator + uuid + ".json").delete();
 		}
 	}
 }	
