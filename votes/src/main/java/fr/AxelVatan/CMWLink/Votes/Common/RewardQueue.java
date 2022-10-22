@@ -59,7 +59,6 @@ public class RewardQueue {
 		for (File fileEntry : new File(main.getMainFolder() + File.separator + "Queue").listFiles()) {
 			QueuedReward reward = persist.load(QueuedReward.class, fileEntry);
 			this.queue.put(fileEntry.getName().replace(".json", ""), reward);
-			System.out.println("Rs: " + this.queue.get(fileEntry.getName().replace(".json", "")));
 	    }
 	}
 

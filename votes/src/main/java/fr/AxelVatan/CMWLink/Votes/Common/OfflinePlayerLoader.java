@@ -34,7 +34,7 @@ public class OfflinePlayerLoader{
 		return null;
 	}
 	
-	public Player loadFromOfflinePlayer(OfflinePlayer player) {
+	private Player loadFromOfflinePlayer(OfflinePlayer player) {
 		if (player == null) {
 			return null;
 		}
@@ -50,7 +50,7 @@ public class OfflinePlayerLoader{
 		return null;
 	}
 
-	public UUID matchUser(String search) {
+	private UUID matchUser(String search) {
 		OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
 		for (OfflinePlayer player : offlinePlayers) {
 			String name = player.getName();
