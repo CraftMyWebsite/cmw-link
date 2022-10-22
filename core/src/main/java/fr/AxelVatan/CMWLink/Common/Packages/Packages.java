@@ -274,7 +274,7 @@ public class Packages {
 				}
 				this.loaders.put(plugin.getName(), loader);
 				CMWLPackage clazz = (CMWLPackage) main.getDeclaredConstructor().newInstance();
-				clazz.init(plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), defaultPath, this.log, webServer);
+				clazz.init(webServer.getConfig().getStartingFrom(), plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), defaultPath, this.log, webServer);
 				this.log.info("Loaded " + (this.packagesCertified.containsValue(plugin) ? "CERTIFIED" : "UNCERTIFIED") + " package " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
 				this.packagesLoaded.add(clazz);
 			} catch (Throwable t){

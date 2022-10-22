@@ -5,12 +5,15 @@ import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import fr.AxelVatan.CMWLink.Common.Config.StartingFrom;
 import fr.AxelVatan.CMWLink.Common.WebServer.IRoute;
 import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
 
 public abstract class CMWLPackage {
 
+	private boolean alreadyInit = false;
+	private @Getter StartingFrom startingFrom;
 	private @Getter String packageName;
 	private @Getter String routePrefix;
 	private @Getter String version;
@@ -20,15 +23,21 @@ public abstract class CMWLPackage {
 	private @Getter boolean isUseProxy;
 	private @Getter PackageConfig packageConfig;
 	
-	public void init(String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer) {
-		this.packageName = packageName;
-		this.routePrefix = routePrefix;
-		this.version = version;
-		this.mainFolder = new File(mainFolder + File.separator + "PackagesConfig" + File.separator + packageName);
-		this.log = log;
-		this.webServer = webServer;
-		this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
-		onEnable();
+	public void init(StartingFrom startingFrom, String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer) {
+		if(this.alreadyInit == false) {
+			this.startingFrom = startingFrom;
+			this.packageName = packageName;
+			this.routePrefix = routePrefix;
+			this.version = version;
+			this.mainFolder = new File(mainFolder + File.separator + "PackagesConfig" + File.separator + packageName);
+			this.log = log;
+			this.webServer = webServer;
+			this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
+			onEnable();
+			this.alreadyInit = true;
+		}else {
+			log(Level.SEVERE, "Package already initiated !");
+		}
 	}
 	
 	public final void onEnable(){
