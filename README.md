@@ -2,7 +2,7 @@
 CraftMyWebsite-Link a java plugin for MC servers
 
 
-### Compatibilité
+### CompatibilitÃ©
 ------------
 - **Spigot/Paper**
 - **Mohist/Magma**
@@ -29,21 +29,21 @@ CraftMyWebsite-Link a java plugin for MC servers
 ```
 
 - port: Port sur lequel l'api du plugin est accessible.
-- bindToDefaultPort: Permet d'utiliser le port par défaut de minecraft pour les communications (Paper/Spigot/Mohist/Magma seulement pour le moment)
-- loadUncertifiedPackage: Permet de chargé les packages non certifié par l'équipe de CMW
-- logRequests: Affiche-les demande de requêtes dans la console du serveur.
-- useProxy: Permet d'utilise les Proxy tel que BungeeCord, Waterfall, Velocity.
-- enableWhitelistedIps: Active la whitelist d'ips
-- whitelistedIps: Liste des ips de la whitelist
+- bindToDefaultPort: Permet d'utiliser le port par dÃ©faut de minecraft pour les communications (Paper/Spigot/Mohist/Magma seulement pour le moment)
+- loadUncertifiedPackage: Permet de charger les packages non certifiÃ© par l'Ã©quipe de CMW
+- logRequests: Affiche-les demande de requÃªtes dans la console du serveur.
+- useProxy: Permet d'utiliser les Proxy tel que BungeeCord, Waterfall, Velocity.
+- enableWhitelistedIps: Active la whitelist d'IPs
+- whitelistedIps: Liste des IPs de la whitelist
 
-Pour vérifié le bon fonctionnement du plugin il suffit de taper l'IP du serveur avec le port dans un navigateur, le plugin envoie la réponse suivante:
+Pour vÃ©rifier le bon fonctionnement du plugin il suffit de taper l'IP du serveur avec le port dans un navigateur, le plugin envoie la rÃ©ponse suivante:
 
 ```
 URL: http://127.0.0.1:24102/
-Réponse: {"CODE":200,"NAME":"CraftMyWebSite_Link","VERSION":1.0}
+RÃ©ponse: {"CODE":200,"NAME":"CraftMyWebSite_Link","VERSION":1.0}
 ```
 
-### Pour les développeurs
+### Pour les dÃ©veloppeurs
 ------------
 Code de base pour un package.
 
@@ -77,7 +77,7 @@ public class TestPackage extends CMWLPackage{
 
 ```
 
-- Les fonctions enable, disable et registerRoutes sont obligatoire, elle sont appeler lors du chargement/arrêt du package.
+- Les fonctions enable, disable et registerRoutes sont obligatoire, elle sont appelÃ©es lors du chargement/arrÃªt du package.
 
 <br>
 Class TestRoute:
@@ -110,15 +110,15 @@ public class TestRoute extends CMWLRoute<TestPackage>{
 
 ```
 
-Dans le constructeur vous devez obligatoirement déclaré les parametres suivant:
+Dans le constructeur vous devez obligatoirement dÃ©clarer les paramÃ¨tres suivant :
 - main : La class principale du package
 - "ping" : Le nom de la route
 - RouteType: Le type de route (GET, POST)
 
-La fonction "execute" est déclanchée quand la route définie est appelée.
+La fonction "execute" est dÃ©clenchÃ©e quand la route dÃ©finie est appelÃ©e.
 
 ```
-http://127.0.0.1:24102/test/ping -> Réponse: {"CODE":200,"MESSAGE":"Pong !"}
+http://127.0.0.1:24102/test/ping -> RÃ©ponse: {"CODE":200,"MESSAGE":"Pong !"}
 ```
 
 <br>
@@ -141,7 +141,7 @@ author: AxelVatan
 - version: La version du package.
 - author: L'auteur du package.
 
-### Support, infos et communauté
+### Support, infos et communautÃ©
 ------------
 
 ### Liens utiles :
@@ -151,4 +151,4 @@ author: AxelVatan
 - **Twitter**: https://twitter.com/CraftMyWebsite
 
 ------------
-Copyright © CraftMyWebsite 2014-2022 
+Copyright Â© CraftMyWebsite 2014-2022 
