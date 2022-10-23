@@ -2,7 +2,6 @@ package fr.AxelVatan.CMWLink.Votes.SP.Routes;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import fr.AxelVatan.CMWLink.Common.Config.JsonBuilder;
 import fr.AxelVatan.CMWLink.Common.WebServer.CMWLRoute;
@@ -22,8 +21,7 @@ public class RewardCmd extends CMWLRoute<Main>{
 		String cmd = params.get("cmd");
 		String uuid = this.getPlugin().getOffLoader().load(username).getUniqueId().toString().replace("-", "");
 		if(uuid != null) {
-			List<String> cmds = Arrays.asList(cmd.split("\\|"));
-			QueuedReward qReward = new QueuedReward(uuid, cmds);
+			QueuedReward qReward = new QueuedReward(uuid, Arrays.asList(cmd.split("\\|")));
 			this.getPlugin().getQueue().addToQueue(qReward);
 			return new JsonBuilder().append("CODE", 200).build();
 		}else {
