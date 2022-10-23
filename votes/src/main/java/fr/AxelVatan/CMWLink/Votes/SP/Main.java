@@ -13,7 +13,6 @@ public class Main extends CMWLPackage{
 
 	private @Getter Config config;
 	private @Getter RewardQueue queue;
-	private @Getter OfflinePlayerLoader offLoader;
 	
 	@Override
 	public void enable() {
@@ -22,7 +21,6 @@ public class Main extends CMWLPackage{
 		this.queue = new RewardQueue(this, config);
 		this.setPackageConfig(config);
 		this.loadPackageConfig(config);
-		this.offLoader = new OfflinePlayerLoader();
 	}
 
 	@Override

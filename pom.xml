@@ -1,6 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
@@ -10,11 +9,29 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>Versions</module>
+		<module>v1_13_R2</module>
+		<module>v1_14_R1</module>
+		<module>v1_15_R1</module>
+		<module>v1_16_R1</module>
+		<module>v1_16_R2</module>
+		<module>v1_16_R3</module>
+		<module>v1_17_R1</module>
+		<module>v1_18_R1</module>
+		<module>v1_18_R2</module>
+		<module>v1_19_R1</module>
+		
 		<module>core</module>
 		<module>votes</module>
 		<module>boutique</module>
 		<module>monitoring</module>
 		<module>news</module>
-	</modules>
+    
+  	</modules>
+
+  	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
 
 </project>

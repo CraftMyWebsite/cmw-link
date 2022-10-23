@@ -19,6 +19,61 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>Versions</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_13_R2</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_14_R1</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_15_R1</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_16_R1</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_16_R2</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_16_R3</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_17_R1</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_18_R1</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_18_R2</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_19_R1</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.24</version>

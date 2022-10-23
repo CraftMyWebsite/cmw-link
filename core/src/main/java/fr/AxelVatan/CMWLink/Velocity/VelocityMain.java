@@ -12,7 +12,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
-import fr.AxelVatan.CMWLink.Common.Config.StartingFrom;
+import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import lombok.Getter;
 
 @Plugin(id = "craftmywebsite-link", name = "CraftMyWebsite-Link", version = "1.0", url = "https://craftmywebsite.fr/", description = "CraftMyWebsite-Link a java plugin for MC servers", authors = {"AxelVatan"})

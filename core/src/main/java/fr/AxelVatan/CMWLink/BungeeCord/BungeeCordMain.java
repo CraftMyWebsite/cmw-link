@@ -1,7 +1,7 @@
 package fr.AxelVatan.CMWLink.BungeeCord;
 
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
-import fr.AxelVatan.CMWLink.Common.Config.StartingFrom;
+import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 

@@ -34,6 +34,7 @@ import org.yaml.snakeyaml.introspector.PropertyUtils;
 
 import com.google.common.base.Preconditions;
 
+import fr.AxelVatan.CMWLink.Common.Utils.Utils;
 import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
 
@@ -41,6 +42,7 @@ public class Packages {
 
 	private Logger log;
 	private WebServer webServer;
+	private Utils utils;
 	private Yaml yaml;
 	private File defaultPath;
 	private File packagesPath;
@@ -65,9 +67,10 @@ public class Packages {
 
 
 
-	public Packages(Logger log, File defaultPath, WebServer webServer) {
+	public Packages(Logger log, File defaultPath, WebServer webServer, Utils utils) {
 		this.log = log;
 		this.webServer = webServer;
+		this.utils = utils;
 		this.defaultPath = defaultPath;
 		log.info("Searching packages ...");
 		this.packagesPath = new File(defaultPath + File.separator + "Packages");
@@ -274,7 +277,7 @@ public class Packages {
 				}
 				this.loaders.put(plugin.getName(), loader);
 				CMWLPackage clazz = (CMWLPackage) main.getDeclaredConstructor().newInstance();
-				clazz.init(webServer.getConfig().getStartingFrom(), plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), defaultPath, this.log, webServer);
+				clazz.init(webServer.getConfig().getStartingFrom(), plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), defaultPath, this.log, webServer, utils);
 				this.log.info("Loaded " + (this.packagesCertified.containsValue(plugin) ? "CERTIFIED" : "UNCERTIFIED") + " package " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
 				this.packagesLoaded.add(clazz);
 			} catch (Throwable t){

@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Common.Config;
+package fr.AxelVatan.CMWLink.Common.Utils;
 
 public enum StartingFrom {
 

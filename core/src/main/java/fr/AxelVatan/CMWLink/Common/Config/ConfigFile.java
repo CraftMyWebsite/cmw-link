@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import fr.AxelVatan.CMWLink.Common.Packages.Packages;
+import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
+import fr.AxelVatan.CMWLink.Common.Utils.Utils;
 import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
 
@@ -16,9 +18,10 @@ public class ConfigFile {
 	private @Getter Logger log;
 	private @Getter String version;
 	private @Getter Settings settings;
+	private @Getter Utils utils;
 	private @Getter Packages packages;
 	private @Getter WebServer webServer;
-
+	
 	//			.~~~~.
 	//			i====i_
 	//			|cccc|_)
@@ -30,6 +33,7 @@ public class ConfigFile {
 		this.filePath = filePath;
 		this.log = log;
 		this.version = version;
+		this.utils = new Utils(log, startingFrom);
 		log.info("Loading configuration...");
 		Persist persist = new Persist(this);
 		settings = persist.getFile(Settings.class).exists() ? persist.load(Settings.class) : new Settings();
@@ -47,7 +51,7 @@ public class ConfigFile {
 			log.info("- Whitelisted IP: " + settings.getWhitelistedIps());
 		}
 		this.webServer = new WebServer(this);
-		this.packages = new Packages(log, filePath, webServer);
+		this.packages = new Packages(log, filePath, webServer, utils);
 		switch(this.startingFrom) {
 		case BUNGEECORD:
 			if(this.settings.useProxy) {

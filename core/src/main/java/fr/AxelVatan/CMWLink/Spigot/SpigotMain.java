@@ -3,7 +3,7 @@ package fr.AxelVatan.CMWLink.Spigot;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
-import fr.AxelVatan.CMWLink.Common.Config.StartingFrom;
+import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import lombok.Getter;
 
 public class SpigotMain extends JavaPlugin{

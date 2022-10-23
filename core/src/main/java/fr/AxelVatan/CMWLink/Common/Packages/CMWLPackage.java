@@ -5,7 +5,8 @@ import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import fr.AxelVatan.CMWLink.Common.Config.StartingFrom;
+import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
+import fr.AxelVatan.CMWLink.Common.Utils.Utils;
 import fr.AxelVatan.CMWLink.Common.WebServer.IRoute;
 import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
@@ -20,11 +21,13 @@ public abstract class CMWLPackage {
 	private @Getter File mainFolder;
 	private Logger log;
 	private WebServer webServer;
+	private @Getter Utils utils;
+	
 	private @Getter boolean isUseProxy;
 	private @Getter PackageConfig packageConfig;
 	private PackagePersist persist;
 	
-	public void init(StartingFrom startingFrom, String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer) {
+	public void init(StartingFrom startingFrom, String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer, Utils utils) {
 		if(this.alreadyInit == false) {
 			this.startingFrom = startingFrom;
 			this.packageName = packageName;
@@ -33,6 +36,7 @@ public abstract class CMWLPackage {
 			this.mainFolder = new File(mainFolder + File.separator + "PackagesConfig" + File.separator + packageName);
 			this.log = log;
 			this.webServer = webServer;
+			this.utils = utils;
 			this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
 			this.persist = new PackagePersist(this, mainFolder);
 			onEnable();
