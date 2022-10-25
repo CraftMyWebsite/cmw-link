@@ -13,14 +13,14 @@ public class SpigotMain extends JavaPlugin{
     @Override
     public void onEnable() {
     	this.getLogger().info("==========================================");
-    	this.configFile = new ConfigFile(StartingFrom.SPIGOT, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
+    	this.configFile = new ConfigFile(this.getServer(), StartingFrom.SPIGOT, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
     	this.getLogger().info("==========================================");
     	this.getCommand("cmwl").setExecutor(new SP_Commands(this));
     	this.getCommand("cmwl").setTabCompleter(new SP_Commands(this));
     }
 
     public void resetConfig() {
-    	this.configFile = new ConfigFile(StartingFrom.SPIGOT, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
+    	this.configFile = new ConfigFile(this.getServer(), StartingFrom.SPIGOT, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
     }
     
     @Override

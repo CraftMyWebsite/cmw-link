@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.bukkit.Server;
+
 import fr.AxelVatan.CMWLink.Common.Packages.Packages;
 import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import fr.AxelVatan.CMWLink.Common.Utils.Utils;
@@ -13,6 +15,13 @@ import lombok.Getter;
 
 public class ConfigFile {
 
+	//SPIGOT
+	private @Getter Server spServer;
+	//BUNGEECORD
+	private @Getter net.md_5.bungee.api.ProxyServer bgServer;
+	//VELOCITY
+	private @Getter com.velocitypowered.api.proxy.ProxyServer vlServer;
+	
 	private @Getter StartingFrom startingFrom;
 	private @Getter File filePath;
 	private @Getter Logger log;
@@ -21,14 +30,29 @@ public class ConfigFile {
 	private @Getter Utils utils;
 	private @Getter Packages packages;
 	private @Getter WebServer webServer;
-	
+
 	//			.~~~~.
 	//			i====i_
 	//			|cccc|_)
 	//			|cccc|   GIVE ME A BEER ! <3
 	//			`-==-'
 
-	public ConfigFile(StartingFrom startingFrom, File filePath, Logger log, String version){
+	public ConfigFile(Server server, StartingFrom startingFrom, File filePath, Logger log, String version) {
+		this.spServer = server;
+		load(startingFrom, filePath, log, version);
+	}
+	
+	public ConfigFile(net.md_5.bungee.api.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version) {
+		this.bgServer = server;
+		load(startingFrom, filePath, log, version);
+	}
+	
+	public ConfigFile(com.velocitypowered.api.proxy.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version) {
+		this.vlServer = server;
+		load(startingFrom, filePath, log, version);
+	}
+	
+	public void load(StartingFrom startingFrom, File filePath, Logger log, String version){
 		this.startingFrom = startingFrom;
 		this.filePath = filePath;
 		this.log = log;
@@ -52,9 +76,9 @@ public class ConfigFile {
 				log.info("- Whitelisted IP: " + settings.getWhitelistedIps());
 			}
 			this.webServer = new WebServer(this);
-			this.packages = new Packages(log, filePath, webServer, utils);
 			switch(this.startingFrom) {
 			case BUNGEECORD:
+				this.packages = new Packages(bgServer, log, filePath, webServer, utils);
 				if(this.settings.useProxy) {
 					this.startWebServer();
 				}else {
@@ -63,6 +87,7 @@ public class ConfigFile {
 				}
 				break;
 			case SPIGOT:
+				this.packages = new Packages(spServer, log, filePath, webServer, utils);
 				if(this.settings.isUseProxy()) {
 					log.info("Waiting requests from the proxy");
 				}else {
@@ -70,6 +95,7 @@ public class ConfigFile {
 				}
 				break;
 			case VELOCITY:
+				this.packages = new Packages(vlServer, log, filePath, webServer, utils);
 				if(this.settings.useProxy) {
 					this.startWebServer();
 				}else {

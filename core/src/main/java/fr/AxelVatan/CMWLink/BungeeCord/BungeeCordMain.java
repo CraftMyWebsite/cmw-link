@@ -12,13 +12,13 @@ public class BungeeCordMain extends Plugin {
     @Override
     public void onEnable() {
     	this.getLogger().info("==========================================");
-    	this.configFile = new ConfigFile(StartingFrom.BUNGEECORD, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
+    	this.configFile = new ConfigFile(this.getProxy(), StartingFrom.BUNGEECORD, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
     	this.getLogger().info("==========================================");
     	this.getProxy().getPluginManager().registerCommand(this, new BG_Commands(this));
     }
 
     public void resetConfig() {
-    	this.configFile = new ConfigFile(StartingFrom.BUNGEECORD, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
+    	this.configFile = new ConfigFile(this.getProxy(), StartingFrom.BUNGEECORD, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
     }
     
     @Override

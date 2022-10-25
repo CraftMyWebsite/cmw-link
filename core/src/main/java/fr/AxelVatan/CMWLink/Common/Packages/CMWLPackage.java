@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.Server;
+
 import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import fr.AxelVatan.CMWLink.Common.Utils.Utils;
 import fr.AxelVatan.CMWLink.Common.WebServer.IRoute;
@@ -13,6 +15,13 @@ import lombok.Getter;
 
 public abstract class CMWLPackage {
 
+	//SPIGOT
+	private @Getter Server spServer;
+	//BUNGEECORD
+	private @Getter net.md_5.bungee.api.ProxyServer bgServer;
+	//VELOCITY
+	private @Getter com.velocitypowered.api.proxy.ProxyServer vlServer;
+	
 	private boolean alreadyInit = false;
 	private @Getter StartingFrom startingFrom;
 	private @Getter String packageName;
@@ -27,8 +36,49 @@ public abstract class CMWLPackage {
 	private @Getter PackageConfig packageConfig;
 	private PackagePersist persist;
 	
-	public void init(StartingFrom startingFrom, String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer, Utils utils) {
+	public void init(Server server, StartingFrom startingFrom, String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer, Utils utils) {
 		if(this.alreadyInit == false) {
+			this.spServer = server;
+			this.startingFrom = startingFrom;
+			this.packageName = packageName;
+			this.routePrefix = routePrefix;
+			this.version = version;
+			this.mainFolder = new File(mainFolder + File.separator + "PackagesConfig" + File.separator + packageName);
+			this.log = log;
+			this.webServer = webServer;
+			this.utils = utils;
+			this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
+			this.persist = new PackagePersist(this, mainFolder);
+			onEnable();
+			this.alreadyInit = true;
+		}else {
+			log(Level.SEVERE, "Package already initiated !");
+		}
+	}
+	
+	public void init(net.md_5.bungee.api.ProxyServer server, StartingFrom startingFrom, String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer, Utils utils) {
+		if(this.alreadyInit == false) {
+			this.bgServer = server;
+			this.startingFrom = startingFrom;
+			this.packageName = packageName;
+			this.routePrefix = routePrefix;
+			this.version = version;
+			this.mainFolder = new File(mainFolder + File.separator + "PackagesConfig" + File.separator + packageName);
+			this.log = log;
+			this.webServer = webServer;
+			this.utils = utils;
+			this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
+			this.persist = new PackagePersist(this, mainFolder);
+			onEnable();
+			this.alreadyInit = true;
+		}else {
+			log(Level.SEVERE, "Package already initiated !");
+		}
+	}
+	
+	public void init(com.velocitypowered.api.proxy.ProxyServer server, StartingFrom startingFrom, String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer, Utils utils) {
+		if(this.alreadyInit == false) {
+			this.vlServer = server;
 			this.startingFrom = startingFrom;
 			this.packageName = packageName;
 			this.routePrefix = routePrefix;

@@ -24,6 +24,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
+import org.bukkit.Server;
 import org.json.simpleForBukkit.JSONObject;
 import org.json.simpleForBukkit.parser.JSONParser;
 import org.json.simpleForBukkit.parser.ParseException;
@@ -39,6 +40,13 @@ import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
 
 public class Packages {
+
+	//SPIGOT
+	private @Getter Server spServer;
+	//BUNGEECORD
+	private @Getter net.md_5.bungee.api.ProxyServer bgServer;
+	//VELOCITY
+	private @Getter com.velocitypowered.api.proxy.ProxyServer vlServer;
 
 	private Logger log;
 	private WebServer webServer;
@@ -66,8 +74,22 @@ public class Packages {
 	//	⠀⠀⠀⠀⠀⠀⠀⠸⠿⠿⠿⠿⠿⣿⣿⣿⣿⠿⠇⠀⠀⠀⠀⠀⠀⠀
 
 
+	public Packages(Server server, Logger log, File defaultPath, WebServer webServer, Utils utils) {
+		this.spServer = server;
+		load(log, defaultPath, webServer, utils);
+	}
 
-	public Packages(Logger log, File defaultPath, WebServer webServer, Utils utils) {
+	public Packages(net.md_5.bungee.api.ProxyServer server, Logger log, File defaultPath, WebServer webServer, Utils utils) {
+		this.bgServer = server;
+		load(log, defaultPath, webServer, utils);
+	}
+
+	public Packages(com.velocitypowered.api.proxy.ProxyServer server, Logger log, File defaultPath, WebServer webServer, Utils utils) {
+		this.vlServer = server;
+		load(log, defaultPath, webServer, utils);
+	}
+
+	private void load(Logger log, File defaultPath, WebServer webServer, Utils utils) {
 		this.log = log;
 		this.webServer = webServer;
 		this.utils = utils;
@@ -277,7 +299,18 @@ public class Packages {
 				}
 				this.loaders.put(plugin.getName(), loader);
 				CMWLPackage clazz = (CMWLPackage) main.getDeclaredConstructor().newInstance();
-				clazz.init(webServer.getConfig().getStartingFrom(), plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), defaultPath, this.log, webServer, utils);
+				switch(webServer.getConfig().getStartingFrom()) {
+				case BUNGEECORD:
+					clazz.init(bgServer, webServer.getConfig().getStartingFrom(), plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), defaultPath, this.log, webServer, utils);
+					break;
+				case SPIGOT:
+					clazz.init(spServer, webServer.getConfig().getStartingFrom(), plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), defaultPath, this.log, webServer, utils);
+					break;
+				case VELOCITY:
+					clazz.init(vlServer, webServer.getConfig().getStartingFrom(), plugin.getName(), plugin.getRoute_prefix(), plugin.getVersion(), defaultPath, this.log, webServer, utils);
+					break;
+				}
+				
 				this.log.info("Loaded " + (this.packagesCertified.containsValue(plugin) ? "CERTIFIED" : "UNCERTIFIED") + " package " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
 				this.packagesLoaded.add(clazz);
 			} catch (Throwable t){
