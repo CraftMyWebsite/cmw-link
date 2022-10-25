@@ -18,6 +18,7 @@ import express.utils.Status;
 import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
 import fr.AxelVatan.CMWLink.Common.Config.JsonBuilder;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
+import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import fr.AxelVatan.CMWLink.Common.WebServer.Injector.Injector;
 import fr.AxelVatan.CMWLink.Common.WebServer.Router.RouteMatcher;
 import lombok.Getter;
@@ -64,7 +65,9 @@ public class WebServer {
 		this.app = new Express();
 		this.routes = new HashMap<String, IRoute>();
 		this.router = new RouteMatcher();
-		this.injector = new Injector(this);
+		if(config.getStartingFrom().equals(StartingFrom.SPIGOT)) {
+			this.injector = new Injector(this);
+		}
 		app.all("/", (req, res) -> {
 			JsonBuilder json = new JsonBuilder()
 					.append("CODE", 200)

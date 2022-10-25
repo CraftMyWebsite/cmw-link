@@ -24,9 +24,9 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.simpleForBukkit.JSONObject;
+import org.json.simpleForBukkit.parser.JSONParser;
+import org.json.simpleForBukkit.parser.ParseException;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
@@ -272,7 +272,7 @@ public class Packages {
 				case VELOCITY:
 					Preconditions.checkNotNull(plugin.getVl_main(), "Package from %s has no vl_main main class, maybe not compatible with Velocity ?", plugin.getFile());
 					loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getVl_main(), plugin.getFile().toURI().toURL(), this);
-					main = loader.loadClass( plugin.getBg_main());
+					main = loader.loadClass( plugin.getVl_main());
 					break;
 				}
 				this.loaders.put(plugin.getName(), loader);

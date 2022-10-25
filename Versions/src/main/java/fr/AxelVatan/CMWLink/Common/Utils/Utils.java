@@ -17,9 +17,9 @@ public class Utils {
 	public Utils(Logger log, StartingFrom startingFrom) {
 		this.log = log;
 		this.startingFrom = startingFrom;
-		
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean init() {
 		switch(startingFrom) {
 		case BUNGEECORD:

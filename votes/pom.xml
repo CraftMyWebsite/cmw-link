@@ -42,12 +42,26 @@
             <version>1.19-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+        	<groupId>com.velocitypowered</groupId>
+        	<artifactId>velocity-api</artifactId>
+        	<version>3.0.1</version>
+        	<scope>provided</scope>
+    	</dependency>
 	</dependencies>
 
 	<repositories>
 		<repository>
+    		<id>jitpack.io</id>
+    		<url>https://jitpack.io</url>
+		</repository>
+		<repository>
 			<id>maven-repo</id>
 			<url>https://repo1.maven.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>jcenter-repo</id>
+			<url>https://jcenter.bintray.com/</url>
 		</repository>
 		<repository>
 			<id>papermc</id>
