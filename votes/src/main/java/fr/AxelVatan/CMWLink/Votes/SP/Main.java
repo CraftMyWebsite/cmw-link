@@ -18,9 +18,9 @@ public class Main extends CMWLPackage{
 	public void enable() {
 		this.log(Level.INFO, "Votes for Spigot enabled.");
 		this.config = new Config();
-		this.queue = new RewardQueue(this, config);
 		this.setPackageConfig(config);
 		this.loadPackageConfig(config);
+		this.queue = new RewardQueue(this, config);
 	}
 
 	@Override

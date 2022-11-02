@@ -6,14 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class RewardQueue {
 
@@ -30,17 +33,31 @@ public class RewardQueue {
 		this.config = config;
 		this.queue = new HashMap<String, QueuedReward>();
 		this.qFile = new File(main.getMainFolder() + File.separator + "Queue");
-		this.plugin = Bukkit.getPluginManager().getPlugin("CraftMyWebsite_Link");
 		if(!qFile.exists()) {
 			qFile.mkdirs();
 		}
  		loadQueuedRewards();
- 		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-			@Override
-			public void run() {
-				proccessQueue();
-			}
- 		}, 200, 200);
+ 		switch(main.getStartingFrom()) {
+		case BUNGEECORD:
+			main.getBgServer().getScheduler().schedule(main.getBgServer().getPluginManager().getPlugin("CraftMyWebsite_Link"), new Runnable() {
+				@Override
+				public void run() {
+					proccessQueue();
+				}
+			}, 10, 10, TimeUnit.SECONDS);
+			break;
+		case SPIGOT:
+			this.plugin = main.getSpServer().getPluginManager().getPlugin("CraftMyWebsite_Link");
+			main.getSpServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+				@Override
+				public void run() {
+					proccessQueue();
+				}
+	 		}, 200, 200);
+			break;
+		case VELOCITY:
+			break;
+ 		}
 	}
 
 	public void addToQueue(QueuedReward qReward) {
@@ -61,33 +78,67 @@ public class RewardQueue {
 			QueuedReward reward = persist.load(QueuedReward.class, fileEntry);
 			this.queue.put(fileEntry.getName().replace(".json", ""), reward);
 	    }
+		this.main.log(Level.INFO, "Loaded Reward Queue, there is " + this.queue.size() + " reward waiting !");
 	}
 
 	private void proccessQueue() {
-		for(Player player : Bukkit.getOnlinePlayers()) {
-			String uuid = player.getUniqueId().toString().replace("-", "");
-			if(this.queue.containsKey(uuid)) {
-				QueuedReward rewards = this.queue.get(uuid);
-				ExecutorService executor = Executors.newFixedThreadPool(5);
-				for(String cmd : rewards.getCmds()) {
-					Runnable worker = new Runnable() {
-						@Override
-						public void run() {
-							Bukkit.getScheduler().runTask(plugin, new Runnable() {
+		switch(main.getStartingFrom()) {
+		case BUNGEECORD:
+			for(ProxiedPlayer player : main.getBgServer().getPlayers()) {
+				this.executeQueuePlayer(null, player, player.getName().toLowerCase());
+			}
+			break;
+		case SPIGOT:
+			for(Player player : main.getSpServer().getOnlinePlayers()) {
+				this.executeQueuePlayer(player, null, player.getUniqueId().toString().replace("-", "").toLowerCase());
+			}
+			break;
+		case VELOCITY:
+			
+			break;
+		}
+	}
+	
+	private void executeQueuePlayer(Player spPlayer, ProxiedPlayer bgPlayer, String uuid) {
+		if(this.queue.containsKey(uuid)) {
+			QueuedReward rewards = this.queue.get(uuid);
+			ExecutorService executor = Executors.newFixedThreadPool(5);
+			for(String cmd : rewards.getCmds()) {
+				Runnable worker = new Runnable() {
+					@Override
+					public void run() {
+						switch(main.getStartingFrom()) {
+						case BUNGEECORD:
+							main.getBgServer().getPluginManager().dispatchCommand(main.getBgServer().getConsole(), cmd);
+							break;
+						case SPIGOT:
+							main.getSpServer().getScheduler().runTask(plugin, new Runnable() {
 								@Override
 								public void run() {
-									Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+									main.getSpServer().dispatchCommand(main.getSpServer().getConsoleSender(), cmd);
 								}
 							});
+							break;
+						case VELOCITY:
+							break;
 						}
-					};
-					executor.execute(worker);
-				}
-				executor.shutdown();
-				while (!executor.isTerminated()) {}
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getPrefix() + " " + config.getRewardQueueText()));
-				this.queue.remove(uuid);
-				new File(main.getMainFolder() + File.separator + "Queue" + File.separator + uuid + ".json").delete();
+					}
+				};
+				executor.execute(worker);
+			}
+			executor.shutdown();
+			while (!executor.isTerminated()) {}
+			this.queue.remove(uuid);
+			new File(main.getMainFolder() + File.separator + "Queue" + File.separator + uuid + ".json").delete();
+			switch(main.getStartingFrom()) {
+			case BUNGEECORD:
+				bgPlayer.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', config.getPrefix() + " " + config.getRewardQueueText())));
+				break;
+			case SPIGOT:
+				spPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getPrefix() + " " + config.getRewardQueueText()));
+				break;
+			case VELOCITY:
+				break;
 			}
 		}
 	}

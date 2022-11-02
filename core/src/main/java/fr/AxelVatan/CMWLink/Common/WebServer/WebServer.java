@@ -174,6 +174,8 @@ public class WebServer {
 	
 	public void disable() {
 		this.app.stop();
-		this.injector.close();
+		if(this.injector != null) {
+			this.injector.close();
+		}
 	}
 }
