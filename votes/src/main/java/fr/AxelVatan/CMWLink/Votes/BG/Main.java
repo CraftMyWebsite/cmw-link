@@ -17,9 +17,6 @@ public class Main extends CMWLPackage{
 	@Override
 	public void enable() {
 		this.log(Level.INFO, "Votes for BungeeCord enabled.");
-		this.config = new Config();
-		this.setPackageConfig(config);
-		this.loadPackageConfig(config);
 		this.queue = new RewardQueue(this, config);
 	}
 

@@ -56,6 +56,12 @@ public class RewardQueue {
 	 		}, 200, 200);
 			break;
 		case VELOCITY:
+			main.getVlServer().getScheduler().buildTask(main.getVlServer().getPluginManager().getPlugin("CraftMyWebsite_Link"), new Runnable() {
+				@Override
+				public void run() {
+					proccessQueue();
+				}
+			}).delay(10, TimeUnit.SECONDS).repeat(10, TimeUnit.SECONDS).schedule();
 			break;
  		}
 	}
@@ -85,21 +91,23 @@ public class RewardQueue {
 		switch(main.getStartingFrom()) {
 		case BUNGEECORD:
 			for(ProxiedPlayer player : main.getBgServer().getPlayers()) {
-				this.executeQueuePlayer(null, player, player.getName().toLowerCase());
+				this.executeQueuePlayer(null, player, null, player.getName().toLowerCase());
 			}
 			break;
 		case SPIGOT:
 			for(Player player : main.getSpServer().getOnlinePlayers()) {
-				this.executeQueuePlayer(player, null, player.getUniqueId().toString().replace("-", "").toLowerCase());
+				this.executeQueuePlayer(player, null, null, player.getUniqueId().toString().replace("-", "").toLowerCase());
 			}
 			break;
 		case VELOCITY:
-			
+			for(com.velocitypowered.api.proxy.Player player : main.getVlServer().getAllPlayers()) {
+				this.executeQueuePlayer(null, null, player, player.getGameProfile().getName().toLowerCase());
+			}
 			break;
 		}
 	}
 	
-	private void executeQueuePlayer(Player spPlayer, ProxiedPlayer bgPlayer, String uuid) {
+	private void executeQueuePlayer(Player spPlayer, ProxiedPlayer bgPlayer, com.velocitypowered.api.proxy.Player vlPlayer, String uuid) {
 		if(this.queue.containsKey(uuid)) {
 			QueuedReward rewards = this.queue.get(uuid);
 			ExecutorService executor = Executors.newFixedThreadPool(5);
@@ -120,6 +128,7 @@ public class RewardQueue {
 							});
 							break;
 						case VELOCITY:
+							main.getVlServer().getCommandManager().executeAsync(main.getVlServer().getConsoleCommandSource(), cmd);
 							break;
 						}
 					}
@@ -138,6 +147,7 @@ public class RewardQueue {
 				spPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getPrefix() + " " + config.getRewardQueueText()));
 				break;
 			case VELOCITY:
+				//vlPlayer.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(config.getPrefix() + " " + config.getRewardQueueText()));
 				break;
 			}
 		}

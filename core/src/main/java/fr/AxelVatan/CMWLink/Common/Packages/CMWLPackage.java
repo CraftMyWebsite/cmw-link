@@ -33,8 +33,7 @@ public abstract class CMWLPackage {
 	private @Getter Utils utils;
 	
 	private @Getter boolean isUseProxy;
-	private @Getter PackageConfig packageConfig;
-	private PackagePersist persist;
+	private @Getter Object packageConfig;
 	
 	public void init(Server server, StartingFrom startingFrom, String packageName, String routePrefix, String version, File mainFolder, Logger log, WebServer webServer, Utils utils) {
 		if(this.alreadyInit == false) {
@@ -48,7 +47,6 @@ public abstract class CMWLPackage {
 			this.webServer = webServer;
 			this.utils = utils;
 			this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
-			this.persist = new PackagePersist(this, mainFolder);
 			onEnable();
 			this.alreadyInit = true;
 		}else {
@@ -68,7 +66,6 @@ public abstract class CMWLPackage {
 			this.webServer = webServer;
 			this.utils = utils;
 			this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
-			this.persist = new PackagePersist(this, mainFolder);
 			onEnable();
 			this.alreadyInit = true;
 		}else {
@@ -88,7 +85,6 @@ public abstract class CMWLPackage {
 			this.webServer = webServer;
 			this.utils = utils;
 			this.isUseProxy = webServer.getConfig().getSettings().isUseProxy();
-			this.persist = new PackagePersist(this, mainFolder);
 			onEnable();
 			this.alreadyInit = true;
 		}else {
@@ -99,22 +95,12 @@ public abstract class CMWLPackage {
 	public final void onEnable(){
 		long epoch = System.currentTimeMillis();
 		log(Level.INFO, "Loading...");
-		enable();
-		registerRoutes();
-		log(Level.INFO, "Enabled in " + convertString(System.currentTimeMillis() - epoch, 1, TimeUnit.MILLISECONDS) + ".");
-	}
-	
-	public void setPackageConfig(PackageConfig pConfig) {
 		if(!this.mainFolder.exists()) {
 			this.mainFolder.mkdirs();
 		}
-		if(!persist.getFile().exists()) {
-			persist.save(pConfig);
-		}
-	}
-	
-	public void loadPackageConfig(PackageConfig pConfig) {
-		packageConfig = persist.load(pConfig.getClass());
+		enable();
+		registerRoutes();
+		log(Level.INFO, "Enabled in " + convertString(System.currentTimeMillis() - epoch, 1, TimeUnit.MILLISECONDS) + ".");
 	}
 	
 	public final void onDisable(){
