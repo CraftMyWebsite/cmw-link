@@ -24,10 +24,10 @@ public class SP_Commands implements CommandExecutor, TabCompleter {
 		if(args.length == 0) {
 			help(sender);
 		}else if(args[0].equalsIgnoreCase("packages")) {
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6CMW-Link: &7Packages installés"));
+			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6CMW-Link: &7Packages installÃ©s"));
 			for(CMWLPackage packageClass : this.main.getConfigFile().getPackages().getPackagesLoaded()) {
 				boolean certified = main.getConfigFile().getPackages().getPackagesCertified().containsKey(packageClass.getPackageName());
-				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7- &a" + packageClass.getPackageName() + "&7, Version: &a" + packageClass.getVersion() + " &8| " + (certified ? "&bCertifié [CMW]" : "&4Non certifié [CMW]")));
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7- &a" + packageClass.getPackageName() + "&7, Version: &a" + packageClass.getVersion() + " &8| " + (certified ? "&bCertifiÃ© [CMW]" : "&4Non certifiÃ© [CMW]")));
 			}
 		}else if(args[0].equalsIgnoreCase("reload")) {
 			if(sender.hasPermission("cmwl.reload")) {

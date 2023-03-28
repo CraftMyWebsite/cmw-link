@@ -21,11 +21,11 @@ public class VL_Commands implements SimpleCommand {
 			help(invocation.source());
 		}else if(invocation.arguments()[0].equalsIgnoreCase("packages")) {
 			if(invocation.source().hasPermission("cmwl.packages")) {
-				invocation.source().sendMessage(Component.text("CMW-Link: ", NamedTextColor.GOLD).append(Component.text("Packages installés", NamedTextColor.GRAY)));
+				invocation.source().sendMessage(Component.text("CMW-Link: ", NamedTextColor.GOLD).append(Component.text("Packages installÃ©s", NamedTextColor.GRAY)));
 				for(CMWLPackage packageClass : this.main.getConfigFile().getPackages().getPackagesLoaded()) {
 					boolean certified = main.getConfigFile().getPackages().getPackagesCertified().containsKey(packageClass.getPackageName());
-					Component certifiedText = Component.text("Certifié [CMW]", NamedTextColor.AQUA);
-					Component unCertifiedText = Component.text("Non certifié [CMW]", NamedTextColor.DARK_RED);
+					Component certifiedText = Component.text("CertifiÃ© [CMW]", NamedTextColor.AQUA);
+					Component unCertifiedText = Component.text("Non certifiÃ© [CMW]", NamedTextColor.DARK_RED);
 					invocation.source().sendMessage(Component.text("- ", NamedTextColor.GRAY).append(Component.text(packageClass.getPackageName(), NamedTextColor.GREEN).append(Component.text(", Version: ", NamedTextColor.GRAY).append(Component.text(packageClass.getVersion(), NamedTextColor.GREEN).append(Component.text(" | ", NamedTextColor.DARK_GRAY).append((certified ? certifiedText : unCertifiedText)))))));
 				}
 			}else {
