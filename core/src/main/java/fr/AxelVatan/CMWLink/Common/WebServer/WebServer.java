@@ -6,9 +6,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
-
-import org.mindrot.jbcrypt.BCrypt;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -25,7 +25,7 @@ import lombok.Getter;
 
 public class WebServer {
 
-/*                 ___  ___
+	/*                 ___  ___
          \  \  /`\ \  \ \  \ \  \
           \__\ \__\ \__' \__' \__\
            \  \ \  \ \    \     \
@@ -36,37 +36,42 @@ public class WebServer {
   \  \ \  \ \    \    \  \ \ |`\\ \    \    \ `\\
    \  \ \  \ \___ \___ \__\ \|  `\ \___ \___ \  `\
 
-  */
-	
+	 */
+
 	private @Getter ConfigFile config;
 	private Express app;
 	private @Getter HashMap<String, IRoute> routes;
 	private @Getter RouteMatcher router;
 	private Injector injector;
-	
+
 	//TEST CODE
 	public static void main(String a[]){
-		/*ExecutorService executor = Executors.newFixedThreadPool(50);
-		for (int i = 0; i < 1; i++) {
+		ExecutorService executor = Executors.newFixedThreadPool(500);
+		for (int i = 0; i < 100000; i++) {
 			Runnable worker = new MyRunnable(i);
 			try {
 				executor.execute(worker);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}*/
-		System.out.println("RESULT: " + BCrypt.hashpw("test", BCrypt.gensalt()));
-		System.out.println("RESULT: " + BCrypt.checkpw("test", "$2a$10$eBfu1aIV0jH45fIoPpg2pOibq/MtB9X50bt/XV5GsLTLtWE/YSb0u"));
-    }
-	//
-	
+		}
+		executor.shutdown();
+		while (!executor.isTerminated()) {
+		}
+		System.out.println("\nFinished all threads");
+		/*System.out.println("RESULT: " + BCrypt.hashpw("test", BCrypt.gensalt()));
+		System.out.println("RESULT: " + BCrypt.checkpw("test", "$2a$10$eBfu1aIV0jH45fIoPpg2pOibq/MtB9X50bt/XV5GsLTLtWE/YSb0u"));*/
+	}
+
 	public WebServer(ConfigFile config) {
 		this.config = config;
 		this.app = new Express();
 		this.routes = new HashMap<String, IRoute>();
 		this.router = new RouteMatcher();
 		if(config.getStartingFrom().equals(StartingFrom.SPIGOT)) {
-			this.injector = new Injector(this);
+			if(config.getSettings().isBindToDefaultPort()){
+				this.injector = new Injector(this);
+			}
 		}
 		app.all("/", (req, res) -> {
 			JsonBuilder json = new JsonBuilder()
@@ -76,31 +81,82 @@ public class WebServer {
 			res.setStatus(Status._200);
 			res.send(json.build());
 		});
+		if(config.getSettings().getToken().equalsIgnoreCase("TO_GENERATE")) {
+			app.post("/core/generate/firstKey", (req, res) -> {
+				String key = req.getFormQuery("key");
+				String domain = req.getFormQuery("domain");
+				this.config.getSettings().setToken(key);
+				this.config.getSettings().setDomain(domain);
+				this.config.saveSettings();
+				this.config.getLog().log(Level.INFO, "CMW Host : " + domain +" linked to CMWL !");
+				JsonBuilder json = new JsonBuilder()
+						.append("CODE", 200);
+				res.setStatus(Status._200);
+				res.send(json.build());
+			});
+		}
 		authRequest();
 	}
-	
+
 	private void authRequest() {
 		app.use((req, res) -> {
-			//IP WHITELIST CHECK
+			if(config.getSettings().isLogRequests()) {
+				this.config.getLog().log(Level.INFO, "Executed request by: " + req.getAddress().getHostName() + ", " + req.getPath());
+			}
 			String ip = req.getIp();
-			if(!this.config.getSettings().getWhitelistedIps().contains(ip)) {
-				this.config.getLog().severe("IP " + ip + " try to execute request, this IP is not in whitelist IPs !");
-				JsonBuilder json = new JsonBuilder()
-						.append("CODE", 403)
-						.append("MESSAGE", "This IP " + ip + " is not allowed to execute requests !");
-				res.setStatus(Status._403);
-				res.send(json.build());
-				return;
+			if(this.config.getSettings().isEnableWhitelistedIps()) {
+				if(!this.config.getSettings().getWhitelistedIps().contains(ip)) {
+					this.config.getLog().severe("IP " + ip + " try to execute request, this IP is not in whitelist IPs !");
+					JsonBuilder json = new JsonBuilder()
+							.append("CODE", 401)
+							.append("MESSAGE", "This IP " + ip + " is not allowed to execute requests !");
+					res.setStatus(Status._401);
+					res.send(json.build());
+					return;
+				}
 			}
 			//HEADER CHECK
-			System.out.println("HEADERS: " + req.getHeader("X-CMW-ACCESS").toString());
-			
-			//AUTH CHECK
-			
+			if(!config.getSettings().getToken().equalsIgnoreCase("TO_GENERATE")) {
+				System.out.println("KEY GENERATED OK");
+				try {
+					if(req.getHeader("X-CMW-ACCESS").size() == 0) {
+						this.config.getLog().severe("Cancelled host " + req.getAddress().getHostName() + " request, there is no CMW header !");
+						JsonBuilder json = new JsonBuilder()
+								.append("CODE", 401)
+								.append("MESSAGE", "No CMW header found !");
+						res.setStatus(Status._401);
+						res.send(json.build());
+					}
+					System.out.println("HEADER OK");
+					String key = req.getHeader("X-CMW-ACCESS").toString();
+					//HOST CHECK
+					if(req.getHost() != this.getConfig().getSettings().getDomain()) {
+						this.config.getLog().severe("Cancelled host " + req.getAddress().getHostName() + " request, this host is not registered !");
+						JsonBuilder json = new JsonBuilder()
+								.append("CODE", 401)
+								.append("MESSAGE", "This host in unknown !");
+						res.setStatus(Status._401);
+						res.send(json.build());
+					}
+					System.out.println("HOST OK");
+					//KEY CHECK
+					if(key != this.config.getSettings().getToken()) {
+						this.config.getLog().severe("Cancelled host " + req.getAddress().getHostName() + " request, invalid key !");
+						JsonBuilder json = new JsonBuilder()
+								.append("CODE", 401)
+								.append("MESSAGE", "No CMW header found !");
+						res.setStatus(Status._401);
+						res.send(json.build());
+					}
+					System.out.println("KEY OK");
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
 		});
 	}
-	
-	public void startWebServer() {
+
+	public void startWebServer(int port) {
 		this.app.listen(this.config.getSettings().getPort());
 		try {
 			URL whatismyip = new URL("https://ip.conceptngo.fr/myIP");
@@ -117,10 +173,10 @@ public class WebServer {
 			json = new Gson().fromJson(in.readLine(), JsonObject.class);
 			boolean reachable = json.get("REACHABLE").getAsBoolean();
 			if(reachable) {
-				this.config.getLog().info("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? "25565" : this.config.getSettings().getPort()) + " is properly forwarded and is externally accessible.");
+				this.config.getLog().info("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? port : this.config.getSettings().getPort()) + " is properly forwarded and is externally accessible.");
 			}
 			else {
-				this.config.getLog().severe("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? "25565" : this.config.getSettings().getPort()) + " is not properly forwarded.");
+				this.config.getLog().severe("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? port : this.config.getSettings().getPort()) + " is not properly forwarded.");
 			}
 		} catch (Exception e) {
 			this.config.getLog().severe("Cannot joint API to get IP and PORT verification, maybe API is down ");
@@ -171,10 +227,10 @@ public class WebServer {
 			res.send(json.build());
 		});
 	}
-	
+
 	public void disable() {
 		this.app.stop();
-		if(this.injector != null) {
+		if(injector != null) {
 			this.injector.close();
 		}
 	}

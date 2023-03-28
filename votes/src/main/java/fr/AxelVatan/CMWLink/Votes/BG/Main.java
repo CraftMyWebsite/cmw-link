@@ -3,10 +3,11 @@ package fr.AxelVatan.CMWLink.Votes.BG;
 import java.util.logging.Level;
 
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
+import fr.AxelVatan.CMWLink.Votes.BG.Routes.RewardCmd;
 import fr.AxelVatan.CMWLink.Votes.BG.Routes.VoteReceived;
 import fr.AxelVatan.CMWLink.Votes.Common.Config;
 import fr.AxelVatan.CMWLink.Votes.Common.RewardQueue;
-import fr.AxelVatan.CMWLink.Votes.BG.Routes.RewardCmd;
+import fr.AxelVatan.CMWLink.Votes.Common.BG.RewardQueueBG;
 import lombok.Getter;
 
 public class Main extends CMWLPackage{
@@ -17,7 +18,7 @@ public class Main extends CMWLPackage{
 	@Override
 	public void enable() {
 		this.log(Level.INFO, "Votes for BungeeCord enabled.");
-		this.queue = new RewardQueue(this, config);
+		this.queue = new RewardQueueBG(this, config);
 	}
 
 	@Override

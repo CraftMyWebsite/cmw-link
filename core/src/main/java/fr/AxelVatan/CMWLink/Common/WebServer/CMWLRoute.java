@@ -31,7 +31,6 @@ public abstract class CMWLRoute<PluginType extends CMWLPackage> implements IRout
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try {
 			JsonElement je = JsonParser.parseString(executeRoute(req.getParams()));
-			//TODO TO FIX
 			res.setStatus(Status._200);
 			res.send(gson.toJson(je));
 		}catch(Exception e) {

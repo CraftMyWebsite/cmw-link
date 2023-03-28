@@ -12,6 +12,7 @@ import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import fr.AxelVatan.CMWLink.Common.Utils.Utils;
 import fr.AxelVatan.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
+import lombok.Setter;
 
 public class ConfigFile {
 
@@ -30,6 +31,7 @@ public class ConfigFile {
 	private @Getter Utils utils;
 	private @Getter Packages packages;
 	private @Getter WebServer webServer;
+	private Persist persist;
 
 	//			.~~~~.
 	//			i====i_
@@ -39,30 +41,31 @@ public class ConfigFile {
 
 	public ConfigFile(Server server, StartingFrom startingFrom, File filePath, Logger log, String version) {
 		this.spServer = server;
-		load(startingFrom, filePath, log, version);
+		load(startingFrom, filePath, log, version, server.getPort());
 	}
 	
 	public ConfigFile(net.md_5.bungee.api.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version) {
 		this.bgServer = server;
-		load(startingFrom, filePath, log, version);
+		load(startingFrom, filePath, log, version, 0000);
 	}
 	
 	public ConfigFile(com.velocitypowered.api.proxy.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version) {
 		this.vlServer = server;
-		load(startingFrom, filePath, log, version);
+		load(startingFrom, filePath, log, version, 0000);
 	}
 	
-	public void load(StartingFrom startingFrom, File filePath, Logger log, String version){
+	public void load(StartingFrom startingFrom, File filePath, Logger log, String version, int port){
 		this.startingFrom = startingFrom;
 		this.filePath = filePath;
 		this.log = log;
 		this.version = version;
 		this.utils = new Utils(log, startingFrom);
+		this.persist = new Persist(this);
 		if(this.utils.init()) {
 			log.info("Loading configuration...");
-			Persist persist = new Persist(this);
+			
 			settings = persist.getFile(Settings.class).exists() ? persist.load(Settings.class) : new Settings();
-			if (settings != null) persist.save(settings);
+			saveSettings();
 			log.info("Configuration loaded successfully !");
 			if(settings.isBindToDefaultPort()) {
 				log.info("- WebServer binded to default server port");
@@ -80,7 +83,7 @@ public class ConfigFile {
 			case BUNGEECORD:
 				this.packages = new Packages(bgServer, log, filePath, webServer, utils);
 				if(this.settings.useProxy) {
-					this.startWebServer();
+					this.startWebServer(port);
 				}else {
 					log.severe("UseProxy on this BungeeCord Proxy is not set to true !");
 					log.severe("CMW-Link will be useless");
@@ -91,13 +94,13 @@ public class ConfigFile {
 				if(this.settings.isUseProxy()) {
 					log.info("Waiting requests from the proxy");
 				}else {
-					this.startWebServer();
+					this.startWebServer(port);
 				}
 				break;
 			case VELOCITY:
 				this.packages = new Packages(vlServer, log, filePath, webServer, utils);
 				if(this.settings.useProxy) {
-					this.startWebServer();
+					this.startWebServer(port);
 				}else {
 					log.severe("UseProxy on this Velocity Proxy is not set to true !");
 					log.severe("CMW-Link will be useless");
@@ -107,9 +110,13 @@ public class ConfigFile {
 		}
 	}
 
-	private void startWebServer() {
+	public void saveSettings() {
+		if (settings != null) persist.save(settings);
+	}
+	
+	private void startWebServer(int port) {
 		this.webServer.createRoutes();
-		this.webServer.startWebServer();
+		this.webServer.startWebServer(port);
 	}
 
 	public class Settings{
@@ -121,7 +128,7 @@ public class ConfigFile {
 		private @Getter boolean useProxy = false;
 		private @Getter boolean enableWhitelistedIps = false;
 		private @Getter List<String> whitelistedIps = Arrays.asList("127.0.0.1");
-		private @Getter String token = "TOKEN FROM THE CMS";
-
+		private @Getter @Setter String token = "TO_GENERATE";
+		private @Getter @Setter String domain = "TO_GENERATE";
 	}
 }

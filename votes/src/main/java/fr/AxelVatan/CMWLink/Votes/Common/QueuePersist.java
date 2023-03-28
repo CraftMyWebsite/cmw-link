@@ -17,13 +17,13 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class Persist {
+public class QueuePersist {
 
 	private RewardQueue queue;
 	private Gson gson;
 	private Map<String, Lock> locks;
 
-	public Persist(RewardQueue queue) {
+	public QueuePersist(RewardQueue queue) {
 		this.queue = queue;
 		this.gson = buildGson().create();
 		this.locks = new HashMap<String, Lock>();

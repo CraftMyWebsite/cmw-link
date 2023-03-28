@@ -3,9 +3,10 @@ package fr.AxelVatan.CMWLink.Votes.VL;
 import java.util.logging.Level;
 
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
-import fr.AxelVatan.CMWLink.Votes.VL.Routes.RewardCmd;
 import fr.AxelVatan.CMWLink.Votes.Common.Config;
 import fr.AxelVatan.CMWLink.Votes.Common.RewardQueue;
+import fr.AxelVatan.CMWLink.Votes.Common.VL.RewardQueueVL;
+import fr.AxelVatan.CMWLink.Votes.VL.Routes.RewardCmd;
 import fr.AxelVatan.CMWLink.Votes.VL.Routes.VoteReceived;
 import lombok.Getter;
 
@@ -17,7 +18,7 @@ public class Main extends CMWLPackage{
 	@Override
 	public void enable() {
 		this.log(Level.INFO, "Votes for Velocity enabled.");
-		this.queue = new RewardQueue(this, config);
+		this.queue = new RewardQueueVL(this, config);
 	}
 
 	@Override

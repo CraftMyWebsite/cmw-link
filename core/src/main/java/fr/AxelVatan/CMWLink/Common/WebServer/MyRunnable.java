@@ -18,10 +18,8 @@ public class MyRunnable implements Runnable {
 	public void run() {
 		HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://127.0.0.1:24102/monitoring/banList"))
+                .uri(URI.create("https://ifquery.net"))
                 .GET()
-                .header("User", "admin")
-                .header("Pwd", "changeme")
                 .header("Content-Type", "application/json")
                 .build();
         HttpResponse<String> response = null;
