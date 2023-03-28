@@ -100,9 +100,6 @@ public class WebServer {
 
 	private void authRequest() {
 		app.use((req, res) -> {
-			if(config.getSettings().isLogRequests()) {
-				this.config.getLog().log(Level.INFO, "Executed request by: " + req.getAddress().getHostName() + ", " + req.getPath());
-			}
 			String ip = req.getIp();
 			if(this.config.getSettings().isEnableWhitelistedIps()) {
 				if(!this.config.getSettings().getWhitelistedIps().contains(ip)) {
@@ -117,7 +114,6 @@ public class WebServer {
 			}
 			//HEADER CHECK
 			if(!config.getSettings().getToken().equalsIgnoreCase("TO_GENERATE")) {
-				System.out.println("KEY GENERATED OK");
 				try {
 					if(req.getHeader("X-CMW-ACCESS").size() == 0) {
 						this.config.getLog().severe("Cancelled host " + req.getAddress().getHostName() + " request, there is no CMW header !");
@@ -126,32 +122,35 @@ public class WebServer {
 								.append("MESSAGE", "No CMW header found !");
 						res.setStatus(Status._401);
 						res.send(json.build());
+						return;
 					}
-					System.out.println("HEADER OK");
-					String key = req.getHeader("X-CMW-ACCESS").toString();
+					String key = req.getHeader("X-CMW-ACCESS").get(0).toString();
 					//HOST CHECK
-					if(req.getHost() != this.getConfig().getSettings().getDomain()) {
+					if(!req.getAddress().getHostName().trim().equalsIgnoreCase(this.getConfig().getSettings().getDomain())) {
 						this.config.getLog().severe("Cancelled host " + req.getAddress().getHostName() + " request, this host is not registered !");
 						JsonBuilder json = new JsonBuilder()
 								.append("CODE", 401)
 								.append("MESSAGE", "This host in unknown !");
 						res.setStatus(Status._401);
 						res.send(json.build());
+						return;
 					}
-					System.out.println("HOST OK");
 					//KEY CHECK
-					if(key != this.config.getSettings().getToken()) {
+					if(!key.trim().equals(this.config.getSettings().getToken())) {
 						this.config.getLog().severe("Cancelled host " + req.getAddress().getHostName() + " request, invalid key !");
 						JsonBuilder json = new JsonBuilder()
 								.append("CODE", 401)
-								.append("MESSAGE", "No CMW header found !");
+								.append("MESSAGE", "Cancelled host " + req.getAddress().getHostName() + " request, invalid key !");
 						res.setStatus(Status._401);
 						res.send(json.build());
+						return;
 					}
-					System.out.println("KEY OK");
 				}catch(Exception e) {
 					e.printStackTrace();
 				}
+			}
+			if(config.getSettings().isLogRequests()) {
+				this.config.getLog().log(Level.INFO, "Executed request by: " + req.getAddress().getHostName() + ", " + req.getPath());
 			}
 		});
 	}
