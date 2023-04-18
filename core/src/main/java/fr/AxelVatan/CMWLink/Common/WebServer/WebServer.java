@@ -22,7 +22,6 @@ import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import fr.AxelVatan.CMWLink.Common.WebServer.Injector.Injector;
 import fr.AxelVatan.CMWLink.Common.WebServer.Router.RouteMatcher;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 
 public class WebServer {
 
