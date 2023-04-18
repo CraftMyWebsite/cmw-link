@@ -22,6 +22,7 @@ import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import fr.AxelVatan.CMWLink.Common.WebServer.Injector.Injector;
 import fr.AxelVatan.CMWLink.Common.WebServer.Router.RouteMatcher;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 public class WebServer {
 
@@ -165,6 +166,11 @@ public class WebServer {
 			JsonObject json = new Gson().fromJson(in.readLine(), JsonObject.class);
 			String ip = json.get("IP").getAsString();
 			this.config.getLog().info("External IP: " + ip);
+
+			if (this.getConfig().getSettings().isUseCustomServerAddress()){
+				ip = this.getConfig().getSettings().getCustomServerAddress();
+			}
+
 			URL checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/" + (this.getConfig().getSettings().isBindToDefaultPort() ? "25565" : this.config.getSettings().getPort()));
 			uc = checkURL.openConnection();
 			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
