@@ -4,14 +4,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpMethod;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.handler.codec.http.HttpVersion;
-import io.netty.handler.codec.http.QueryStringDecoder;
+import io.netty.handler.codec.http.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,8 +35,7 @@ public class RouteMatcher extends SimpleChannelInboundHandler<FullHttpRequest> {
 	}
 
 	List<PatternBinding> getBindingsForRequest(FullHttpRequest request) {
-		@SuppressWarnings("deprecation")
-		HttpMethod m = request.getMethod();
+		HttpMethod m = request.method();
 		if (m.equals(HttpMethod.GET)) {
 			return getBindings;
 		}
@@ -75,14 +67,13 @@ public class RouteMatcher extends SimpleChannelInboundHandler<FullHttpRequest> {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
-	public boolean serveRequest(ChannelHandlerContext ctx, FullHttpRequest request) {
-		if (!request.getDecoderResult().isSuccess()) {
+	public void serveRequest(ChannelHandlerContext ctx, FullHttpRequest request) {
+		if (!request.decoderResult().isSuccess()) {
 			sendHttpResponse(ctx, request, new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.BAD_REQUEST));
-			return false;
+			return;
 		}
 
-		return route(ctx, request, getBindingsForRequest(request));
+		route(ctx, request, getBindingsForRequest(request));
 	}
 
 	public RouteMatcher get(String pattern, Handler<FullHttpResponse, RoutedHttpRequest> handler) {
@@ -234,10 +225,9 @@ public class RouteMatcher extends SimpleChannelInboundHandler<FullHttpRequest> {
 		bindings.add(binding);
 	}
 
-	@SuppressWarnings("deprecation")
 	public FullHttpResponse getResponse(ChannelHandlerContext ctx, FullHttpRequest request) {
 		FullHttpResponse resp = null;
-		if (!request.getDecoderResult().isSuccess()) {
+		if (!request.decoderResult().isSuccess()) {
 			resp = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.BAD_REQUEST);
 			sendHttpResponse(ctx, request, resp);
 		}
@@ -251,8 +241,7 @@ public class RouteMatcher extends SimpleChannelInboundHandler<FullHttpRequest> {
 	FullHttpResponse getResponseForRoute(ChannelHandlerContext ctx, FullHttpRequest request, List<PatternBinding> bindings) {
 		RoutedHttpRequest rreq = new RoutedHttpRequest(ctx, request);
 		for (PatternBinding binding : bindings) {
-			@SuppressWarnings("deprecation")
-			QueryStringDecoder uri = new QueryStringDecoder(request.getUri());
+			QueryStringDecoder uri = new QueryStringDecoder(request.uri());
 			NamedMatcher m = binding.pattern.matcher(uri.path());
 			if (m.matches()) {
 				Map<String, List<String>> params = new HashMap<String, List<String>>(m.groupCount());
@@ -291,13 +280,12 @@ public class RouteMatcher extends SimpleChannelInboundHandler<FullHttpRequest> {
 		return noMatchHandler != null;
 	}
 
-	@SuppressWarnings("deprecation")
 	void sendHttpResponse(ChannelHandlerContext ctx, FullHttpRequest req, FullHttpResponse res) {
 		if (res == null) {
 			return;
 		}
 		ChannelFuture f = ctx.channel().writeAndFlush(res);
-		if (!HttpHeaders.isKeepAlive(req) || res.getStatus().code() != 200) {
+		if (!HttpHeaderUtil.isKeepAlive(req) || res.status().code() != 200) {
 			f.addListener(ChannelFutureListener.CLOSE);
 		}
 	}
