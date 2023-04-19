@@ -72,6 +72,9 @@ public class ConfigFile {
 			}else {
 				log.info("- Port: " + settings.getPort());
 			}
+			if (settings.isUseCustomServerAddress()){
+				log.info("- Use custom address: " + settings.getCustomServerAddress());
+			}
 			log.info("- Log Requests: " + settings.isLogRequests());
 			log.info("- Using proxy: " + settings.isUseProxy());
 			log.info("- Load Uncertified packages: " + settings.isLoadUncertifiedPackages());

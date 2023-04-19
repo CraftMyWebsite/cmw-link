@@ -180,7 +180,7 @@ public class WebServer {
 				this.config.getLog().info("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? port : this.config.getSettings().getPort()) + " is properly forwarded and is externally accessible.");
 			}
 			else {
-				this.config.getLog().severe("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? port : this.config.getSettings().getPort()) + " is not properly forwarded.");
+				this.config.getLog().warning("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? port : this.config.getSettings().getPort()) + " is not properly forwarded. (Ignore this warning if your server is on a mutual server host)");
 			}
 		} catch (Exception e) {
 			this.config.getLog().severe("Cannot joint API to get IP and PORT verification, maybe API is down ");
