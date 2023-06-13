@@ -2,19 +2,23 @@ package fr.AxelVatan.CMWLink.Votes.SP;
 
 import java.util.logging.Level;
 
+import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
 import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
+import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import fr.AxelVatan.CMWLink.Votes.Common.Config;
 import fr.AxelVatan.CMWLink.Votes.Common.RewardQueue;
 import fr.AxelVatan.CMWLink.Votes.Common.SP.RewardQueueSP;
+import fr.AxelVatan.CMWLink.Votes.SP.Hooks.HooksManager;
 import fr.AxelVatan.CMWLink.Votes.SP.Routes.RewardCmd;
 import fr.AxelVatan.CMWLink.Votes.SP.Routes.VoteReceived;
 import lombok.Getter;
 
-public class Main extends CMWLPackage{
+public class Main extends CMWLPackage {
 
 	private @Getter Config config;
 	private @Getter RewardQueue queue;
-	
+	private @Getter ConfigFile configFile;
+
 	@Override
 	public void enable() {
 		this.log(Level.INFO, "Votes for Spigot enabled.");
@@ -24,7 +28,7 @@ public class Main extends CMWLPackage{
 
 	@Override
 	public void disable() {
-		
+
 	}
 
 	@Override

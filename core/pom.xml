@@ -75,13 +75,18 @@
 		</dependency>
 		<dependency>
 			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_19_R3</artifactId>
+			<version>1.0</version>
+		</dependency>
+    <dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
 			<artifactId>v1_20_R1</artifactId>
 			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.24</version>
+			<version>1.18.26</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -99,18 +104,18 @@
         <dependency>
         	<groupId>com.velocitypowered</groupId>
         	<artifactId>velocity-api</artifactId>
-        	<version>3.0.1</version>
+        	<version>3.1.1</version>
         	<scope>provided</scope>
     	</dependency>
     	<dependency>
 		    <groupId>org.mindrot</groupId>
 		    <artifactId>jbcrypt</artifactId>
-		    <version>0.4</version>
+		    <version>0.4-atlassian-1</version>
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
-			<version>4.1.77.Final</version>
+			<version>5.0.0.Alpha2</version>
 		</dependency>
 	</dependencies>
 

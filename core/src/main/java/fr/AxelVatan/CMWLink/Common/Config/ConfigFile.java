@@ -72,6 +72,9 @@ public class ConfigFile {
 			}else {
 				log.info("- Port: " + settings.getPort());
 			}
+			if (settings.isUseCustomServerAddress()){
+				log.info("- Use custom address: " + settings.getCustomServerAddress());
+			}
 			log.info("- Log Requests: " + settings.isLogRequests());
 			log.info("- Using proxy: " + settings.isUseProxy());
 			log.info("- Load Uncertified packages: " + settings.isLoadUncertifiedPackages());
@@ -123,6 +126,8 @@ public class ConfigFile {
 
 		private @Getter int port = 24102;
 		private @Getter boolean bindToDefaultPort = false;
+		private @Getter boolean useCustomServerAddress = false;
+		private @Getter String customServerAddress = "123.123.123.123";
 		private @Getter boolean loadUncertifiedPackages = false;
 		private @Getter boolean logRequests = true;
 		private @Getter boolean useProxy = false;

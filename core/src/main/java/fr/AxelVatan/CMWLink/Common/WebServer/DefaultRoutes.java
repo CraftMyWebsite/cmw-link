@@ -18,23 +18,21 @@ public class DefaultRoutes {
 	public DefaultRoutes(WebServer ws) {
 		RouteMatcher r = ws.getRouter();
 		r.noMatch(new Handler<FullHttpResponse, RoutedHttpRequest>() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public FullHttpResponse handle(RoutedHttpRequest event) {
-				ws.getConfig().getLog().info("[CMW-Link] [HTTP] 404 " + event.getRequest().getUri());
-				return buildResponse(HttpResponseStatus.OK, "text/plain", event.getRequest().getUri() + " wasn't found. This is a Minecraft server. HTTP on this port by JSONAPI. JSONAPI by Alec Gorge.\n");
+				ws.getConfig().getLog().info("[CMW-Link] [HTTP] 404 " + event.getRequest().uri());
+				return buildResponse(HttpResponseStatus.OK, "text/plain", event.getRequest().uri() + " wasn't found. This is a Minecraft server. HTTP on this port by JSONAPI. JSONAPI by Alec Gorge.\n");
 			}
 		});
 		
 		r.everyMatch(new Handler<Void, RoutedHttpResponse>() {
 			
-			@SuppressWarnings("deprecation")
 			@Override
 			public Void handle(RoutedHttpResponse event) {
 				ws.getConfig().getLog().info("[CMW-Link] [HTTP] " +
-									event.getRes().getStatus().code() + " " +
-									event.getRequest().getMethod().toString() + " " +
-									event.getRequest().getUri());
+									event.getRes().status().code() + " " +
+									event.getRequest().method().toString() + " " +
+									event.getRequest().uri());
 				return null;
 			}
 		});
@@ -57,7 +55,7 @@ public class DefaultRoutes {
 		ByteBuf buf = Unpooled.copiedBuffer(body, CharsetUtil.UTF_8);
 		FullHttpResponse r = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, resp, buf);
 		r.headers().set("Access-Control-Allow-Origin", "*");
-		r.headers().set("Content-Length", buf.readableBytes());
+		r.headers().set("Content-Length", String.valueOf(buf.readableBytes()));
 
 		return r;
 	}

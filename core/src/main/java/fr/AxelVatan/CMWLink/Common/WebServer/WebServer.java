@@ -165,6 +165,11 @@ public class WebServer {
 			JsonObject json = new Gson().fromJson(in.readLine(), JsonObject.class);
 			String ip = json.get("IP").getAsString();
 			this.config.getLog().info("External IP: " + ip);
+
+			if (this.getConfig().getSettings().isUseCustomServerAddress()){
+				ip = this.getConfig().getSettings().getCustomServerAddress();
+			}
+
 			URL checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/" + (this.getConfig().getSettings().isBindToDefaultPort() ? "25565" : this.config.getSettings().getPort()));
 			uc = checkURL.openConnection();
 			uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
@@ -175,7 +180,7 @@ public class WebServer {
 				this.config.getLog().info("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? port : this.config.getSettings().getPort()) + " is properly forwarded and is externally accessible.");
 			}
 			else {
-				this.config.getLog().severe("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? port : this.config.getSettings().getPort()) + " is not properly forwarded.");
+				this.config.getLog().warning("Port " + (this.getConfig().getSettings().isBindToDefaultPort() ? port : this.config.getSettings().getPort()) + " is not properly forwarded. (Ignore this warning if your server is on a mutual server host)");
 			}
 		} catch (Exception e) {
 			this.config.getLog().severe("Cannot joint API to get IP and PORT verification, maybe API is down ");
