@@ -25,8 +25,10 @@ public class SpigotMain extends JavaPlugin{
     
     @Override
     public void onDisable() {
-    	this.configFile.getWebServer().disable();
-    	this.configFile.getPackages().disablePackages();
+    	if(this.configFile != null) {
+    		this.configFile.getWebServer().disable();
+        	this.configFile.getPackages().disablePackages();
+    	}
     }
 	
 }

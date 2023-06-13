@@ -33,7 +33,7 @@ public class Utils {
 				return true;
 			} catch (Exception e) {
 				log.severe("Unsupported Version Detected: " + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
-				log.severe("Disabling CMWL_Votes...");
+				log.severe("Disabling CWML...");
 				Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("CraftMyWebsite_Link"));
 				return false;
 			}
