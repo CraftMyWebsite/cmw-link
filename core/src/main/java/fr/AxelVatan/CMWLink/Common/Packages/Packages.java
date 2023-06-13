@@ -28,10 +28,6 @@ import org.bukkit.Server;
 import org.json.simpleForBukkit.JSONObject;
 import org.json.simpleForBukkit.parser.JSONParser;
 import org.json.simpleForBukkit.parser.ParseException;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
-import org.yaml.snakeyaml.introspector.PropertyUtils;
 
 import com.google.common.base.Preconditions;
 
@@ -51,7 +47,6 @@ public class Packages {
 	private Logger log;
 	private WebServer webServer;
 	private Utils utils;
-	private Yaml yaml;
 	private File defaultPath;
 	private File packagesPath;
 	private Map<String, CMWLPackageDescription> packagesToLoad;
@@ -103,11 +98,6 @@ public class Packages {
 		if(!packagesConfigPath.exists()) {
 			packagesConfigPath.mkdirs();
 		}
-		Constructor yamlConstructor = new CustomClassLoaderConstructor(Packages.class.getClassLoader());
-		PropertyUtils propertyUtils = yamlConstructor.getPropertyUtils();
-		propertyUtils.setSkipMissingProperties(true);
-		yamlConstructor.setPropertyUtils(propertyUtils);
-		this.yaml = new Yaml(yamlConstructor);
 		this.packagesToLoad = new HashMap<String, CMWLPackageDescription>();
 		this.loaders = new LinkedHashMap<String, PackageClassLoader>();
 		this.classes = new HashMap<String, Class<?>>();
@@ -131,7 +121,7 @@ public class Packages {
 					JarEntry pdf = jar.getJarEntry("package.yml");
 					Preconditions.checkNotNull(pdf, "Package must have a Package.yml");
 					try (InputStream in = jar.getInputStream(pdf)){
-						CMWLPackageDescription desc = this.yaml.loadAs(in, CMWLPackageDescription.class);
+						CMWLPackageDescription desc = new CMWLPackageDescription(in);
 						Preconditions.checkNotNull(desc.getName(), "Package from %s has no name", file);
 						Preconditions.checkNotNull(desc.getRoute_prefix(), "Package from %s has no route prefix", file);
 						Preconditions.checkNotNull(desc.getVersion(), "Package from %s has no version", file);

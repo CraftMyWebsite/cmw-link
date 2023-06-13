@@ -126,15 +126,15 @@ public class WebServer {
 					}
 					String key = req.getHeader("X-CMW-ACCESS").get(0).toString();
 					//HOST CHECK
-					if(!req.getAddress().getHostName().trim().equalsIgnoreCase(this.getConfig().getSettings().getDomain())) {
-						this.config.getLog().severe("Cancelled host " + req.getAddress().getHostName() + " request, this host is not registered !");
+					/*if(!req.getAddress().getHostName().trim().equalsIgnoreCase(this.getConfig().getSettings().getDomain())) {
+						this.config.getLog().severe("Cancelled host " + req.getAddress().getHostAddress() + " request, this host is not registered !");
 						JsonBuilder json = new JsonBuilder()
 								.append("CODE", 401)
 								.append("MESSAGE", "This host in unknown !");
 						res.setStatus(Status._401);
 						res.send(json.build());
 						return;
-					}
+					}*/
 					//KEY CHECK
 					if(!key.trim().equals(this.config.getSettings().getToken())) {
 						this.config.getLog().severe("Cancelled host " + req.getAddress().getHostName() + " request, invalid key !");

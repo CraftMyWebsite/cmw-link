@@ -20,7 +20,7 @@ public class Utils {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public boolean init() {
+	public boolean init(boolean say) {
 		switch(startingFrom) {
 		case BUNGEECORD:
 			return true;
@@ -28,12 +28,16 @@ public class Utils {
 			try {
 				String bukkitVer = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 				mcVersion = Versions.valueOf(bukkitVer);
-				log.info("Detected version of MC: " + mcVersion.toString());
+				if(say) {
+					log.info("Detected version of MC: " + mcVersion.toString());
+				}
 				offlinePlayerLoader = (OfflinePlayerLoader) Class.forName("fr.AxelVatan.CMWLink.Common.Utils." + bukkitVer +".OfflinePlayerLoader_" + bukkitVer).newInstance();
 				return true;
 			} catch (Exception e) {
-				log.severe("Unsupported Version Detected: " + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
-				log.severe("Disabling CWML...");
+				if(say) {
+					log.severe("Unsupported Version Detected: " + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
+					log.severe("Disabling CWML...");
+				}
 				Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("CraftMyWebsite_Link"));
 				return false;
 			}

@@ -15,8 +15,10 @@ public class SpigotMain extends JavaPlugin{
     	this.getLogger().info("==========================================");
     	this.configFile = new ConfigFile(this.getServer(), StartingFrom.SPIGOT, this.getDataFolder(), this.getLogger(), this.getDescription().getVersion());
     	this.getLogger().info("==========================================");
-    	this.getCommand("cmwl").setExecutor(new SP_Commands(this));
-    	this.getCommand("cmwl").setTabCompleter(new SP_Commands(this));
+    	if(this.configFile.getUtils().init(false)) {
+        	this.getCommand("cmwl").setExecutor(new SP_Commands(this));
+            this.getCommand("cmwl").setTabCompleter(new SP_Commands(this));
+    	}
     }
 
     public void resetConfig() {
