@@ -28,8 +28,9 @@
 		<module>boutique</module>
 		<module>monitoring</module>
 		<module>news</module>
-    
-  	</modules>
+        <module>v1_19_R2</module>
+
+    </modules>
 
   	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
