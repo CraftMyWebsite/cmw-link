@@ -10,9 +10,7 @@ import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
 import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
 import fr.AxelVatan.CMWLink.Common.WebServer.Injector.Injector;
 import fr.AxelVatan.CMWLink.Common.WebServer.Router.RouteMatcher;
-import fr.AxelVatan.CMWLink.Spigot.SpigotMain;
 import lombok.Getter;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedReader;
@@ -165,24 +163,24 @@ public class WebServer {
             @Override
             public void run() {
                 try {
-                    URL whatismyip = new URL("https://ip.conceptngo.fr/myIP");
+                    URL whatismyip = new URL("https://apiv2.craftmywebsite.fr/v1/network/ip");
                     URLConnection uc = whatismyip.openConnection();
                     uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
                     BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
                     JsonObject json = new Gson().fromJson(in.readLine(), JsonObject.class);
-                    String ip = json.get("IP").getAsString();
+                    String ip = json.get("ip_address").getAsString();
                     config.getLog().info("External IP: " + ip);
 
                     if (getConfig().getSettings().isUseCustomServerAddress()) {
                         ip = getConfig().getSettings().getCustomServerAddress();
                     }
 
-                    URL checkURL = new URL("https://ip.conceptngo.fr/portOpen/" + ip + "/" + (getConfig().getSettings().isBindToDefaultPort() ? "25565" : config.getSettings().getPort()));
+                    URL checkURL = new URL("https://apiv2.craftmywebsite.fr/v1/network/check/port/" + ip + "/" + (getConfig().getSettings().isBindToDefaultPort() ? "25565" : config.getSettings().getPort()));
                     uc = checkURL.openConnection();
                     uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
                     in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
                     json = new Gson().fromJson(in.readLine(), JsonObject.class);
-                    boolean reachable = json.get("REACHABLE").getAsBoolean();
+                    boolean reachable = json.get("status").getAsBoolean();
                     if (reachable) {
                         config.getLog().info("Port " + (getConfig().getSettings().isBindToDefaultPort() ? port : config.getSettings().getPort()) + " is properly forwarded and is externally accessible.");
                     } else {
