@@ -1,18 +1,5 @@
 package fr.AxelVatan.CMWLink.Common.WebServer;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import express.Express;
-import express.utils.Status;
-import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
-import fr.AxelVatan.CMWLink.Common.Config.JsonBuilder;
-import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
-import fr.AxelVatan.CMWLink.Common.Utils.StartingFrom;
-import fr.AxelVatan.CMWLink.Common.WebServer.Injector.Injector;
-import fr.AxelVatan.CMWLink.Common.WebServer.Router.RouteMatcher;
-import lombok.Getter;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -23,6 +10,18 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
+
+import org.bukkit.scheduler.BukkitRunnable;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import express.Express;
+import express.utils.Status;
+import fr.AxelVatan.CMWLink.Common.Config.ConfigFile;
+import fr.AxelVatan.CMWLink.Common.Config.JsonBuilder;
+import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
+import lombok.Getter;
 
 public class WebServer {
 
@@ -42,8 +41,6 @@ public class WebServer {
     private @Getter ConfigFile config;
     private Express app;
     private @Getter HashMap<String, IRoute> routes;
-    private @Getter RouteMatcher router;
-    private Injector injector;
 
     //TEST CODE
     public static void main(String a[]) {
@@ -60,20 +57,12 @@ public class WebServer {
         while (!executor.isTerminated()) {
         }
         System.out.println("\nFinished all threads");
-		/*System.out.println("RESULT: " + BCrypt.hashpw("test", BCrypt.gensalt()));
-		System.out.println("RESULT: " + BCrypt.checkpw("test", "$2a$10$eBfu1aIV0jH45fIoPpg2pOibq/MtB9X50bt/XV5GsLTLtWE/YSb0u"));*/
     }
 
     public WebServer(ConfigFile config) {
         this.config = config;
         this.app = new Express();
         this.routes = new HashMap<String, IRoute>();
-        this.router = new RouteMatcher();
-        if (config.getStartingFrom().equals(StartingFrom.SPIGOT)) {
-            if (config.getSettings().isBindToDefaultPort()) {
-                this.injector = new Injector(this);
-            }
-        }
         app.all("/", (req, res) -> {
             JsonBuilder json = new JsonBuilder()
                     .append("CODE", 200)
@@ -242,8 +231,5 @@ public class WebServer {
 
     public void disable() {
         this.app.stop();
-        if (injector != null) {
-            this.injector.close();
-        }
     }
 }

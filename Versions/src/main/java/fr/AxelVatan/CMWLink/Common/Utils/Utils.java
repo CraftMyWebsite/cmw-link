@@ -11,7 +11,7 @@ public class Utils {
 	private Logger log;
 	private StartingFrom startingFrom;
 	
-	private @Getter Versions mcVersion;
+	private @Getter Versions version;
 	private @Getter OfflinePlayerLoader offlinePlayerLoader;
 	
 	public Utils(Logger log, StartingFrom startingFrom) {
@@ -26,16 +26,24 @@ public class Utils {
 			return true;
 		case SPIGOT:
 			try {
-				String bukkitVer = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-				mcVersion = Versions.valueOf(bukkitVer);
-				if(say) {
-					log.info("Detected version of MC: " + mcVersion.toString());
+				version = Versions.fromVersion(Bukkit.getVersion());
+				if(version != null) {
+					if(say) {
+						log.info("Detected version of MC: " + version.toString());
+					}
+					offlinePlayerLoader = (OfflinePlayerLoader) Class.forName("fr.AxelVatan.CMWLink.Common.Utils." + version.getPackageName() +".OfflinePlayerLoader_" + version.getPackageName()).newInstance();
+					
+				}else {
+					if(say) {
+						log.severe("Unsupported Version Detected: " + Bukkit.getVersion());
+						log.severe("Disabling CWML...");
+					}
+					Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("CraftMyWebsite_Link"));
 				}
-				offlinePlayerLoader = (OfflinePlayerLoader) Class.forName("fr.AxelVatan.CMWLink.Common.Utils." + bukkitVer +".OfflinePlayerLoader_" + bukkitVer).newInstance();
 				return true;
 			} catch (Exception e) {
 				if(say) {
-					log.severe("Unsupported Version Detected: " + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
+					log.severe("Unsupported Version Detected: " + Bukkit.getVersion());
 					log.severe("Disabling CWML...");
 				}
 				Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("CraftMyWebsite_Link"));

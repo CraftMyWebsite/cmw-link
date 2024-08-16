@@ -1,7 +1,0 @@
-name: CMWL_Monitoring
-route_prefix: monitoring
-sp_main: fr.AxelVatan.CMWLink.Monitoring.SP.Main
-bg_main: fr.AxelVatan.CMWLink.Monitoring.BG.Main
-vl_main: fr.AxelVatan.CMWLink.Monitoring.VL.Main
-version: 1.0
-author: AxelVatan

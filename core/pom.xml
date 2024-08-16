@@ -17,6 +17,11 @@
 		</developer>
 	</developers>
 
+	<properties>
+	    <maven.compiler.source>11</maven.compiler.source>
+	    <maven.compiler.target>11</maven.compiler.target>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
@@ -83,15 +88,35 @@
 			<artifactId>v1_19_R3</artifactId>
 			<version>1.0</version>
 		</dependency>
-    <dependency>
+    	<dependency>
 			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
 			<artifactId>v1_20_R1</artifactId>
 			<version>1.0</version>
 		</dependency>
 		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_20_R2</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_20_R3</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_20_R4</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_21_R1</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.26</version>
+			<version>1.18.34</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -153,14 +178,6 @@
 			</resource>
 		</resources>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<configuration>
-					<release>11</release>
-				</configuration>
-			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
