@@ -30,21 +30,6 @@
 		</dependency>
 		<dependency>
 			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
-			<artifactId>v1_13_R2</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
-			<artifactId>v1_14_R1</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
-			<artifactId>v1_15_R1</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
 			<artifactId>v1_16_R1</artifactId>
 			<version>1.0</version>
 		</dependency>
