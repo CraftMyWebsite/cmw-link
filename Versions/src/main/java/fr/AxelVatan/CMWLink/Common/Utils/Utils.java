@@ -32,15 +32,15 @@ public class Utils {
 						log.info("Detected version of MC: " + version.toString());
 					}
 					offlinePlayerLoader = (OfflinePlayerLoader) Class.forName("fr.AxelVatan.CMWLink.Common.Utils." + version.getPackageName() +".OfflinePlayerLoader_" + version.getPackageName()).newInstance();
-					
+					return true;
 				}else {
 					if(say) {
 						log.severe("Unsupported Version Detected: " + Bukkit.getVersion());
 						log.severe("Disabling CWML...");
 					}
 					Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("CraftMyWebsite_Link"));
+					return false;
 				}
-				return true;
 			} catch (Exception e) {
 				if(say) {
 					log.severe("Unsupported Version Detected: " + Bukkit.getVersion());

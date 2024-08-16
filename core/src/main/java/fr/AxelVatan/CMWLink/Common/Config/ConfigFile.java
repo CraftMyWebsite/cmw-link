@@ -125,7 +125,7 @@ public class ConfigFile {
 	public class Settings{
 
 		private @Getter int port = 24102;
-		private @Getter boolean bindToDefaultPort = false;
+		private @Getter boolean bindToDefaultPort= false;
 		private @Getter boolean useCustomServerAddress = false;
 		private @Getter String customServerAddress = "123.123.123.123";
 		private @Getter boolean loadUncertifiedPackages = false;

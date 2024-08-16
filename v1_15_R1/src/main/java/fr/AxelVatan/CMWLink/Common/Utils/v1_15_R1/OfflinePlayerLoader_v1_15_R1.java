@@ -1,4 +1,4 @@
-package fr.AxelVatan.CMWLink.Common.Utils.v1_14_R1;
+package fr.AxelVatan.CMWLink.Common.Utils.v1_15_R1;
 
 import java.util.UUID;
 
