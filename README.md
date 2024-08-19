@@ -151,4 +151,4 @@ author: AxelVatan
 - **Twitter**: https://twitter.com/CraftMyWebsite
 
 ------------
-Copyright © CraftMyWebsite 2014-2022 
+Copyright © CraftMyWebsite 2014-2024 
