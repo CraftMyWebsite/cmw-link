@@ -1,4 +1,4 @@
-package fr.CraftMyWebsite.CMWLink.Boutique.BG.Routes;
+package fr.CraftMyWebsite.CMWLink.Shop.BG.Routes;
 
 import java.util.HashMap;
 
@@ -7,7 +7,7 @@ import com.google.common.io.ByteStreams;
 
 import express.http.request.Request;
 import express.http.response.Response;
-import fr.CraftMyWebsite.CMWLink.Boutique.BG.Main;
+import fr.CraftMyWebsite.CMWLink.Shop.BG.Main;
 import fr.CraftMyWebsite.CMWLink.Common.WebServer.CMWLRoute;
 import fr.CraftMyWebsite.CMWLink.Common.WebServer.RouteType;
 import net.md_5.bungee.api.ProxyServer;

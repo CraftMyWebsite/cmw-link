@@ -27,7 +27,7 @@
 		
 		<module>core</module>
 		<module>votes</module>
-		<module>boutique</module>
+		<module>shop</module>
 		<module>news</module>
 
     </modules>

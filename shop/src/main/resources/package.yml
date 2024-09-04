@@ -1,0 +1,7 @@
+name: CMWL_Shop
+route_prefix: shop
+sp_main: fr.CraftMyWebsite.CMWLink.Shop.SP.Main
+bg_main: fr.CraftMyWebsite.CMWLink.Shop.BG.Main
+vl_main: fr.CraftMyWebsite.CMWLink.Shop.VL.Main
+version: 1.0
+author: AxelVatan@Teyir

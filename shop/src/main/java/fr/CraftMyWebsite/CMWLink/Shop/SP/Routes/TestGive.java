@@ -1,14 +1,14 @@
-package fr.CraftMyWebsite.CMWLink.Boutique.SP.Routes;
+package fr.CraftMyWebsite.CMWLink.Shop.SP.Routes;
 
 import java.util.HashMap;
 
-import fr.CraftMyWebsite.CMWLink.Boutique.SP.Main;
+import fr.CraftMyWebsite.CMWLink.Shop.SP.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import fr.CraftMyWebsite.CMWLink.Boutique.Result;
+import fr.CraftMyWebsite.CMWLink.Shop.Result;
 import fr.CraftMyWebsite.CMWLink.Common.Config.JsonBuilder;
 import fr.CraftMyWebsite.CMWLink.Common.WebServer.CMWLRoute;
 import fr.CraftMyWebsite.CMWLink.Common.WebServer.RouteType;

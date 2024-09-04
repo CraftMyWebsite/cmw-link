@@ -1,4 +1,4 @@
-package fr.CraftMyWebsite.CMWLink.Boutique.VL;
+package fr.CraftMyWebsite.CMWLink.Shop.VL;
 
 import fr.CraftMyWebsite.CMWLink.Common.Packages.CMWLPackage;
 

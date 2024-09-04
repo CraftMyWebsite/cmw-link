@@ -1,4 +1,4 @@
-package fr.CraftMyWebsite.CMWLink.Boutique;
+package fr.CraftMyWebsite.CMWLink.Shop;
 
 public enum Result {
 

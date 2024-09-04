@@ -1,4 +1,4 @@
-package fr.CraftMyWebsite.CMWLink.Boutique.BG;
+package fr.CraftMyWebsite.CMWLink.Shop.BG;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -11,7 +11,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
-import fr.CraftMyWebsite.CMWLink.Boutique.BG.Routes.TestGive;
+import fr.CraftMyWebsite.CMWLink.Shop.BG.Routes.TestGive;
 import fr.CraftMyWebsite.CMWLink.Common.Packages.CMWLPackage;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -25,9 +25,9 @@ public class Main extends CMWLPackage implements Listener{
 
 	@Override
 	public void enable() {
-		this.log(Level.INFO, "Boutique for BungeeCord enabled.");
+		this.log(Level.INFO, "Shop for BungeeCord enabled.");
 		this.callbacks = new HashMap<String, Deque<BiConsumer<ProxiedPlayer, byte[]>>>();
-		ProxyServer.getInstance().registerChannel("cmw:boutique");
+		ProxyServer.getInstance().registerChannel("cmw:shop");
 		ProxyServer.getInstance().getPluginManager().registerListener(ProxyServer.getInstance().getPluginManager().getPlugin("CraftMyWebsite_Link"), this);
 	}
 
@@ -43,7 +43,7 @@ public class Main extends CMWLPackage implements Listener{
 
 	@EventHandler
 	public void on(PluginMessageEvent event) {
-		if (!event.getTag().equalsIgnoreCase("cmw:boutique")){
+		if (!event.getTag().equalsIgnoreCase("cmw:shop")){
             return;
         }
         ByteArrayDataInput in = ByteStreams.newDataInput( event.getData() );
@@ -58,7 +58,7 @@ public class Main extends CMWLPackage implements Listener{
 		out.writeUTF(username);
 		out.writeUTF(item);
 		out.writeInt(qty);
-		target.getServer().sendData("cmw:boutique", out.toByteArray());
+		target.getServer().sendData("cmw:shop", out.toByteArray());
 	}
 
 	protected void consume(String bungeeSubChannel, ProxiedPlayer receiver, byte[] message) {

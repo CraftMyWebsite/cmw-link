@@ -1,4 +1,4 @@
-package fr.CraftMyWebsite.CMWLink.Boutique.SP;
+package fr.CraftMyWebsite.CMWLink.Shop.SP;
 
 import java.util.logging.Level;
 
@@ -13,8 +13,8 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
-import fr.CraftMyWebsite.CMWLink.Boutique.Result;
-import fr.CraftMyWebsite.CMWLink.Boutique.SP.Routes.TestGive;
+import fr.CraftMyWebsite.CMWLink.Shop.Result;
+import fr.CraftMyWebsite.CMWLink.Shop.SP.Routes.TestGive;
 import fr.CraftMyWebsite.CMWLink.Common.Packages.CMWLPackage;
 
 public class Main extends CMWLPackage implements PluginMessageListener{
@@ -23,11 +23,11 @@ public class Main extends CMWLPackage implements PluginMessageListener{
 
 	@Override
 	public void enable() {
-		this.log(Level.INFO, "Boutique for Spigot enabled.");
+		this.log(Level.INFO, "Shop for Spigot enabled.");
 		if(this.isUseProxy()) {
 			this.mcServer = Bukkit.getServer();
-			mcServer.getMessenger().registerOutgoingPluginChannel(mcServer.getPluginManager().getPlugin("CraftMyWebsite_Link"), "cmw:boutique");
-			mcServer.getMessenger().registerIncomingPluginChannel(mcServer.getPluginManager().getPlugin("CraftMyWebsite_Link"), "cmw:boutique", this);
+			mcServer.getMessenger().registerOutgoingPluginChannel(mcServer.getPluginManager().getPlugin("CraftMyWebsite_Link"), "cmw:shop");
+			mcServer.getMessenger().registerIncomingPluginChannel(mcServer.getPluginManager().getPlugin("CraftMyWebsite_Link"), "cmw:shop", this);
 		}
 	}
 
@@ -44,7 +44,7 @@ public class Main extends CMWLPackage implements PluginMessageListener{
 
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-		if (!channel.equals("cmw:boutique")) {
+		if (!channel.equals("cmw:shop")) {
 			return;
 		}
 		ByteArrayDataInput in = ByteStreams.newDataInput(message);
@@ -74,7 +74,7 @@ public class Main extends CMWLPackage implements PluginMessageListener{
 				e.printStackTrace();
 				out.writeUTF(Result.ITEM_NOT_FOUND.name());
 			}
-			Bukkit.getPlayer(username).sendPluginMessage(mcServer.getPluginManager().getPlugin("CraftMyWebsite_Link"), "cmw:boutique", out.toByteArray());
+			Bukkit.getPlayer(username).sendPluginMessage(mcServer.getPluginManager().getPlugin("CraftMyWebsite_Link"), "cmw:shop", out.toByteArray());
 		}
 	}
 }

@@ -4,13 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>fr.CraftMyWebsite.CMWL</groupId>
-	<artifactId>Boutique</artifactId>
+	<artifactId>Shop</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>CMWL_Boutique</name>
-
-
+	<name>CMWL_Shop</name>
 
 	<properties>
 	    <maven.compiler.source>11</maven.compiler.source>
@@ -56,7 +54,7 @@
 	</repositories>
 
 	<build>
-		<finalName>CMWL_Boutique</finalName>
+		<finalName>CMWL_Shop</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<defaultGoal>clean install</defaultGoal>
 		<resources>
