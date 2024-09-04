@@ -1,0 +1,40 @@
+package fr.CraftMyWebsite.CMWLink.Boutique.BG.Routes;
+
+import java.util.HashMap;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
+
+import express.http.request.Request;
+import express.http.response.Response;
+import fr.CraftMyWebsite.CMWLink.Boutique.BG.Main;
+import fr.CraftMyWebsite.CMWLink.Common.WebServer.CMWLRoute;
+import fr.CraftMyWebsite.CMWLink.Common.WebServer.RouteType;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+
+public class TestGive extends CMWLRoute<Main>{
+
+	public TestGive(Main plugin) {
+		super(plugin, "give/:username/:item/:qty", RouteType.GET);
+	}
+
+	@Override
+	public void execute(Request req, Response res) {
+		String username = req.getParam("username");
+		String item = req.getParam("item");
+		int qty = Integer.valueOf(req.getParam("qty"));
+		ProxiedPlayer sender = ProxyServer.getInstance().getPlayer(username);
+		this.getPlugin().request(sender, "give", (rec, msg) -> {
+			ByteArrayDataInput in = ByteStreams.newDataInput(msg);
+			res.send("Success " + in.readUTF() + " response: " + in.readUTF());
+		}, username, item, qty);
+	}
+
+	@Override
+	public String executeRoute(HashMap<String, String> params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

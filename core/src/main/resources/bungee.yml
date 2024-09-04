@@ -1,5 +1,5 @@
 name: CraftMyWebsite_Link
-main: fr.AxelVatan.CMWLink.BungeeCord.BungeeCordMain
+main: fr.CraftMyWebsite.CMWLink.BungeeCord.BungeeCordMain
 version: 1.0
-author: AxelVatan
+author: CraftMyWebsite
 description: CraftMyWebsite-Link a java plugin for MC servers

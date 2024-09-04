@@ -3,19 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+	<groupId>fr.CraftMyWebsite.CMWL</groupId>
 	<artifactId>v1_19_R1</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>v1_19_R1</name>
 
-	<developers>
-		<developer>
-			<name>Axel Vatan AKA Axeldu18</name>
-			<url>https://axelvatan.fr/</url>
-		</developer>
-	</developers>
+
 
 	<properties>
 	    <maven.compiler.source>11</maven.compiler.source>
@@ -24,7 +19,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>fr.AxelVatan.CraftMyWebsite.CMWL</groupId>
+			<groupId>fr.CraftMyWebsite.CMWL</groupId>
 			<artifactId>Versions</artifactId>
 			<version>1.0</version>
 			<scope>provided</scope>

@@ -52,10 +52,10 @@ Class TestPackage:
 
 ```java
 
-package fr.AxelVatan.CMWLink.TestPackages;
+package fr.CraftMyWebsite.CMWLink.TestPackages;
 
 import java.util.logging.Level;
-import fr.AxelVatan.CMWLink.Common.Packages.CMWLPackage;
+import fr.CraftMyWebsite.CMWLink.Packages.Common.CMWLink.CMWLPackage;
 
 public class TestPackage extends CMWLPackage{
 
@@ -83,12 +83,12 @@ public class TestPackage extends CMWLPackage{
 Class TestRoute:
 
 ```java
-package fr.AxelVatan.CMWLink.TestPackages;
+package fr.CraftMyWebsite.CMWLink.TestPackages;
 
 import express.http.request.Request;
 import express.http.response.Response;
-import fr.AxelVatan.CMWLink.Common.WebServer.CMWLRoute;
-import fr.AxelVatan.CMWLink.Common.WebServer.RouteType;
+import fr.CraftMyWebsite.CMWLink.WebServer.Common.CMWLink.CMWLRoute;
+import fr.CraftMyWebsite.CMWLink.WebServer.Common.CMWLink.RouteType;
 
 public class TestRoute extends CMWLRoute<TestPackage>{
 
@@ -127,7 +127,7 @@ Pour que le package soit reconnue par le plugin vous devez avoir un package.yml 
 ```yaml
 name: CMWL_Test
 route_prefix: test
-sp_main: fr.AxelVatan.CMWLink.TestPackages.TestPackage
+sp_main: fr.CraftMyWebsite.CMWLink.TestPackages.TestPackage
 version: 1.0
 author: AxelVatan
 
