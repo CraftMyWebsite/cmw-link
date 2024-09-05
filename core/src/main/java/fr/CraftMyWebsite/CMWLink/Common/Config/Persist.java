@@ -18,11 +18,11 @@ import com.google.gson.GsonBuilder;
 
 public class Persist {
 
-	private ConfigFile configFile;
+	private IConfigFile configFile;
 	private Gson gson;
 	private Map<String, Lock> locks;
 
-	public Persist(ConfigFile configFile) {
+	public Persist(IConfigFile configFile) {
 		configFile.getFilePath().mkdirs();
 		this.configFile = configFile;
 		this.gson = buildGson().create();
