@@ -4,13 +4,16 @@ import fr.CraftMyWebsite.CMWLink.Common.Packages.Packages;
 import fr.CraftMyWebsite.CMWLink.Common.Utils.StartingFrom;
 import fr.CraftMyWebsite.CMWLink.Common.Utils.Utils;
 import fr.CraftMyWebsite.CMWLink.Common.WebServer.WebServer;
+import fr.CraftMyWebsite.CMWLink.Velocity.VelocityMain;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Server;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class ConfigFile extends IConfigFile {
@@ -21,6 +24,7 @@ public class ConfigFile extends IConfigFile {
     private @Getter net.md_5.bungee.api.ProxyServer bgServer;
     //VELOCITY
     private @Getter com.velocitypowered.api.proxy.ProxyServer vlServer;
+    private VelocityMain velocityPlugin;
 
     private @Getter StartingFrom startingFrom;
     private @Getter File filePath;
@@ -50,9 +54,10 @@ public class ConfigFile extends IConfigFile {
         load(startingFrom, filePath, log, version, 0000);
     }
 
-    public ConfigFile(com.velocitypowered.api.proxy.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version) {
+    public ConfigFile(com.velocitypowered.api.proxy.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version, VelocityMain plugin) {
         super(filePath, log);
         this.vlServer = server;
+        this.velocityPlugin = plugin;
         load(startingFrom, filePath, log, version, 0000);
     }
 
@@ -88,7 +93,7 @@ public class ConfigFile extends IConfigFile {
                 case BUNGEECORD:
                     this.packages = new Packages(bgServer, log, filePath, webServer, utils);
                     if (this.settings.useProxy) {
-                        this.startWebServer(port);
+                        this.startWebServerSpigot(port);
                     } else {
                         log.severe("UseProxy on this BungeeCord Proxy is not set to true !");
                         log.severe("CMW-Link will be useless");
@@ -99,13 +104,13 @@ public class ConfigFile extends IConfigFile {
                     if (this.settings.isUseProxy()) {
                         log.info("Waiting requests from the proxy");
                     } else {
-                        this.startWebServer(port);
+                        this.startWebServerSpigot(port);
                     }
                     break;
                 case VELOCITY:
                     this.packages = new Packages(vlServer, log, filePath, webServer, utils);
                     if (this.settings.useProxy) {
-                        this.startWebServer(port);
+                        this.startWebServerVelocity(port);
                     } else {
                         log.severe("UseProxy on this Velocity Proxy is not set to true !");
                         log.severe("CMW-Link will be useless");
@@ -119,9 +124,27 @@ public class ConfigFile extends IConfigFile {
         if (settings != null) persist.save(settings);
     }
 
-    private void startWebServer(int port) {
+    private void startWebServerSpigot(int port) {
         this.webServer.createRoutes();
-        this.webServer.startWebServer(port);
+
+        this.webServer.listenPort();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                webServer.startWebServer(port);
+            }
+        }.runTaskAsynchronously(Objects.requireNonNull(this.getSpServer().getPluginManager().getPlugin("CraftMyWebsite_Link")));
+    }
+
+    private void startWebServerVelocity(int port) {
+        this.webServer.createRoutes();
+
+        this.webServer.listenPort();
+        this.vlServer.getScheduler()
+                .buildTask(this.velocityPlugin, () -> {
+                    this.webServer.startWebServer(port);
+                })
+                .schedule();
     }
 
     public class Settings {

@@ -1,7 +1,6 @@
 package fr.CraftMyWebsite.CMWLink.Common.Packages;
 
 import com.google.common.base.Preconditions;
-import fr.CraftMyWebsite.CMWLink.Common.Utils.StartingFrom;
 import fr.CraftMyWebsite.CMWLink.Common.Utils.Utils;
 import fr.CraftMyWebsite.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
@@ -291,7 +290,7 @@ public class Packages {
                 this.log.info("Loaded " + (this.packagesCertified.containsValue(plugin) ? "CERTIFIED" : "UNCERTIFIED") + " package " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor());
                 this.packagesLoaded.add(clazz);
             } catch (Throwable t) {
-                this.log.severe("Error enabling package " + plugin.getName() + ":" + t.getMessage());
+                this.log.severe("Error enabling package " + plugin.getName() + ": " + t.getMessage());
                 t.printStackTrace();
             }
         }

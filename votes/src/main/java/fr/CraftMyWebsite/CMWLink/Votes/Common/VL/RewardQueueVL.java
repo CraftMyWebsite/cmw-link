@@ -1,6 +1,8 @@
 package fr.CraftMyWebsite.CMWLink.Votes.Common.VL;
 
+import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ProxyServer;
 import fr.CraftMyWebsite.CMWLink.Common.Packages.CMWLPackage;
 import fr.CraftMyWebsite.CMWLink.Votes.Common.Config;
 import fr.CraftMyWebsite.CMWLink.Votes.Common.QueuedReward;
@@ -14,14 +16,12 @@ import java.util.concurrent.TimeUnit;
 
 public class RewardQueueVL extends RewardQueue {
 
-    public RewardQueueVL(CMWLPackage main, Config config) {
+    public RewardQueueVL(CMWLPackage main, Config config, ProxyServer server, PluginContainer pluginContainer) {
         super(main, config);
-        main.getVlServer().getScheduler().buildTask(main.getVlServer().getPluginManager().getPlugin("CraftMyWebsite_Link"), new Runnable() {
-            @Override
-            public void run() {
-                proccessQueue();
-            }
-        }).delay(10, TimeUnit.SECONDS).repeat(10, TimeUnit.SECONDS).schedule();
+        server.getScheduler().buildTask(pluginContainer, this::proccessQueue)
+                .delay(10, TimeUnit.SECONDS)
+                .repeat(10, TimeUnit.SECONDS)
+                .schedule();
     }
 
     private void proccessQueue() {

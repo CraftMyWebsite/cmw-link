@@ -1,27 +1,23 @@
 package fr.CraftMyWebsite.CMWLink.Common.WebServer;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.logging.Level;
-
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 import express.Express;
 import express.utils.Status;
 import fr.CraftMyWebsite.CMWLink.Common.Config.ConfigFile;
 import fr.CraftMyWebsite.CMWLink.Common.Config.JsonBuilder;
 import fr.CraftMyWebsite.CMWLink.Common.Packages.CMWLPackage;
 import lombok.Getter;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
 
 public class WebServer {
 
@@ -145,43 +141,39 @@ public class WebServer {
         });
     }
 
-    public void startWebServer(int port) {
+    public void listenPort() {
         this.app.listen(this.config.getSettings().getPort());
+    }
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {
-                    URL whatismyip = new URL("https://apiv2.craftmywebsite.fr/v1/network/ip");
-                    URLConnection uc = whatismyip.openConnection();
-                    uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
-                    BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
-                    JsonObject json = new Gson().fromJson(in.readLine(), JsonObject.class);
-                    String ip = json.get("ip_address").getAsString();
-                    config.getLog().info("External IP: " + ip);
+    public void startWebServer(int port) {
+        try {
+            URL whatismyip = new URL("https://apiv2.craftmywebsite.fr/v1/network/ip");
+            URLConnection uc = whatismyip.openConnection();
+            uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
+            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+            JsonObject json = new Gson().fromJson(in.readLine(), JsonObject.class);
+            String ip = json.get("ip_address").getAsString();
+            config.getLog().info("External IP: " + ip);
 
-                    if (getConfig().getSettings().isUseCustomServerAddress()) {
-                        ip = getConfig().getSettings().getCustomServerAddress();
-                    }
-
-                    URL checkURL = new URL("https://apiv2.craftmywebsite.fr/v1/network/check/port/" + ip + "/" + (getConfig().getSettings().isBindToDefaultPort() ? "25565" : config.getSettings().getPort()));
-                    uc = checkURL.openConnection();
-                    uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
-                    in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
-                    json = new Gson().fromJson(in.readLine(), JsonObject.class);
-                    boolean reachable = json.get("status").getAsBoolean();
-                    if (reachable) {
-                        config.getLog().info("Port " + (getConfig().getSettings().isBindToDefaultPort() ? port : config.getSettings().getPort()) + " is properly forwarded and is externally accessible.");
-                    } else {
-                        config.getLog().warning("Port " + (getConfig().getSettings().isBindToDefaultPort() ? port : config.getSettings().getPort()) + " is not properly forwarded. (Ignore this warning if your server is on a mutual server host)");
-                    }
-
-                } catch (Exception e) {
-                    config.getLog().severe("Cannot joint API to get IP and PORT verification, maybe API is down ");
-                }
+            if (getConfig().getSettings().isUseCustomServerAddress()) {
+                ip = getConfig().getSettings().getCustomServerAddress();
             }
-        }.runTaskAsynchronously(Objects.requireNonNull(config.getSpServer().getPluginManager().getPlugin("CraftMyWebsite_Link"))); //TODO Only Spigot ??
 
+            URL checkURL = new URL("https://apiv2.craftmywebsite.fr/v1/network/check/port/" + ip + "/" + (getConfig().getSettings().isBindToDefaultPort() ? "25565" : config.getSettings().getPort()));
+            uc = checkURL.openConnection();
+            uc.setRequestProperty("User-Agent", "CraftMyWebsite-Link Version: " + config.getVersion());
+            in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+            json = new Gson().fromJson(in.readLine(), JsonObject.class);
+            boolean reachable = json.get("status").getAsBoolean();
+            if (reachable) {
+                config.getLog().info("Port " + (getConfig().getSettings().isBindToDefaultPort() ? port : config.getSettings().getPort()) + " is properly forwarded and is externally accessible.");
+            } else {
+                config.getLog().warning("Port " + (getConfig().getSettings().isBindToDefaultPort() ? port : config.getSettings().getPort()) + " is not properly forwarded. (Ignore this warning if your server is on a mutual server host)");
+            }
+
+        } catch (Exception e) {
+            config.getLog().severe("Cannot joint API to get IP and PORT verification, maybe API is down ");
+        }
     }
 
     public void addRoute(CMWLPackage cmwlPackage, IRoute route) {
