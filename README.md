@@ -5,9 +5,11 @@ CraftMyWebsite-Link a java plugin for MC servers
 ### Compatibilité
 ------------
 - **Spigot/Paper**
+  - **1.16** -> **1.21.1**
 - **Mohist/Magma**
-- **BungeeCord/Waterfall**
+- **BungeeCord/Waterfall** (En cours d'intégration)
 - **Velocity**
+  - **3.X.X**
 
 ### Installation
 ------------
@@ -23,7 +25,8 @@ CraftMyWebsite-Link a java plugin for MC servers
     "whitelistedIps": [
       "127.0.0.1"
     ],
-    "token": "TOKEN FROM THE CMS"
+    "token": "TOKEN FROM THE CMS",
+    "domain": "monsite.fr"
 }
 
 ```
@@ -35,6 +38,8 @@ CraftMyWebsite-Link a java plugin for MC servers
 - useProxy: Permet d'utiliser les Proxy tel que BungeeCord, Waterfall, Velocity.
 - enableWhitelistedIps: Active la whitelist d'IPs
 - whitelistedIps: Liste des IPs de la whitelist
+- token: Token de connexion fourni par le CMS
+- domain: Domaine du site web
 
 Pour vérifier le bon fonctionnement du plugin il suffit de taper l'IP du serveur avec le port dans un navigateur, le plugin envoie la réponse suivante:
 
