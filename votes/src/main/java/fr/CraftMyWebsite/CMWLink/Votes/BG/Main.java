@@ -1,6 +1,7 @@
 package fr.CraftMyWebsite.CMWLink.Votes.BG;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.CraftMyWebsite.CMWLink.Common.Packages.CMWLPackage;
 import fr.CraftMyWebsite.CMWLink.Votes.BG.Routes.RewardCmd;
@@ -18,6 +19,8 @@ public class Main extends CMWLPackage{
 	@Override
 	public void enable() {
 		this.log(Level.INFO, "Votes for BungeeCord enabled.");
+
+		this.config = new Config(this.getMainFolder(), Logger.getAnonymousLogger());
 		this.queue = new RewardQueueBG(this, config);
 	}
 

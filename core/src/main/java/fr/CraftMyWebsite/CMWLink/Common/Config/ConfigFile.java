@@ -1,5 +1,6 @@
 package fr.CraftMyWebsite.CMWLink.Common.Config;
 
+import fr.CraftMyWebsite.CMWLink.BungeeCord.BungeeCordMain;
 import fr.CraftMyWebsite.CMWLink.Common.Packages.Packages;
 import fr.CraftMyWebsite.CMWLink.Common.Utils.StartingFrom;
 import fr.CraftMyWebsite.CMWLink.Common.Utils.Utils;
@@ -22,6 +23,7 @@ public class ConfigFile extends IConfigFile {
     private @Getter Server spServer;
     //BUNGEECORD
     private @Getter net.md_5.bungee.api.ProxyServer bgServer;
+    private BungeeCordMain bungeePlugin;
     //VELOCITY
     private @Getter com.velocitypowered.api.proxy.ProxyServer vlServer;
     private VelocityMain velocityPlugin;
@@ -48,9 +50,10 @@ public class ConfigFile extends IConfigFile {
         load(startingFrom, filePath, log, version, server.getPort());
     }
 
-    public ConfigFile(net.md_5.bungee.api.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version) {
+    public ConfigFile(net.md_5.bungee.api.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version, BungeeCordMain plugin) {
         super(filePath, log);
         this.bgServer = server;
+        this.bungeePlugin = plugin;
         load(startingFrom, filePath, log, version, 0000);
     }
 
@@ -93,7 +96,7 @@ public class ConfigFile extends IConfigFile {
                 case BUNGEECORD:
                     this.packages = new Packages(bgServer, log, filePath, webServer, utils);
                     if (this.settings.useProxy) {
-                        this.startWebServerSpigot(port);
+                        this.startWebServerBungeecord(port);
                     } else {
                         log.severe("UseProxy on this BungeeCord Proxy is not set to true !");
                         log.severe("CMW-Link will be useless");
@@ -122,6 +125,16 @@ public class ConfigFile extends IConfigFile {
 
     public void saveSettings() {
         if (settings != null) persist.save(settings);
+    }
+
+    private void startWebServerBungeecord(int port) {
+        this.webServer.createRoutes();
+
+        this.webServer.listenPort();
+
+        this.bgServer.getScheduler().runAsync(this.bungeePlugin, () -> {
+            webServer.startWebServer(port);
+        });
     }
 
     private void startWebServerSpigot(int port) {

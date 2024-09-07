@@ -6,8 +6,7 @@ CraftMyWebsite-Link a java plugin for MC servers
 ------------
 - **Spigot/Paper**
   - **1.16** -> **1.21.1**
-- **Mohist/Magma**
-- **BungeeCord/Waterfall** (En cours d'intégration)
+- **BungeeCord/Waterfall**
 - **Velocity**
   - **3.X.X**
 
