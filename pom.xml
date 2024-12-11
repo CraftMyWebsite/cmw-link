@@ -30,7 +30,9 @@
 		<module>shop</module>
 		<module>news</module>
 
-    </modules>
+		<module>v1_21_R2</module>
+		<module>v1_21_R3</module>
+	</modules>
 
   	<properties>
 		<maven.compiler.source>11</maven.compiler.source>

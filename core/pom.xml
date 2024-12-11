@@ -94,6 +94,16 @@
 			<version>1.0</version>
 		</dependency>
 		<dependency>
+			<groupId>fr.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_21_R2</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.CraftMyWebsite.CMWL</groupId>
+			<artifactId>v1_21_R3</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.34</version>
