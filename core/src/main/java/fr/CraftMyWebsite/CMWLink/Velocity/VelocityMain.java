@@ -45,9 +45,7 @@ public final class VelocityMain {
                 StartingFrom.VELOCITY,
                 dataDirectory.toFile(),
                 logger,
-                "1.0",
-                this
-        );
+                "1.0");
         logger.info("==========================================");
 
         CommandMeta meta = server.getCommandManager().metaBuilder("vcmwl").build();
@@ -60,9 +58,7 @@ public final class VelocityMain {
                 StartingFrom.VELOCITY,
                 dataDirectory.toFile(),
                 logger,
-                "1.0",
-                this
-        );
+                "1.0");
     }
 
     @Subscribe

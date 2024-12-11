@@ -17,9 +17,7 @@ public class BungeeCordMain extends Plugin {
                 StartingFrom.BUNGEECORD,
                 this.getDataFolder(),
                 this.getLogger(),
-                this.getDescription().getVersion(),
-                this
-        );
+                this.getDescription().getVersion());
         this.getLogger().info("==========================================");
         this.getProxy().getPluginManager().registerCommand(this, new BG_Commands(this));
     }
@@ -30,9 +28,7 @@ public class BungeeCordMain extends Plugin {
                 StartingFrom.BUNGEECORD,
                 this.getDataFolder(),
                 this.getLogger(),
-                this.getDescription().getVersion(),
-                this
-        );
+                this.getDescription().getVersion());
     }
 
     @Override

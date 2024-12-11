@@ -1,21 +1,18 @@
 package fr.CraftMyWebsite.CMWLink.Common.Config;
 
-import fr.CraftMyWebsite.CMWLink.BungeeCord.BungeeCordMain;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Logger;
+
+import org.bukkit.Server;
+
 import fr.CraftMyWebsite.CMWLink.Common.Packages.Packages;
 import fr.CraftMyWebsite.CMWLink.Common.Utils.StartingFrom;
 import fr.CraftMyWebsite.CMWLink.Common.Utils.Utils;
 import fr.CraftMyWebsite.CMWLink.Common.WebServer.WebServer;
-import fr.CraftMyWebsite.CMWLink.Velocity.VelocityMain;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Server;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.logging.Logger;
 
 public class ConfigFile extends IConfigFile {
 
@@ -23,10 +20,8 @@ public class ConfigFile extends IConfigFile {
     private @Getter Server spServer;
     //BUNGEECORD
     private @Getter net.md_5.bungee.api.ProxyServer bgServer;
-    private BungeeCordMain bungeePlugin;
     //VELOCITY
     private @Getter com.velocitypowered.api.proxy.ProxyServer vlServer;
-    private VelocityMain velocityPlugin;
 
     private @Getter StartingFrom startingFrom;
     private @Getter File filePath;
@@ -50,17 +45,15 @@ public class ConfigFile extends IConfigFile {
         load(startingFrom, filePath, log, version, server.getPort());
     }
 
-    public ConfigFile(net.md_5.bungee.api.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version, BungeeCordMain plugin) {
+    public ConfigFile(net.md_5.bungee.api.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version) {
         super(filePath, log);
         this.bgServer = server;
-        this.bungeePlugin = plugin;
         load(startingFrom, filePath, log, version, 0000);
     }
 
-    public ConfigFile(com.velocitypowered.api.proxy.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version, VelocityMain plugin) {
+    public ConfigFile(com.velocitypowered.api.proxy.ProxyServer server, StartingFrom startingFrom, File filePath, Logger log, String version) {
         super(filePath, log);
         this.vlServer = server;
-        this.velocityPlugin = plugin;
         load(startingFrom, filePath, log, version, 0000);
     }
 
@@ -129,35 +122,20 @@ public class ConfigFile extends IConfigFile {
 
     private void startWebServerBungeecord(int port) {
         this.webServer.createRoutes();
-
         this.webServer.listenPort();
-
-        this.bgServer.getScheduler().runAsync(this.bungeePlugin, () -> {
-            webServer.startWebServer(port);
-        });
+        this.webServer.startWebServer(port);
     }
 
     private void startWebServerSpigot(int port) {
         this.webServer.createRoutes();
-
         this.webServer.listenPort();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                webServer.startWebServer(port);
-            }
-        }.runTaskAsynchronously(Objects.requireNonNull(this.getSpServer().getPluginManager().getPlugin("CraftMyWebsite_Link")));
+        this.webServer.startWebServer(port);
     }
 
     private void startWebServerVelocity(int port) {
         this.webServer.createRoutes();
-
         this.webServer.listenPort();
-        this.vlServer.getScheduler()
-                .buildTask(this.velocityPlugin, () -> {
-                    this.webServer.startWebServer(port);
-                })
-                .schedule();
+        this.webServer.startWebServer(port);
     }
 
     public class Settings {
