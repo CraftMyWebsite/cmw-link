@@ -1,6 +1,6 @@
 name: CraftMyWebsite_Link
 main: fr.CraftMyWebsite.CMWLink.Spigot.SpigotMain
-version: 1.0
+version: ${project.version}
 author: CraftMyWebsite
 description: CraftMyWebsite-Link a java plugin for MC servers
 commands:
