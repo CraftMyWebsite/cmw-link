@@ -30,6 +30,13 @@
         </dependency>
     </dependencies>
 
+	<repositories>
+		<repository>
+	        <id>spigot-repo</id>
+	        <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+	    </repository>
+	</repositories>
+
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
