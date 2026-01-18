@@ -1,0 +1,31 @@
+plugins {
+    id 'java-library'
+    id 'com.gradleup.shadow' version '9.3.1'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    compileOnly project(':core')
+    compileOnly 'org.spigotmc:spigot-api:1.19.3-R0.1-SNAPSHOT'
+}
+
+shadowJar {
+    archiveBaseName = 'CMWL_News'
+    archiveVersion = ''
+    archiveClassifier = ''
+
+    dependencies {
+        exclude(dependency('org.projectlombok:lombok'))
+        exclude(dependency('org.spigotmc:spigot-api'))
+        exclude(dependency('fr.CraftMyWebsite.CMWL:core'))
+    }
+}
+
+build.dependsOn shadowJar

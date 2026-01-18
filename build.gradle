@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+allprojects {
+    group = 'fr.CraftMyWebsite.CMWL'
+    version = '1.1.0'
+
+    repositories {
+        mavenCentral()
+        maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url = 'https://jitpack.io' }
+        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+        maven { url = 'https://hub.spigotmc.org/nexus/content/groups/public/' }
+        maven { url = 'https://repo.extendedclip.com/releases/' }
+        maven { url = 'https://repo.loohpjames.com/repository/' }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    // Disable tests
+    tasks.withType(Test) {
+        enabled = false
+    }
+}

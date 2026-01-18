@@ -1,9 +1,8 @@
 package fr.CraftMyWebsite.CMWLink.BungeeCord;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.google.common.collect.ImmutableSet;
 
 import fr.CraftMyWebsite.CMWLink.Common.Packages.CMWLPackage;
 import net.md_5.bungee.api.ChatColor;
@@ -61,7 +60,7 @@ public class BG_Commands extends Command implements TabExecutor{
 	@Override
 	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
 		if (args.length > 2 || args.length == 0){
-			return ImmutableSet.of();
+			return Collections.emptySet();
 		}
 		Set<String> matches = new HashSet<String>();
 		if(args.length == 1) {

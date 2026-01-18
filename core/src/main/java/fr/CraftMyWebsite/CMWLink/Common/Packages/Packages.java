@@ -1,6 +1,5 @@
 package fr.CraftMyWebsite.CMWLink.Common.Packages;
 
-import com.google.common.base.Preconditions;
 import fr.CraftMyWebsite.CMWLink.Common.Utils.Utils;
 import fr.CraftMyWebsite.CMWLink.Common.WebServer.WebServer;
 import lombok.Getter;
@@ -103,13 +102,13 @@ public class Packages {
             if (file.isFile() && file.getName().endsWith(".jar")) {
                 try (JarFile jar = new JarFile(file)) {
                     JarEntry pdf = jar.getJarEntry("package.yml");
-                    Preconditions.checkNotNull(pdf, "Package must have a Package.yml");
+                    Objects.requireNonNull(pdf, "Package must have a Package.yml");
                     try (InputStream in = jar.getInputStream(pdf)) {
                         CMWLPackageDescription desc = new CMWLPackageDescription(in);
-                        Preconditions.checkNotNull(desc.getName(), "Package from %s has no name", file);
-                        Preconditions.checkNotNull(desc.getRoute_prefix(), "Package from %s has no route prefix", file);
-                        Preconditions.checkNotNull(desc.getVersion(), "Package from %s has no version", file);
-                        Preconditions.checkNotNull(desc.getAuthor(), "Package from %s has no author", file);
+                        Objects.requireNonNull(desc.getName(), String.format("Package from %s has no name", file));
+                        Objects.requireNonNull(desc.getRoute_prefix(), String.format("Package from %s has no route prefix", file));
+                        Objects.requireNonNull(desc.getVersion(), String.format("Package from %s has no version", file));
+                        Objects.requireNonNull(desc.getAuthor(), String.format("Package from %s has no author", file));
                         desc.setFile(file);
                         this.packagesToLoad.put(desc.getName(), desc);
                     }
@@ -258,17 +257,17 @@ public class Packages {
                 Class<?> main = null;
                 switch (webServer.getConfig().getStartingFrom()) {
                     case BUNGEECORD:
-                        Preconditions.checkNotNull(plugin.getBg_main(), "Package from %s has no sp_main main class, maybe not compatible with BungeeCord ?", plugin.getFile());
+                        Objects.requireNonNull(plugin.getBg_main(), String.format("Package from %s has no sp_main main class, maybe not compatible with BungeeCord ?", plugin.getFile()));
                         loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getBg_main(), plugin.getFile().toURI().toURL(), this);
                         main = loader.loadClass(plugin.getBg_main());
                         break;
                     case SPIGOT:
-                        Preconditions.checkNotNull(plugin.getSp_main(), "Package from %s has no bg_main main class, maybe not compatible with Spigot/Paper ?", plugin.getFile());
+                        Objects.requireNonNull(plugin.getSp_main(), String.format("Package from %s has no bg_main main class, maybe not compatible with Spigot/Paper ?", plugin.getFile()));
                         loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getSp_main(), plugin.getFile().toURI().toURL(), this);
                         main = loader.loadClass(plugin.getSp_main());
                         break;
                     case VELOCITY:
-                        Preconditions.checkNotNull(plugin.getVl_main(), "Package from %s has no vl_main main class, maybe not compatible with Velocity ?", plugin.getFile());
+                        Objects.requireNonNull(plugin.getVl_main(), String.format("Package from %s has no vl_main main class, maybe not compatible with Velocity ?", plugin.getFile()));
                         loader = new PackageClassLoader(getClass().getClassLoader(), plugin.getVl_main(), plugin.getFile().toURI().toURL(), this);
                         main = loader.loadClass(plugin.getVl_main());
                         break;

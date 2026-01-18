@@ -1,6 +1,5 @@
 package fr.CraftMyWebsite.CMWLink.Common.Packages;
 
-import com.google.common.collect.ImmutableList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +13,7 @@ import org.yaml.snakeyaml.nodes.Node;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -76,10 +76,10 @@ public class CMWLPackageDescription {
     private static List<String> makePluginNameList(@NotNull final Map<?, ?> map, @NotNull final String key) {
         final Object value = map.get(key);
         if (value == null) {
-            return ImmutableList.of();
+            return Collections.emptyList();
         }
 
-        final ImmutableList.Builder<String> builder = ImmutableList.<String>builder();
+        final List<String> builder = new ArrayList<>();
         try {
             for (final Object entry : (Iterable<?>) value) {
                 builder.add(entry.toString().replace(' ', '_'));
@@ -89,7 +89,7 @@ public class CMWLPackageDescription {
         } catch (NullPointerException ex) {
             // Handle exception if necessary
         }
-        return builder.build();
+        return Collections.unmodifiableList(builder);
     }
 
     @NotNull

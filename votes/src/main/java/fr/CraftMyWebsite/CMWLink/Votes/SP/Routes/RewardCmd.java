@@ -22,7 +22,7 @@ public class RewardCmd extends CMWLRoute<Main>{
 		String cmd = new String(Base64.getDecoder().decode(params.get("cmd")));
 		String uuid = this.getPlugin().getUtils().getOfflinePlayerLoader().load(username).getUniqueId().toString().replace("-", "");
 		if(uuid != null) {
-			
+
 			QueuedReward qReward = new QueuedReward(uuid.toLowerCase(), Arrays.asList(cmd.split("\\|")));
 			this.getPlugin().getQueue().addToQueue(qReward);
 			return new JsonBuilder().append("CODE", 200).build();

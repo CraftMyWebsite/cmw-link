@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
@@ -13,7 +15,6 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 
-import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -100,8 +101,8 @@ public class QueuePersist {
 		}
 		lock.lock();
 		try {
-			file.createNewFile();
-			Files.write(content.getBytes(), file);
+			Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8),
+					StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			this.queue.getMain().log(Level.SEVERE, "Failed to write data to file: " + e.getMessage());
 			e.printStackTrace();

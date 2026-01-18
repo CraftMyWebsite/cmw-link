@@ -2,10 +2,8 @@ package fr.CraftMyWebsite.CMWLink.Common.HttpClient;
 
 import fr.CraftMyWebsite.CMWLink.Common.Config.ConfigFile;
 import lombok.Getter;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.lang.Object;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,9 +21,9 @@ public class HttpClientManager {
 
     /**
      * @param slug String
-     * @return StringBuilder
+     * @return JsonElement
      */
-    public Object getWebsiteData(String slug) {
+    public JsonElement getWebsiteData(String slug) {
 
         URL url = null;
         try {
@@ -34,16 +32,12 @@ public class HttpClientManager {
             throw new RuntimeException(e);
         }
 
-        try (InputStream input = url.openStream()) {
-            InputStreamReader isr = new InputStreamReader(input);
-            BufferedReader reader = new BufferedReader(isr);
-            StringBuilder json = new StringBuilder();
-            int c;
-            while ((c = reader.read()) != -1) {
-                json.append((char) c);
-            }
-            return new JSONParser().parse(json.toString());
-        } catch (IOException | ParseException e) {
+        try (InputStream input = url.openStream();
+             InputStreamReader isr = new InputStreamReader(input);
+             BufferedReader reader = new BufferedReader(isr)) {
+
+            return new Gson().fromJson(reader, JsonElement.class);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

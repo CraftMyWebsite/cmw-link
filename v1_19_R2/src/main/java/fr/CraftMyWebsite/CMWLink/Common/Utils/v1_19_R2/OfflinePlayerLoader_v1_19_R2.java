@@ -6,7 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -35,7 +35,7 @@ public class OfflinePlayerLoader_v1_19_R2 extends OfflinePlayerLoader {
         }
         GameProfile profile = new GameProfile(player.getUniqueId(), player.getName());
         MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
-        EntityPlayer entity = new EntityPlayer(server, server.E().iterator().next(), profile);
+        EntityPlayer entity = new EntityPlayer(server, server.E().iterator().next(), profile, null);
         Player target = entity.getBukkitEntity();
         if (target != null) {
             target.loadData();
