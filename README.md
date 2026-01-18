@@ -5,7 +5,7 @@ CraftMyWebsite-Link a java plugin for MC servers
 ### Compatibilité
 ------------
 - **Spigot/Paper**
-  - **1.16** -> **1.21.4**
+  - **1.16** -> **1.21.8**
 - **BungeeCord/Waterfall**
 - **Velocity**
   - **3.X.X**

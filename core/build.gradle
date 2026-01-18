@@ -41,7 +41,7 @@ shadowJar {
               ':v1_17_R1:jar', ':v1_18_R1:jar', ':v1_18_R2:jar',
               ':v1_19_R1:jar', ':v1_19_R2:jar', ':v1_19_R3:jar',
               ':v1_20_R1:jar', ':v1_20_R2:jar', ':v1_20_R3:jar', ':v1_20_R4:jar',
-              ':v1_21_R1:jar', ':v1_21_R2:jar', ':v1_21_R3:jar'
+              ':v1_21_R1:jar', ':v1_21_R2:jar', ':v1_21_R3:jar', ':v1_21_R4:jar', ':v1_21_R5:jar'
 
     // Include Versions API and version adapters in the fat JAR by extracting their contents
     from { project(':Versions').tasks.jar.outputs.files.collect { zipTree(it) } }
@@ -61,6 +61,8 @@ shadowJar {
     from { project(':v1_21_R1').tasks.jar.outputs.files.collect { zipTree(it) } }
     from { project(':v1_21_R2').tasks.jar.outputs.files.collect { zipTree(it) } }
     from { project(':v1_21_R3').tasks.jar.outputs.files.collect { zipTree(it) } }
+    from { project(':v1_21_R4').tasks.jar.outputs.files.collect { zipTree(it) } }
+    from { project(':v1_21_R5').tasks.jar.outputs.files.collect { zipTree(it) } }
 
     // Exclude provided dependencies from fat JAR
     dependencies {
