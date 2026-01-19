@@ -24,19 +24,24 @@ public class RewardCmd extends CMWLRoute<Main> {
         String cmd = new String(Base64.getDecoder().decode(params.get("cmd")));
         String item = new String(Base64.getDecoder().decode(params.get("item")));
 
-        String uuid = this.getPlugin().getUtils().getOfflinePlayerLoader().load(username).getUniqueId().toString().replace("-", "");
+        // Load the player (works for both online and offline players)
+        org.bukkit.OfflinePlayer offlinePlayer = this.getPlugin().getUtils().getOfflinePlayerLoader().load(username);
+
+        if (offlinePlayer == null) {
+            this.getPlugin().log(java.util.logging.Level.WARNING, "Player not found: " + username + " (Shop reward)");
+            return new JsonBuilder().append("CODE", 404).append("MESSAGE", "Player not found: " + username).build();
+        }
+
+        String uuid = offlinePlayer.getUniqueId().toString().replace("-", "");
+
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', this.getPlugin().getConfig().getSettings().getPrefix() + this.getPlugin().getConfig().getSettings().getBroadcastPurchase()
                 .replace("{username}", username)
                 .replace("{item}", item)
         ));
 
-        if (uuid != null) {
-            QueuedReward qReward = new QueuedReward(uuid.toLowerCase(), item, Arrays.asList(cmd.split("\\|")));
-            this.getPlugin().getQueue().addToQueue(qReward);
-            return new JsonBuilder().append("CODE", 200).build();
-        } else {
-            return new JsonBuilder().append("CODE", 500).append("MESSAGE", "Player not found.").build();
-        }
+        QueuedReward qReward = new QueuedReward(uuid.toLowerCase(), item, Arrays.asList(cmd.split("\\|")));
+        this.getPlugin().getQueue().addToQueue(qReward);
+        return new JsonBuilder().append("CODE", 200).build();
     }
 
 }

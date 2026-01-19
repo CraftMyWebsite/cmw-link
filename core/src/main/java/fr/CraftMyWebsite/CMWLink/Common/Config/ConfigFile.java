@@ -64,7 +64,7 @@ public class ConfigFile extends IConfigFile {
         this.version = version;
         this.utils = new Utils(log, startingFrom);
         this.persist = new Persist(this);
-        if (this.utils.init(true)) {
+        if (this.utils.init()) {
             log.info("Loading configuration...");
 
             settings = persist.getFile(Settings.class).exists() ? persist.load(Settings.class) : new Settings();

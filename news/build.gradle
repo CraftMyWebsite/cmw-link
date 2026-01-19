@@ -21,6 +21,9 @@ shadowJar {
     archiveVersion = ''
     archiveClassifier = ''
 
+    // Output to root build/libs directory
+    destinationDirectory = file("$rootDir/build/libs")
+
     dependencies {
         exclude(dependency('org.projectlombok:lombok'))
         exclude(dependency('org.spigotmc:spigot-api'))
