@@ -2,6 +2,11 @@ plugins {
     id 'java'
 }
 
+// Disable jar creation for root project (no source code here)
+jar {
+    enabled = false
+}
+
 allprojects {
     group = 'fr.CraftMyWebsite.CMWL'
     version = '1.2.0'
@@ -20,12 +25,14 @@ allprojects {
 subprojects {
     apply plugin: 'java'
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
     }
 
     // Disable tests
-    tasks.withType(Test) {
-        enabled = false
+    tasks.withType(Test).tap {
+        configureEach {
+            enabled = false
+        }
     }
 }
